@@ -128,7 +128,8 @@ public enum TokenType {
     /**
      * @return corresponding regular expression string
      */
-    public String getRegex() {
+    public String getRegex()
+    {
         return regex;
     }
 }
