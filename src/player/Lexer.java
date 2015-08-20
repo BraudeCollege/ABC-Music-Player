@@ -1,7 +1,9 @@
 package player;
 
 /**
- * Created by DucNguyenMinh on 8/20/15.
+ * Lexer performs lexical analysis for an ABC-Notation text
+ * and provides tokens to parser
  */
-public class Lexer {
+public class Lexer
+{
 }
