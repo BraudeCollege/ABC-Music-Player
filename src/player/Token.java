@@ -26,16 +26,15 @@ public class Token
 
     public boolean equals(Object o)
     {
-        if (this.getClass() != o.getClass())
-            return false;
-
         Token aToken = (Token) o;
-
         return type.equals(aToken.type) && value.equals(aToken.value);
     }
-
-    public String toString()
+    
+    @Override
+    public int hashCode()
     {
-        return "Token(" + type + ","+ value +")";
+        int result = type != null ? type.hashCode() : 0;
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        return result;
     }
 }
