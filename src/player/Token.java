@@ -5,6 +5,7 @@ package player;
  */
 public class Token
 {
+
     private final TokenType type;
     private final String value;
 
@@ -29,4 +30,13 @@ public class Token
         Token aToken = (Token) o;
         return type.equals(aToken.type) && value.equals(aToken.value);
     }
+
+    @Override
+    public int hashCode()
+    {
+        int result = type != null ? type.hashCode() : 0;
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        return result;
+    }
+
 }
