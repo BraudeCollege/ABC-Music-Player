@@ -20,6 +20,7 @@ public class Lexer
     {
         this.text = text;
         this.tokens = new ArrayDeque<>();
+        initLexer();
     }
 
     /**
@@ -27,7 +28,7 @@ public class Lexer
      */
     public boolean hasNext()
     {
-        return  tokens.isEmpty();
+        return tokens.isEmpty();
     }
 
     /**
@@ -38,6 +39,23 @@ public class Lexer
     public Token nextToken()
     {
         return null;
+    }
+
+
+    /**
+     * Tokenize the text of the lexer
+     */
+    private void tokenize()
+    {
+
+    }
+
+    /**
+     * Initialize all states of the lexer at the begining
+     */
+    private void initLexer()
+    {
+        tokenize();
     }
 
 }
