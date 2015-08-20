@@ -1,5 +1,8 @@
 package player;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
+
 /**
  * Lexer performs lexical analysis for an ABC-Notation text
  * and provides tokens to parser
@@ -11,23 +14,29 @@ public class Lexer
      */
     private String text;
 
-    public Lexer(String text) {
+    private Queue<Token> tokens;
+
+    public Lexer(String text)
+    {
         this.text = text;
+        this.tokens = new ArrayDeque<>();
     }
 
     /**
-     *
      * @return true if there are tokens left; otherwise false
      */
-    public boolean hasNext(){
-        return false;
+    public boolean hasNext()
+    {
+        return  tokens.isEmpty();
     }
 
     /**
      * This Method read the text of lexer and create some token
+     *
      * @return nextToken if there're still some left
      */
-    public Token nextToken(){
+    public Token nextToken()
+    {
         return null;
     }
 
