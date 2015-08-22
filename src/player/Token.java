@@ -24,6 +24,7 @@ public class Token
         return value;
     }
 
+    @Override
     public boolean equals(Object o)
     {
         if (this.getClass() != o.getClass())
