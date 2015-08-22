@@ -74,7 +74,7 @@ public enum TokenType {
 //    end-of-line ::= comment | linefeed
 //    text ::= .*
 
-
+    SPACE(" "),
     FIELD_X("X:"), FIELD_T("T:"), FIELD_C("C:"), FIELD_L("L:"),
     FIELD_M("M:"), FIELD_Q("Q:"), FIELD_V("V:"), FIELD_K("K:"),
 
@@ -99,8 +99,8 @@ public enum TokenType {
 
     OPEN_PAREN("\\("),
 
-    DOUBLE_BAR("\\|\\|"), SINGLE_BAR("\\|"), OPEN_BAR("\\[\\|"),
-    CLOSE_BAR("\\|\\]"), OPEN_REPEAT_BAR("\\|:"), CLOSE_REPEAT_BAR(":\\|"),
+    DOUBLE_BAR("\\|\\|"),CLOSE_BAR("\\|\\]"), SINGLE_BAR("\\|"),OPEN_BAR("\\[\\|"),
+    OPEN_REPEAT_BAR("\\|:"), CLOSE_REPEAT_BAR(":\\|"),
 
     OPEN_BRACKET("\\["), CLOSE_BRACKET("\\]"),
 
@@ -136,7 +136,8 @@ public enum TokenType {
     }
 
     /**
-     * @param token
+     * @param token Value of Token to be identified
+     *
      * @return the type of the token given in the argument
      * null if no matching type found
      */
