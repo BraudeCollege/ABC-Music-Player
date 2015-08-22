@@ -20,7 +20,7 @@ public class Lexer
     {
         this.text = text;
         this.tokens = new ArrayDeque<>();
-        initLexer();
+        tokenize();
     }
 
     /**
@@ -49,13 +49,4 @@ public class Lexer
     {
 
     }
-
-    /**
-     * Initialize all states of the lexer at the begining
-     */
-    private void initLexer()
-    {
-        tokenize();
-    }
-
 }
