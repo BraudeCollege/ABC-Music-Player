@@ -18,12 +18,16 @@ public class LexerTest
     @Test
     public void testInitState() throws Exception
     {
-        assertTrue(new Lexer("X:1\nT:Title").hasNext());
+        Lexer lex = new Lexer("X:1\nT:Title");
+        System.out.println(lex);
+        assertTrue(lex.hasNext());
     }
 
     @Test
     public void testEmptyString() throws Exception
     {
-        assertFalse(new Lexer("").hasNext());
+        Lexer lex = new Lexer("");
+        System.out.println(lex);
+        assertFalse(lex.hasNext());
     }
 }

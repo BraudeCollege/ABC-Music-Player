@@ -107,7 +107,7 @@ public enum TokenType {
     REPEAT_1("\\[1"),
     REPEAT_2("\\[2"),
     DIGIT("[0-9]"),
-    DOT_STAR(".*"),
+    DOT_PLUS(".+"),
     PERCENT("%"),
     LINEFEED("[\\n\\r]+");
 

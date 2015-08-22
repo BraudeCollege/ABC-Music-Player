@@ -32,7 +32,7 @@ public class Lexer
      */
     public boolean hasNext()
     {
-        return tokens.isEmpty();
+        return !tokens.isEmpty();
     }
 
     /**
@@ -42,7 +42,7 @@ public class Lexer
      */
     public Token nextToken()
     {
-        return null;
+        return tokens.remove();
     }
 
 
@@ -74,5 +74,11 @@ public class Lexer
 
             tokens.add(new Token(tokenType, tokenText));
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Lexer[" + tokens + ']';
     }
 }
