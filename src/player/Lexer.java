@@ -79,6 +79,6 @@ public class Lexer
     @Override
     public String toString()
     {
-        return "Lexer[" + tokens + ']';
+        return "Lexer{ " + tokens + " }";
     }
 }
