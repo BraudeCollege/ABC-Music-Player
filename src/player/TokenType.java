@@ -112,6 +112,8 @@ public enum TokenType {
     LINEFEED("[\\n\\r]+");
 
 
+    static class UnknownTokenException extends Exception { }
+
     /**
      * regular expression to match the token
      */
@@ -131,5 +133,20 @@ public enum TokenType {
     public String getRegex()
     {
         return regex;
+    }
+
+    /**
+     * @param token
+     * @return the type of the token given in the argument
+     * null if no matching type found
+     */
+    public static TokenType identify(String token)
+    {
+        for (TokenType t : TokenType.values()) {
+            if (token.matches(t.getRegex()))
+                return t;
+        }
+
+        return null;
     }
 }

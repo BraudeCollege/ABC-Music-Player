@@ -1,7 +1,10 @@
 package player;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Queue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Lexer performs lexical analysis for an ABC-Notation text
@@ -16,10 +19,11 @@ public class Lexer
 
     private Queue<Token> tokens;
 
-    public Lexer(String text)
+    public Lexer(String text) throws TokenType.UnknownTokenException
     {
         this.text = text;
         this.tokens = new ArrayDeque<>();
+
         tokenize();
     }
 
@@ -45,8 +49,30 @@ public class Lexer
     /**
      * Tokenize the text of the lexer
      */
-    private void tokenize()
+    private void tokenize() throws TokenType.UnknownTokenException
     {
+        TokenType[] types = TokenType.values();
 
+        ArrayList<String> patterns = new ArrayList<>();
+
+        for (TokenType t : types) {
+            patterns.add(t.getRegex());
+        }
+
+        String regex = "(" + String.join("|", patterns) + ")";
+
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(text);
+
+        while (m.find()) {
+
+            String tokenText = m.group(1);
+            TokenType tokenType = TokenType.identify(tokenText);
+
+            if (tokenType == null)
+                throw new TokenType.UnknownTokenException();
+
+            tokens.add(new Token(tokenType, tokenText));
+        }
     }
 }
