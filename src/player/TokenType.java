@@ -107,9 +107,9 @@ public enum TokenType {
     REPEAT_1("\\[1"),
     REPEAT_2("\\[2"),
     DIGIT("[0-9]"),
+    COMMENT("%.+"),
     DOT_PLUS(".+"),
-    PERCENT("%"),
-    LINEFEED("[\\n\\r]+");
+    LINEFEED("(?:\\n|\\n\\r)");
 
 
     static class UnknownTokenException extends RuntimeException { }

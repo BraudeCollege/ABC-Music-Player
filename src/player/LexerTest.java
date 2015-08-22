@@ -54,21 +54,13 @@ public class LexerTest
         lex.nextToken();
     }
 
-    /*
-    X:1
-    T:Note lengths and default note length
-    M:C
-    K:C
-    L:1/16
-    A/2 A/ A A2 A3 A4 A6 A7 A8 A12 A15 A16|]
-    */
-
     @Test
-    public void testLexerSmall() throws Exception
+    public void testSampleFile() throws Exception
     {
         Lexer lex = new Lexer("X:1\n" +
-                "T:Note lengths and default note length\n" +
+                "T: Note lengths and default note length\n" +
                 "M:C\n" +
+                "% A shit on the head is some comments\n" +
                 "K:C\n" +
                 "L:1/16\n" +
                 "A/2 A/ A A2 A3 A4 A6 A7 A8 A12 A15 A16|]\n");
@@ -78,10 +70,12 @@ public class LexerTest
         assertEquals(new Token(TokenType.DIGIT, "1"), lex.nextToken());
         assertEquals(new Token(TokenType.LINEFEED, "\n"), lex.nextToken());
         assertEquals(new Token(TokenType.FIELD_T, "T:"), lex.nextToken());
-        assertEquals(new Token(TokenType.DOT_PLUS, "Note lengths and default note length"), lex.nextToken());
+        assertEquals(new Token(TokenType.DOT_PLUS, " Note lengths and default note length"), lex.nextToken());
         assertEquals(new Token(TokenType.LINEFEED, "\n"), lex.nextToken());
         assertEquals(new Token(TokenType.FIELD_M, "M:"), lex.nextToken());
         assertEquals(new Token(TokenType.C, "C"), lex.nextToken());
+        assertEquals(new Token(TokenType.LINEFEED, "\n"), lex.nextToken());
+        assertEquals(new Token(TokenType.COMMENT, "% A shit on the head is some comments"), lex.nextToken());
         assertEquals(new Token(TokenType.LINEFEED, "\n"), lex.nextToken());
         assertEquals(new Token(TokenType.FIELD_K, "K:"), lex.nextToken());
         assertEquals(new Token(TokenType.C, "C"), lex.nextToken());
