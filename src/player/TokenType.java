@@ -112,7 +112,7 @@ public enum TokenType {
     LINEFEED("[\\n\\r]+");
 
 
-    static class UnknownTokenException extends Exception { }
+    static class UnknownTokenException extends RuntimeException { }
 
     /**
      * regular expression to match the token
