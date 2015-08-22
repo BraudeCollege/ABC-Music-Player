@@ -42,5 +42,14 @@ public class LexerTest
         assertTrue(lex.hasNext());
         assertEquals(new Token(TokenType.DIGIT,"2"),lex.nextToken());
         assertFalse(lex.hasNext());
+        assertFalse(lex.hasNext());
+    }
+
+    @Test(expected = Lexer.RunOutOfTokenException.class)
+    public void testFromEmptyToNextToken() throws Exception
+    {
+        Lexer lex = new Lexer("");
+
+        lex.nextToken();
     }
 }

@@ -42,13 +42,14 @@ public class Lexer
      */
     public Token nextToken()
     {
+        if(!hasNext()) throw new RunOutOfTokenException();
         return tokens.remove();
     }
 
 
     /**
      * Tokenize the text of the lexer
-     * @modifies change this.tokens by adding tokens to it
+     * Modifies tokens by adding tokens to it
      */
     private void tokenize() throws TokenType.UnknownTokenException
     {
@@ -81,5 +82,11 @@ public class Lexer
     public String toString()
     {
         return "Lexer{ " + tokens + " }";
+    }
+
+
+    static class RunOutOfTokenException extends RuntimeException
+    {
+
     }
 }
