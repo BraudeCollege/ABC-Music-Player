@@ -19,7 +19,6 @@ public class LexerTest
     public void testInitState() throws Exception
     {
         Lexer lex = new Lexer("X:1\nT:Title");
-        System.out.println(lex);
         assertTrue(lex.hasNext());
     }
 
@@ -27,7 +26,19 @@ public class LexerTest
     public void testEmptyString() throws Exception
     {
         Lexer lex = new Lexer("");
-        System.out.println(lex);
+        assertFalse(lex.hasNext());
+    }
+
+    @Test
+    public void testHasTokenTillEmpty() throws Exception
+    {
+
+        Lexer lex = new Lexer("A/2");
+
+        assertTrue(lex.hasNext());
+        assertEquals(new Token(TokenType.A,"A"),lex.nextToken());
+        assertEquals(new Token(TokenType.SLASH,"/"),lex.nextToken());
+        assertEquals(new Token(TokenType.DIGIT,"2"),lex.nextToken());
         assertFalse(lex.hasNext());
     }
 }
