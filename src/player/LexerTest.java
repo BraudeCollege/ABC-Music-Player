@@ -37,7 +37,9 @@ public class LexerTest
 
         assertTrue(lex.hasNext());
         assertEquals(new Token(TokenType.A,"A"),lex.nextToken());
+        assertTrue(lex.hasNext());
         assertEquals(new Token(TokenType.SLASH,"/"),lex.nextToken());
+        assertTrue(lex.hasNext());
         assertEquals(new Token(TokenType.DIGIT,"2"),lex.nextToken());
         assertFalse(lex.hasNext());
     }
