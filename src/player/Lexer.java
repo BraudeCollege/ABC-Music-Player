@@ -48,6 +48,7 @@ public class Lexer
 
     /**
      * Tokenize the text of the lexer
+     * @modifies change this.tokens by adding tokens to it
      */
     private void tokenize() throws TokenType.UnknownTokenException
     {
