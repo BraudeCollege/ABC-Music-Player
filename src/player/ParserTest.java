@@ -1,5 +1,6 @@
 package player;
 
+import com.sun.tools.corba.se.idl.constExpr.Not;
 import org.junit.Test;
 import player.ast.*;
 
@@ -134,6 +135,26 @@ public class ParserTest
 
         parser = getParser("^D,,");
         assertEquals(new Pitch(new Basenote('D'), Accidental.getInstance(Accidental.Type.SHARP), Octave.getDown(2)), parser.expectNoteOrRest());
+    }
+
+    @Test
+    public void testNote() throws Exception
+    {
+        Parser parser = getParser("A");
+        assertEquals(new Note(new Pitch(new Basenote('A'),Accidental.getEmptyObj(), Octave.getEmpty()), new NoteLength(1,1)), parser.expectNote());
+
+        parser = getParser("^^A,2/3");
+        assertEquals(new Note(new Pitch(new Basenote('A'),Accidental.getInstance(Accidental.Type.DOUBLE_SHARP), Octave.getDown(1)), new NoteLength(2,3)), parser.expectNote());
+
+        parser = getParser("^B2/4");
+        assertEquals(new Note(new Pitch(new Basenote('B'),Accidental.getInstance(Accidental.Type.SHARP), Octave.getEmpty()), new NoteLength(2,4)), parser.expectNote());
+
+        parser = getParser("C2/");
+        assertEquals(new Note(new Pitch(new Basenote('C'),Accidental.getEmptyObj(), Octave.getEmpty()), new NoteLength(2,2)), parser.expectNote());
+
+        parser = getParser("z/3");
+        assertEquals(new Note(Rest.getInstance(), new NoteLength(1,3)),parser.expectNote());
+
     }
 
     public Parser getParser(String str)

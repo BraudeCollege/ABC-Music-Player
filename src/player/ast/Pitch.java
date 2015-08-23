@@ -89,4 +89,15 @@ public class Pitch implements AbstractSyntaxTree, NoteOrRest
         result = 31 * result + octave.hashCode();
         return result;
     }
+
+
+    @Override
+    public String toString()
+    {
+        return "Pitch{" +
+                "accidental=" + accidental +
+                ", basenote=" + basenote +
+                ", octave=" + octave +
+                '}';
+    }
 }
