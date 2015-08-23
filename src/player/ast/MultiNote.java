@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * // _TODO: traverse notes
  */
 public class MultiNote implements NoteElement
 {

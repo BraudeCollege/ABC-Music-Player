@@ -195,7 +195,14 @@ public class ParserTest
     @Test(expected = Parser.UnexpectedTokenException.class)
     public void testMultiNoteFailsEmpty() throws Exception
     {
-        getParser("[]").expectMultiNote();
+        getParser("[  ]").expectMultiNote();
+    }
+
+    @Test
+    public void testTupletSpec() throws Exception
+    {
+        Parser parser = getParser("(3");
+        assertEquals(3, parser.expectTupletSpec());
     }
 
     public Parser getParser(String str)
