@@ -8,11 +8,19 @@ public class Basenote implements AbstractSyntaxTree
     /**
      * Symbol of basenote
      */
-    public final char symbol;
+    private final char symbol;
 
     public Basenote(char symbol)
     {
         this.symbol = symbol;
+    }
+
+    /**
+     * @return symbol that the basenote represent
+     */
+    public char getSymbol()
+    {
+        return symbol;
     }
 
     @Override
