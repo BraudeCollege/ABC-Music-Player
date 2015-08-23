@@ -210,6 +210,7 @@ public class Parser
         return new Note(noteOrRest, noteLength);
     }
 
+
     /**
      * @return int read from lexer
      */

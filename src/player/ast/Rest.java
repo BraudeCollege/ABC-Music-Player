@@ -1,6 +1,6 @@
 package player.ast;
 
-public class Rest implements AbstractSyntaxTree, NoteOrRest
+public class Rest implements NoteOrRest
 {
 
     private static Rest instance;

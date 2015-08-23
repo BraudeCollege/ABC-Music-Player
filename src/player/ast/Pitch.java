@@ -1,6 +1,6 @@
 package player.ast;
 
-public class Pitch implements AbstractSyntaxTree, NoteOrRest
+public class Pitch implements NoteOrRest
 {
     /**
      * Rep Invariants:
