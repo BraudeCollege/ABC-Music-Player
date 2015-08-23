@@ -1,6 +1,7 @@
 package player;
 
 import player.ast.AbstractSyntaxTree;
+import player.ast.Accidental;
 import player.ast.Basenote;
 
 /**
@@ -32,6 +33,31 @@ public class Parser
         }
 
         throw new UnexpectedTokenException("Unexpected token '"+ token.getValue() +"', expect a Basenote");
+    }
+
+    /**
+     * @return an ast with the root is an accidental
+     * @throws player.Parser.UnexpectedTokenException if no basenote found
+     * @throws player.Lexer.RunOutOfTokenException if there is no token left
+     */
+    public AbstractSyntaxTree expectAccidental()
+    {
+        Token token =  lex.nextToken();
+
+        switch (token.getType()) {
+            case ACC_SHARP:
+                return new Accidental(Accidental.Type.SHARP);
+            case ACC_SHARP_DOUBLE:
+                return new Accidental(Accidental.Type.DOUBLE_SHARP);
+            case ACC_FLAT:
+                return new Accidental(Accidental.Type.FLAT);
+            case ACC_FLAT_DOUBLE:
+                return new Accidental(Accidental.Type.DOUBLE_FLAT);
+            case ACC_NEUTRAL:
+                return new Accidental(Accidental.Type.NEUTRAL);
+        }
+
+        throw new UnexpectedTokenException("Unexpected token '"+ token.getValue() +"', expect an accidental");
     }
 
     static class UnexpectedTokenException extends RuntimeException {

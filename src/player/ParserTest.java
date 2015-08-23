@@ -1,6 +1,7 @@
 package player;
 
 import org.junit.Test;
+import player.ast.Accidental;
 import player.ast.Basenote;
 
 import static org.junit.Assert.*;
@@ -42,7 +43,7 @@ public class ParserTest
         Lexer lex = new Lexer("^^");
         Parser pars = new Parser(lex);
 
-        assertEquals(new Accidental(Accidental.DOUBLE_SHARP),pars.expectAccidental());
+        assertEquals(new Accidental(Accidental.Type.DOUBLE_SHARP), pars.expectAccidental());
     }
 
 
