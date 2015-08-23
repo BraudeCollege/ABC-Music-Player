@@ -94,6 +94,18 @@ public class ParserTest
         assertEquals(Rest.getInstance(), parser.expectRest());
     }
 
+    @Test
+    public void testExpectNoteLength() throws Exception
+    {
+        Parser parser = getParser("4");
+        assertEquals(new NoteLength(4, 1), parser.expectNoteLength());
+
+        parser = getParser("4/4");
+        assertEquals(new NoteLength(4, 4), parser.expectNoteLength());
+
+        parser = getParser("/3");
+        assertEquals(new NoteLength(1, 3), parser.expectNoteLength());
+    }
 
     @Test
     public void testNoteOrRest() throws Exception
