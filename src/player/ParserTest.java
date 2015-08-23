@@ -186,10 +186,16 @@ public class ParserTest
         assertEquals(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)), parser.expectNoteElement());
     }
 
-    @Test
-    public void testMultiNoteFails() throws Exception
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testMultiNoteFailsBracket() throws Exception
     {
+        getParser("A1/2").expectMultiNote();
+    }
 
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testMultiNoteFailsEmpty() throws Exception
+    {
+        getParser("[]").expectMultiNote();
     }
 
     public Parser getParser(String str)
