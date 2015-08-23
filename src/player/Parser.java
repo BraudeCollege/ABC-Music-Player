@@ -113,12 +113,19 @@ public class Parser
 
     /**
      * @return an ast with the root is a Rest
-     * @throws player.Parser.UnexpectedTokenException if no basenote found
+     * @throws player.Parser.UnexpectedTokenException if no rest is found
      * @throws player.Lexer.RunOutOfTokenException if there is no token left
      */
-    public Rest expectRest()
+    public Rest expectRest() throws UnexpectedTokenException
     {
-        return null;
+        Token token = lex.nextToken();
+
+        if (token.getType() == TokenType.REST)
+            return Rest.getInstance();
+
+        lex.backtrack();
+
+        throw new UnexpectedTokenException("Unexpected token '"+ token.getValue() +"', expect a Rest");
     }
 
     static class UnexpectedTokenException extends Exception {

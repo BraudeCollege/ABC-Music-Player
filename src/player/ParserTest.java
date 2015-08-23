@@ -91,7 +91,7 @@ public class ParserTest
     public void testExpectRest() throws Exception
     {
         Parser parser = getParser("z");
-        assertEquals(new Rest(), parser.expectRest());
+        assertEquals(Rest.getInstance(), parser.expectRest());
     }
 
     public Parser getParser(String str)

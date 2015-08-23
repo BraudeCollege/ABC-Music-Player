@@ -5,4 +5,16 @@ package player.ast;
  */
 public class Rest implements AbstractSyntaxTree
 {
+
+    private static Rest instance;
+
+    private Rest() {}
+
+    public static Rest getInstance() {
+
+        if (instance == null)
+            instance = new Rest();
+
+        return instance;
+    }
 }
