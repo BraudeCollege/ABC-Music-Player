@@ -19,6 +19,7 @@ public class Parser
     /**
      * @return an ast with the root is a basenote
      * @throws player.Parser.UnexpectedTokenException if no basenote found
+     * @throws player.Lexer.RunOutOfTokenException if there is no token left
      */
     public AbstractSyntaxTree expectBasenote()
     {
