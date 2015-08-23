@@ -21,6 +21,10 @@ public class Octave implements AbstractSyntaxTree
      */
     private final Type type;
 
+    /**
+     * @param type
+     * @param levels
+     */
     private Octave(Type type, int levels)
     {
         this.levels = levels;
@@ -65,6 +69,22 @@ public class Octave implements AbstractSyntaxTree
 
         return levels == octave.levels && type == octave.type;
 
+    }
+
+    /**
+     * @return how many octaves
+     */
+    public int getLevels()
+    {
+        return levels;
+    }
+
+    /**
+     * @return type of the octave
+     */
+    public Type getType()
+    {
+        return type;
     }
 
     @Override
