@@ -106,6 +106,7 @@ public enum TokenType {
 
     REPEAT_1("\\[1"),
     REPEAT_2("\\[2"),
+    NUMBER("[1-9][0-9]*"),
     DIGIT("[0-9]"),
     COMMENT("%.+"),
     DOT_PLUS(".+"),

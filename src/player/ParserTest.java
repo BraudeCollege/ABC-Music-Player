@@ -103,14 +103,17 @@ public class ParserTest
         parser = getParser("4/4");
         assertEquals(new NoteLength(4, 4), parser.expectNoteLength());
 
-        parser = getParser("/3");
-        assertEquals(new NoteLength(1, 3), parser.expectNoteLength());
+        parser = getParser("/32");
+        assertEquals(new NoteLength(1, 32), parser.expectNoteLength());
 
         parser = getParser("/");
         assertEquals(new NoteLength(1, 2), parser.expectNoteLength());
 
-        parser = getParser("4/");
-        assertEquals(new NoteLength(4, 2), parser.expectNoteLength());
+        parser = getParser("10/");
+        assertEquals(new NoteLength(10, 2), parser.expectNoteLength());
+
+        parser = getParser("");
+        assertEquals(new NoteLength(1, 1), parser.expectNoteLength());
     }
 
     @Test
