@@ -90,8 +90,8 @@ public enum TokenType {
 
     SLASH("/"),
 
-    OCTAVE_UP("'"),
-    OCTAVE_DOWN(","),
+    OCTAVE_UP("'+"),
+    OCTAVE_DOWN(",+"),
 
     ACC_SHARP_DOUBLE("\\^\\^"), ACC_SHARP("\\^"),
     ACC_FLAT_DOUBLE("__"), ACC_FLAT("_"),

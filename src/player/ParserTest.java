@@ -2,8 +2,7 @@ package player;
 
 import org.junit.Before;
 import org.junit.Test;
-import player.ast.Accidental;
-import player.ast.Basenote;
+import player.ast.*;
 
 import static org.junit.Assert.*;
 

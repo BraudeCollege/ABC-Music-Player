@@ -3,6 +3,7 @@ package player;
 import player.ast.AbstractSyntaxTree;
 import player.ast.Accidental;
 import player.ast.Basenote;
+import player.ast.Octave;
 
 /**
  * Perform semantic analysis and produce an abstract syntax tree
@@ -58,6 +59,26 @@ public class Parser
         }
 
         throw new UnexpectedTokenException("Unexpected token '"+ token.getValue() +"', expect an accidental");
+    }
+
+    /**
+     * @return an ast with the root is an octave
+     * @throws player.Parser.UnexpectedTokenException if no basenote found
+     * @throws player.Lexer.RunOutOfTokenException if there is no token left
+     */
+    public AbstractSyntaxTree expectOctave()
+    {
+
+        Token token =  lex.nextToken();
+        int levels = token.getValue().length();
+
+        switch (token.getType()){
+            case OCTAVE_UP: return new Octave(Octave.Type.UP, levels);
+            case OCTAVE_DOWN: return new Octave(Octave.Type.DOWN, levels);
+        }
+
+
+        throw new UnexpectedTokenException("Unexpected token '"+ token.getValue() +"', expect an octave");
     }
 
     static class UnexpectedTokenException extends RuntimeException {
