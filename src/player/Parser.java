@@ -162,7 +162,7 @@ public class Parser
             }
         }
 
-        if (noteElement!= null)
+        if (noteElement != null)
             return noteElement;
 
         throw new UnexpectedTokenException("Unexpected token, expect a Note or a Rest");
@@ -205,8 +205,7 @@ public class Parser
 
         try {
             multiplier = expectNumber();
-        } catch (UnexpectedTokenException e) {
-        } catch (Lexer.RunOutOfTokenException e) {
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
         }
 
         try {
@@ -216,8 +215,7 @@ public class Parser
 
             divider = expectNumber();
 
-        } catch (Lexer.RunOutOfTokenException e) {
-        } catch (UnexpectedTokenException e) {
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
         }
 
         return new NoteLength(multiplier, divider);
@@ -271,12 +269,12 @@ public class Parser
 
             try {
                 expectSpaces();
-            } catch (Exception e) {
+            } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
             }
 
             try {
                 multiNote.addNote(expectNote());
-            } catch (Exception e) {
+            } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
                 break;
             }
         }
@@ -292,6 +290,7 @@ public class Parser
 
     /**
      * expect a '/' character
+     *
      * @throws player.Parser.UnexpectedTokenException if there is no slash
      */
     private void expectSlash() throws UnexpectedTokenException
@@ -324,8 +323,7 @@ public class Parser
     {
         Token token = lex.nextToken();
 
-        if (token.getType() != TokenType.OPEN_PAREN)
-        {
+        if (token.getType() != TokenType.OPEN_PAREN) {
             lex.backtrack();
             throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect a open parenthesis");
         }
@@ -349,35 +347,30 @@ public class Parser
 
     public TupletElement expectTupletElement() throws UnexpectedTokenException
     {
-
         TupletSpec tupletSpec = expectTupletSpec();
 
-
         List<NoteElement> noteElements = new ArrayList<>();
-        for (int i = 0 ; i < tupletSpec.getCount(); i++) {
+        for (int i = 0; i < tupletSpec.getCount(); i++) {
 
             try {
                 expectSpaces();
-            } catch (Exception e) {
+            } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
             }
-
 
             try {
                 noteElements.add(expectNoteElement());
-            }catch (UnexpectedTokenException | Lexer.RunOutOfTokenException  e){
+            } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
                 lex.backtrack(i);
-                lex.backtrack(2); // For tupletSpec
+                lex.backtrack(2); // for TupletSpec
                 throw e;
             }
-
         }
 
-        return  new TupletElement(tupletSpec,noteElements);
+        return new TupletElement(tupletSpec, noteElements);
     }
 
     static class UnexpectedTokenException extends Exception
     {
-
         public UnexpectedTokenException(String message)
         {
             super(message);
