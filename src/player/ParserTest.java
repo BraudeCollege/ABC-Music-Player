@@ -25,4 +25,13 @@ public class ParserTest
 
         pars.expectBasenote();
     }
+
+    @Test(expected = Lexer.RunOutOfTokenException.class)
+    public void testBaseNoteEmptyLexer() throws Exception
+    {
+        Lexer lex = new Lexer("");
+        Parser pars = new Parser(lex);
+
+        pars.expectBasenote();
+    }
 }
