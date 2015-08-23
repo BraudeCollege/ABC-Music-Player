@@ -143,6 +143,32 @@ public class Parser
     }
 
     /**
+     * @return an ast with the root is a NoteElemetn
+     * @throws UnexpectedTokenException
+     */
+    public NoteElement expectNoteElement() throws UnexpectedTokenException
+    {
+        NoteElement noteElement = null;
+        try {
+            noteElement = expectNote();
+        } catch (UnexpectedTokenException e) {
+        }
+
+        if (noteElement == null) {
+            try {
+                noteElement = expectMultiNote();
+            } catch (UnexpectedTokenException e) {
+            }
+        }
+
+        if (noteElement!= null)
+            return noteElement;
+
+        throw new UnexpectedTokenException("Unexpected token, expect a Note or a Rest");
+
+    }
+
+    /**
      * @return an ast with the root is a NoteOrRest
      * @throws UnexpectedTokenException
      */
