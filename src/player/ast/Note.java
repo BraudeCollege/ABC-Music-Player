@@ -4,7 +4,7 @@ package player.ast;
  * Represent a note, which either is a pitch or a rest
  * played with a particular length
  */
-public class Note implements AbstractSyntaxTree
+public class Note implements NoteElement
 {
     private final NoteLength noteLength;
     private final NoteOrRest noteOrRest;

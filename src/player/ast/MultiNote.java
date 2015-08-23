@@ -6,7 +6,7 @@ import java.util.List;
 /**
  *
  */
-public class MultiNote implements AbstractSyntaxTree
+public class MultiNote implements NoteElement
 {
    private List<Note> notes;
 

@@ -159,6 +159,7 @@ public class ParserTest
 
     @Test
     public void testMultinote() throws Exception
+
     {
         Parser parser = getParser("[A1/2 z/3 B _C']");
 
