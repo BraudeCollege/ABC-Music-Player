@@ -167,9 +167,9 @@ public class Parser
     }
 
     /**
-     * @return
+     * @return a note length
      */
-    public NoteLength expectNoteLength() throws UnexpectedTokenException
+    public NoteLength expectNoteLength()
     {
         int multiplier = 1;
         int divider = 1;
@@ -177,7 +177,8 @@ public class Parser
         try {
             multiplier = expectNumber();
         } catch (UnexpectedTokenException e) {
-        } catch (Lexer.RunOutOfTokenException e) {}
+        } catch (Lexer.RunOutOfTokenException e) {
+        }
 
         try {
 
@@ -190,9 +191,23 @@ public class Parser
                 divider = expectNumber();
             }
 
-        } catch (Lexer.RunOutOfTokenException e) {}
+        } catch (Lexer.RunOutOfTokenException e) {
+        } catch (UnexpectedTokenException e) {
+        }
 
         return new NoteLength(multiplier, divider);
+    }
+
+    /**
+     * @return a note
+     */
+    public Note expectNote() throws UnexpectedTokenException
+    {
+        NoteOrRest noteOrRest = expectNoteOrRest();
+
+        NoteLength noteLength = expectNoteLength();
+
+        return new Note(noteOrRest, noteLength);
     }
 
     /**
