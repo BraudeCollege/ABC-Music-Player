@@ -2,6 +2,9 @@ package player;
 
 import player.ast.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Perform semantic analysis and produce an abstract syntax tree
  */
@@ -341,6 +344,35 @@ public class Parser
             throw new UnexpectedTokenException("Unexpected token '" + digit + "', expect a digit only ");
 
         return digit;
+    }
+
+
+    public TupletElement expectTupletElement() throws UnexpectedTokenException
+    {
+
+        TupletSpec tupletSpec = expectTupletSpec();
+
+
+        List<NoteElement> noteElements = new ArrayList<>();
+        for (int i = 0 ; i < tupletSpec.getCount(); i++) {
+
+            try {
+                expectSpaces();
+            } catch (Exception e) {
+            }
+
+
+            try {
+                noteElements.add(expectNoteElement());
+            }catch (UnexpectedTokenException | Lexer.RunOutOfTokenException  e){
+                lex.backtrack(i);
+                lex.backtrack(2); // For tupletSpec
+                throw e;
+            }
+
+        }
+
+        return  new TupletElement(tupletSpec,noteElements);
     }
 
     static class UnexpectedTokenException extends Exception

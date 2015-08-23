@@ -104,6 +104,13 @@ public class Lexer
         return true;
     }
 
+    public void backtrack(int steps)
+    {
+        for (int i = 0; i < steps ; i++) {
+            backtrack();
+        }
+    }
+
 
     static class RunOutOfTokenException extends RuntimeException
     {

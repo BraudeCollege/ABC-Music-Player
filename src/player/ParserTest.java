@@ -226,7 +226,7 @@ public class ParserTest
         mnote.addNote(new Note(new Pitch(new Basenote('D'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1,1)));
         mnote.addNote(new Note(new Pitch(new Basenote('F'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1,1)));
         notes.add(mnote);
-        notes.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1,1)))
+        notes.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1,1)));
 
         TupletElement tupletElement = new TupletElement(new TupletSpec(3), notes);
         assertEquals(tupletElement, parser.expectTupletElement());
