@@ -205,6 +205,13 @@ public class ParserTest
         assertEquals(new TupletSpec(3), parser.expectTupletSpec());
     }
 
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testTupletSpecFails() throws Exception
+    {
+        Parser parser = getParser("(x");
+        parser.expectTupletSpec();
+    }
+
     public Parser getParser(String str)
     {
         return new Parser(new Lexer(str));
