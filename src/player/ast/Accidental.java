@@ -7,7 +7,10 @@ public class Accidental implements AbstractSyntaxTree
         SHARP, DOUBLE_SHARP, FLAT, DOUBLE_FLAT, NEUTRAL, NONE
     }
 
-    public final Type type;
+    /**
+     * type of accidental
+     */
+    private final Type type;
 
     private static Accidental sharp;
     private static Accidental doubleSharp;
@@ -37,6 +40,14 @@ public class Accidental implements AbstractSyntaxTree
         }
 
         return none = (none == null) ? new Accidental(Type.NONE) : none;
+    }
+
+    /**
+     * @return type of accidental
+     */
+    public Type getType()
+    {
+        return type;
     }
 
     @Override
