@@ -65,7 +65,7 @@ public class Accidental implements AbstractSyntaxTree
     /**
      * @return null object of Octave
      */
-    public static Accidental getEmptyObj()
+    public static Accidental getEmpty()
     {
         return Accidental.getInstance(Type.NONE);
     }

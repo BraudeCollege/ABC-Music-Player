@@ -1,6 +1,5 @@
 package player;
 
-import com.sun.tools.corba.se.idl.constExpr.Not;
 import org.junit.Test;
 import player.ast.*;
 
@@ -76,7 +75,7 @@ public class ParserTest
     public void testPitch() throws Exception
     {
         Parser parser = getParser("B");
-        assertEquals(new Pitch(new Basenote('B'), Accidental.getEmptyObj(), Octave.getEmpty()), parser.expectPitch());
+        assertEquals(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty()), parser.expectPitch());
 
         parser = getParser("__c");
         assertEquals(new Pitch(new Basenote('c'), Accidental.getInstance(Accidental.Type.DOUBLE_FLAT), Octave.getEmpty()), parser.expectPitch());
@@ -85,7 +84,7 @@ public class ParserTest
         assertEquals(new Pitch(new Basenote('A'), Accidental.getInstance(Accidental.Type.SHARP), Octave.getDown(1)), parser.expectPitch());
 
         parser = getParser("B'");
-        assertEquals(new Pitch(new Basenote('B'), Accidental.getEmptyObj(), Octave.getUp(1)), parser.expectPitch());
+        assertEquals(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getUp(1)), parser.expectPitch());
     }
 
     @Test
@@ -127,7 +126,7 @@ public class ParserTest
 
         parser = getParser("B");
 
-        assertEquals(new Pitch(new Basenote('B'), Accidental.getEmptyObj(), Octave.getEmpty()), parser.expectNoteOrRest());
+        assertEquals(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty()), parser.expectNoteOrRest());
 
         parser = getParser("__c");
         assertEquals(new Pitch(new Basenote('c'), Accidental.getInstance(Accidental.Type.DOUBLE_FLAT), Octave.getEmpty()), parser.expectNoteOrRest());
@@ -141,7 +140,7 @@ public class ParserTest
     public void testNote() throws Exception
     {
         Parser parser = getParser("A");
-        assertEquals(new Note(new Pitch(new Basenote('A'), Accidental.getEmptyObj(), Octave.getEmpty()), new NoteLength(1, 1)), parser.expectNote());
+        assertEquals(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)), parser.expectNote());
 
         parser = getParser("^^A,2/3");
         assertEquals(new Note(new Pitch(new Basenote('A'), Accidental.getInstance(Accidental.Type.DOUBLE_SHARP), Octave.getDown(1)), new NoteLength(2, 3)), parser.expectNote());
@@ -150,7 +149,7 @@ public class ParserTest
         assertEquals(new Note(new Pitch(new Basenote('B'), Accidental.getInstance(Accidental.Type.SHARP), Octave.getEmpty()), new NoteLength(2, 4)), parser.expectNote());
 
         parser = getParser("C2/");
-        assertEquals(new Note(new Pitch(new Basenote('C'), Accidental.getEmptyObj(), Octave.getEmpty()), new NoteLength(2, 2)), parser.expectNote());
+        assertEquals(new Note(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(2, 2)), parser.expectNote());
 
         parser = getParser("z/3");
         assertEquals(new Note(Rest.getInstance(), new NoteLength(1, 3)), parser.expectNote());
@@ -164,12 +163,27 @@ public class ParserTest
         Parser parser = getParser("[A1/2 z/3 B _C']");
 
         MultiNote mnote = new MultiNote();
-        mnote.addNote(new Note(new Pitch(new Basenote('A'),Accidental.getEmptyObj(),Octave.getEmpty()), new NoteLength(1,2)));
+        mnote.addNote(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)));
         mnote.addNote(new Note(Rest.getInstance(), new NoteLength(1,3)));
-        mnote.addNote(new Note(new Pitch(new Basenote('B'),Accidental.getEmptyObj(),Octave.getEmpty()), new NoteLength(1,1)));
+        mnote.addNote(new Note(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
         mnote.addNote(new Note(new Pitch(new Basenote('C'),Accidental.getInstance(Accidental.Type.FLAT),Octave.getUp(1)), new NoteLength(1,1)));
 
         assertEquals(mnote, parser.expectMultiNote());
+    }
+
+    @Test
+    public void testNoteElement() throws Exception
+    {
+        Parser parser = getParser("[A1/2 z/3]");
+
+        MultiNote mnote = new MultiNote();
+        mnote.addNote(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)));
+        mnote.addNote(new Note(Rest.getInstance(), new NoteLength(1,3)));
+
+        assertEquals(mnote, parser.expectNoteElement());
+
+        parser = getParser("A1/2");
+        assertEquals(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)), parser.expectNoteElement());
     }
 
     @Test

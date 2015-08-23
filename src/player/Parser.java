@@ -1,7 +1,5 @@
 package player;
 
-import com.sun.org.apache.bcel.internal.generic.MULTIANEWARRAY;
-import com.sun.org.apache.xpath.internal.operations.Mult;
 import player.ast.*;
 
 /**
@@ -106,7 +104,7 @@ public class Parser
      */
     public Pitch expectPitch() throws UnexpectedTokenException
     {
-        Accidental ac = Accidental.getEmptyObj();
+        Accidental ac = Accidental.getEmpty();
         try {
             ac = expectAccidental();
         } catch (UnexpectedTokenException e) {
@@ -143,7 +141,7 @@ public class Parser
     }
 
     /**
-     * @return an ast with the root is a NoteElemetn
+     * @return an ast with the root is a NoteElement
      * @throws UnexpectedTokenException
      */
     public NoteElement expectNoteElement() throws UnexpectedTokenException
