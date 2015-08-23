@@ -202,7 +202,7 @@ public class ParserTest
     public void testTupletSpec() throws Exception
     {
         Parser parser = getParser("(3");
-        assertEquals(3, parser.expectTupletSpec());
+        assertEquals(new TupletSpec(3), parser.expectTupletSpec());
     }
 
     public Parser getParser(String str)

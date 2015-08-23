@@ -314,6 +314,35 @@ public class Parser
         return token.getValue();
     }
 
+    /**
+     * @return
+     */
+    public TupletSpec expectTupletSpec() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+
+        if (token.getType() != TokenType.OPEN_PAREN)
+        {
+            lex.backtrack();
+            throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect a open parenthesis");
+        }
+
+        return new TupletSpec(expectDigit());
+    }
+
+    /**
+     * @return int expected digit
+     */
+    private int expectDigit() throws UnexpectedTokenException
+    {
+        int digit = expectNumber();
+
+        if (digit > 9)
+            throw new UnexpectedTokenException("Unexpected token '" + digit + "', expect a digit only ");
+
+        return digit;
+    }
+
     static class UnexpectedTokenException extends Exception
     {
 
