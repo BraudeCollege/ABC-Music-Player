@@ -45,16 +45,25 @@ public class Pitch implements AbstractSyntaxTree, NoteOrRest
         this.octave = octave;
     }
 
+    /**
+     * @return accidental of the pitch
+     */
     public Accidental getAccidental()
     {
         return accidental;
     }
 
+    /**
+     * @return basenote of the pitch
+     */
     public Basenote getBasenote()
     {
         return basenote;
     }
 
+    /**
+     * @return octave of the pitch
+     */
     public Octave getOctave()
     {
         return octave;
