@@ -34,4 +34,26 @@ public class ParserTest
 
         pars.expectBasenote();
     }
+
+
+    @Test
+    public void testAccidental()
+    {
+        Lexer lex = new Lexer("^^");
+        Parser pars = new Parser(lex);
+
+        assertEquals(new Accidental(Accidental.DOUBLE_SHARP),pars.expectAccidental());
+    }
+
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testAccidentalFail() throws Exception
+    {
+        Lexer lex = new Lexer("!");
+        Parser pars = new Parser(lex);
+
+        pars.expectAccidental();
+    }
+
+
 }
