@@ -1,43 +1,83 @@
 package player.ast;
 
-/**
- * Created by DucNguyenMinh on 8/23/15.
- */
 public class Pitch implements AbstractSyntaxTree
 {
     /**
-     * accidental object of this Pitch
+     * Rep Invariants:
+     *   accidental != null
+     *   octave != null
+     *   basenote != null
+     */
+
+    /**
+     * accidental of this Pitch
      */
     private Accidental accidental;
 
     /**
-     * accidental object of this Pitch
+     * basenote of this Pitch
      */
     private Basenote basenote;
 
     /**
-     * accidental object of this Pitch
+     * octave of this Pitch
      */
     private Octave octave;
 
     /**
      * Create a Pitch with basenote and optional accidental anf octave
      *
-     * @param accidental Accidental of the pitch if there is no accidental then use Accidental.getEmptyObj()
      * @param basenote basenote of the pitch
+     * @param accidental Accidental of the pitch if there is no accidental then use Accidental.getEmptyObj()
      * @param octave octabe of the pitch if there is no accidental then use Accidental.getEmptyObj()
      *
      * @requires basenote != null
      *           accidental != null
      *           octave != null
      */
-    public Pitch(Accidental accidental, Basenote basenote, Octave octave)
+    public Pitch(Basenote basenote, Accidental accidental, Octave octave)
     {
         if(basenote == null || accidental == null || octave == null)
-            throw new NullPointerException("basenote must ");
+            throw new NullPointerException("Basenote, Accidental and Octave mustn't be null");
 
         this.accidental = accidental;
         this.basenote = basenote;
         this.octave = octave;
+    }
+
+    public Accidental getAccidental()
+    {
+        return accidental;
+    }
+
+    public Basenote getBasenote()
+    {
+        return basenote;
+    }
+
+    public Octave getOctave()
+    {
+        return octave;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Pitch pitch = (Pitch) o;
+
+        return accidental.equals(pitch.accidental) && octave.equals(pitch.octave) && basenote.equals(pitch.basenote);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = accidental.hashCode();
+        result = 31 * result + basenote.hashCode();
+        result = 31 * result + octave.hashCode();
+        return result;
     }
 }

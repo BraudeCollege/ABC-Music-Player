@@ -6,7 +6,7 @@ package player.ast;
 public class Accidental implements AbstractSyntaxTree
 {
     public enum Type {
-        SHARP, DOUBLE_SHARP, FLAT, DOUBLE_FLAT, NEUTRAL;
+        SHARP, DOUBLE_SHARP, FLAT, DOUBLE_FLAT, NEUTRAL, NONE;
     }
 
     public final Type type;
@@ -27,6 +27,15 @@ public class Accidental implements AbstractSyntaxTree
         return type == that.type;
 
     }
+
+    /**
+     * @return null object of Octave
+     */
+    public static Accidental getEmptyObj()
+    {
+        return new Accidental(Type.NONE);
+    }
+
 
     @Override
     public int hashCode()

@@ -1,6 +1,5 @@
 package player;
 
-import org.junit.Before;
 import org.junit.Test;
 import player.ast.*;
 
@@ -9,7 +8,7 @@ import static org.junit.Assert.*;
 public class ParserTest
 {
     @Test
-    public void testBasenote()
+    public void testBasenote() throws Exception
     {
         Parser pars = getParser("A");
         assertEquals(new Basenote('A'), pars.expectBasenote());
@@ -33,7 +32,7 @@ public class ParserTest
 
 
     @Test
-    public void testAccidental()
+    public void testAccidental() throws Exception
     {
         Parser pars = getParser("^^");
         assertEquals(new Accidental(Accidental.Type.DOUBLE_SHARP), pars.expectAccidental());
@@ -55,7 +54,7 @@ public class ParserTest
     }
 
     @Test
-    public void testOctave()
+    public void testOctave() throws Exception
     {
         Parser parser  = getParser("'''");
         assertEquals(new Octave(Octave.Type.UP, 3), parser.expectOctave());
@@ -86,6 +85,13 @@ public class ParserTest
 
         parser = getParser("B'");
         assertEquals(new Pitch(new Basenote('B'), Accidental.getEmptyObj(), new Octave(Octave.Type.UP, 1)), parser.expectPitch());
+    }
+
+    @Test
+    public void testExpectRest() throws Exception
+    {
+        Parser parser = getParser("z");
+        assertEquals(new Rest(), parser.expectRest());
     }
 
     public Parser getParser(String str)

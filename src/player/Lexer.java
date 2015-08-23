@@ -1,8 +1,6 @@
 package player;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Queue;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,12 +15,14 @@ public class Lexer
      */
     private String text;
 
-    private Queue<Token> tokens;
+    private Deque<Token> tokens;
+    private Stack<Token> logger;
 
     public Lexer(String text) throws TokenType.UnknownTokenException
     {
         this.text = text;
         this.tokens = new ArrayDeque<>();
+        this.logger = new Stack<>();
 
         tokenize();
     }
@@ -42,8 +42,13 @@ public class Lexer
      */
     public Token nextToken()
     {
-        if(!hasNext()) throw new RunOutOfTokenException();
-        return tokens.remove();
+        if (!hasNext()) throw new RunOutOfTokenException();
+
+        Token token = tokens.remove();
+
+        logger.push(token);
+
+        return token;
     }
 
 
@@ -82,6 +87,21 @@ public class Lexer
     public String toString()
     {
         return "Lexer{ " + tokens + " }";
+    }
+
+    /**
+     * Backtrack the most recently returned token
+     * Modifies the object by putting the old token to the first
+     * @return true if backtrack succeeds otherwise false
+     */
+    public boolean backtrack()
+    {
+        if (logger.size() == 0)
+            return false;
+
+        tokens.offerFirst(logger.pop());
+
+        return true;
     }
 
 

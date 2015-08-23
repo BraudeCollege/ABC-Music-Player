@@ -129,4 +129,18 @@ public class LexerTest
         assertEquals(new Token(TokenType.LINEFEED, "\n"), lex.nextToken());
 
     }
+
+    @Test
+    public void testBacktrack() throws Exception
+    {
+        Lexer lex = new Lexer("AB");
+
+        lex.nextToken();
+        lex.nextToken();
+        assertFalse(lex.hasNext());
+
+        lex.backtrack();
+        assertTrue(lex.hasNext());
+        assertEquals(new Token(TokenType.B, "B"), lex.nextToken());
+    }
 }

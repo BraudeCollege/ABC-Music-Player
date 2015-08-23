@@ -8,7 +8,7 @@ public class Octave implements AbstractSyntaxTree
 
     public enum Type
     {
-        UP, DOWN
+        UP, DOWN, NONE
     }
 
     /**
@@ -23,6 +23,15 @@ public class Octave implements AbstractSyntaxTree
         this.levels = levels;
         this.type = type;
     }
+
+    /**
+     * @return null object of Octave
+     */
+    public static Octave getEmptyObj()
+    {
+        return new Octave(Type.NONE, 0);
+    }
+
 
     @Override
     public boolean equals(Object o)
