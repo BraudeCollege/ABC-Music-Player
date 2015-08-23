@@ -1,5 +1,7 @@
 package player;
 
+import com.sun.org.apache.bcel.internal.generic.MULTIANEWARRAY;
+import com.sun.org.apache.xpath.internal.operations.Mult;
 import player.ast.*;
 
 /**
@@ -181,15 +183,11 @@ public class Parser
         }
 
         try {
+            expectSlash();
 
-            Token token = lex.nextToken();
+            divider = 2; // divider is set default to 2 if there is a '/'
 
-            if (token.getType() == TokenType.SLASH) {
-
-                divider = 2; // divider is set default to 2 if there is a '/'
-
-                divider = expectNumber();
-            }
+            divider = expectNumber();
 
         } catch (Lexer.RunOutOfTokenException e) {
         } catch (UnexpectedTokenException e) {
@@ -224,6 +222,72 @@ public class Parser
         lex.backtrack();
 
         throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect a Number");
+    }
+
+    /**
+     * @return a MultiNote
+     */
+    public MultiNote expectMultiNote() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+
+        if (token.getType() != TokenType.OPEN_BRACKET) {
+            lex.backtrack();
+            throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect an open bracket");
+        }
+
+        MultiNote multiNote = new MultiNote();
+
+        multiNote.addNote(expectNote());
+
+        while (true) {
+
+            try {
+                expectSpaces();
+            } catch (Exception e) {
+            }
+
+            try {
+                multiNote.addNote(expectNote());
+            } catch (Exception e) {
+                break;
+            }
+        }
+
+        token = lex.nextToken();
+        if (token.getType() != TokenType.CLOSE_BRACKET) {
+            lex.backtrack();
+            throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect a close bracket");
+        }
+
+        return multiNote;
+    }
+
+    /**
+     * expect a '/' character
+     * @throws player.Parser.UnexpectedTokenException if there is no slash
+     */
+    private void expectSlash() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+        if (token.getType() != TokenType.SLASH) {
+            lex.backtrack();
+            throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect spaces");
+        }
+    }
+
+    /**
+     * @return spaces
+     */
+    private String expectSpaces() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+        if (token.getType() != TokenType.SPACE) {
+            lex.backtrack();
+            throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect spaces");
+        }
+
+        return token.getValue();
     }
 
     static class UnexpectedTokenException extends Exception

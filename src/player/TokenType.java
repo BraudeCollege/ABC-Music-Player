@@ -74,7 +74,7 @@ public enum TokenType {
 //    end-of-line ::= comment | linefeed
 //    text ::= .*
 
-    SPACE(" "),
+    SPACE(" +"),
     FIELD_X("X:"), FIELD_T("T:"), FIELD_C("C:"), FIELD_L("L:"),
     FIELD_M("M:"), FIELD_Q("Q:"), FIELD_V("V:"), FIELD_K("K:"),
 

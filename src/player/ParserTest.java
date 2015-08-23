@@ -164,9 +164,9 @@ public class ParserTest
 
         MultiNote mnote = new MultiNote();
         mnote.addNote(new Note(new Pitch(new Basenote('A'),Accidental.getEmptyObj(),Octave.getEmpty()), new NoteLength(1,2)));
-        mnote.addNote(new Note(Rest.getInstance(), new NoteLength(1,2)));
+        mnote.addNote(new Note(Rest.getInstance(), new NoteLength(1,3)));
         mnote.addNote(new Note(new Pitch(new Basenote('B'),Accidental.getEmptyObj(),Octave.getEmpty()), new NoteLength(1,1)));
-        mnote.addNote(new Note(new Pitch(new Basenote('B'),Accidental.getInstance(Accidental.Type.SHARP),Octave.getUp(1)), new NoteLength(1,1)));
+        mnote.addNote(new Note(new Pitch(new Basenote('C'),Accidental.getInstance(Accidental.Type.FLAT),Octave.getUp(1)), new NoteLength(1,1)));
 
         assertEquals(mnote, parser.expectMultiNote());
     }

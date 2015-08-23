@@ -76,4 +76,12 @@ public class Accidental implements AbstractSyntaxTree
     {
         return type.hashCode();
     }
+
+    @Override
+    public String toString()
+    {
+        return "Accidental{" +
+                "type=" + type +
+                '}';
+    }
 }

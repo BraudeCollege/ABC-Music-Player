@@ -40,4 +40,12 @@ public class Basenote implements AbstractSyntaxTree
     {
         return (int) symbol;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Basenote{" +
+                "symbol=" + symbol +
+                '}';
+    }
 }
