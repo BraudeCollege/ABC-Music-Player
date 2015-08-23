@@ -16,4 +16,13 @@ public class ParserTest
         assertEquals(new Basenote('A'),pars.expectBasenote());
     }
 
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testBaseNoteFail() throws Exception
+    {
+        Lexer lex = new Lexer("~");
+        Parser pars = new Parser(lex);
+
+        pars.expectBasenote();
+    }
 }
