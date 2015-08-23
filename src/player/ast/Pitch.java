@@ -1,6 +1,6 @@
 package player.ast;
 
-public class Pitch implements AbstractSyntaxTree
+public class Pitch implements AbstractSyntaxTree, NoteOrRest
 {
     /**
      * Rep Invariants:
@@ -28,8 +28,8 @@ public class Pitch implements AbstractSyntaxTree
      * Create a Pitch with basenote and optional accidental anf octave
      *
      * @param basenote basenote of the pitch
-     * @param accidental Accidental of the pitch if there is no accidental then use Accidental.getEmptyObj()
-     * @param octave octabe of the pitch if there is no accidental then use Accidental.getEmptyObj()
+     * @param accidental Accidental of the pitch if there is no accidental then use Accidental.getEmpty()
+     * @param octave octabe of the pitch if there is no accidental then use Octave.getEmpty()
      *
      * @requires basenote != null
      *           accidental != null

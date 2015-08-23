@@ -14,24 +14,46 @@ public class Octave implements AbstractSyntaxTree
     /**
      * levels of octave to be alternated
      */
-    private int levels;
+    private final int levels;
 
-    private Type type;
+    /**
+     * type of octave
+     */
+    private final Type type;
 
-    public Octave(Type type, int levels)
+    private Octave(Type type, int levels)
     {
         this.levels = levels;
         this.type = type;
     }
 
     /**
+     * Get an Up Octave with a given levels
+     * @param levels
+     * @return an Octave of type Type.UP
+     */
+    public static Octave getUp(int levels)
+    {
+        return new Octave(Type.UP, levels);
+    }
+
+    /**
+     * Get an Up Octave with a given levels
+     * @param levels
+     * @return an Octave of type Type.DOWN
+     */
+    public static Octave getDown(int levels)
+    {
+        return new Octave(Type.DOWN, levels);
+    }
+
+    /**
      * @return null object of Octave
      */
-    public static Octave getEmptyObj()
+    public static Octave getEmpty()
     {
         return new Octave(Type.NONE, 0);
     }
-
 
     @Override
     public boolean equals(Object o)

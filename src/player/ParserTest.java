@@ -35,13 +35,13 @@ public class ParserTest
     public void testAccidental() throws Exception
     {
         Parser pars = getParser("^^");
-        assertEquals(new Accidental(Accidental.Type.DOUBLE_SHARP), pars.expectAccidental());
+        assertEquals(Accidental.getInstance(Accidental.Type.DOUBLE_SHARP), pars.expectAccidental());
 
         pars = getParser("__");
-        assertEquals(new Accidental(Accidental.Type.DOUBLE_FLAT), pars.expectAccidental());
+        assertEquals(Accidental.getInstance(Accidental.Type.DOUBLE_FLAT), pars.expectAccidental());
 
         pars = getParser("=");
-        assertEquals(new Accidental(Accidental.Type.NEUTRAL), pars.expectAccidental());
+        assertEquals(Accidental.getInstance(Accidental.Type.NEUTRAL), pars.expectAccidental());
     }
 
 
@@ -57,10 +57,10 @@ public class ParserTest
     public void testOctave() throws Exception
     {
         Parser parser  = getParser("'''");
-        assertEquals(new Octave(Octave.Type.UP, 3), parser.expectOctave());
+        assertEquals(Octave.getUp(3), parser.expectOctave());
 
         parser  = getParser(",,");
-        assertEquals(new Octave(Octave.Type.DOWN, 2), parser.expectOctave());
+        assertEquals(Octave.getDown(2), parser.expectOctave());
     }
 
 
@@ -75,16 +75,16 @@ public class ParserTest
     public void testPitch() throws Exception
     {
         Parser parser = getParser("B");
-        assertEquals(new Pitch(new Basenote('B'), Accidental.getEmptyObj(), Octave.getEmptyObj()), parser.expectPitch());
+        assertEquals(new Pitch(new Basenote('B'), Accidental.getEmptyObj(), Octave.getEmpty()), parser.expectPitch());
 
         parser = getParser("__c");
-        assertEquals(new Pitch(new Basenote('c'), new Accidental(Accidental.Type.DOUBLE_FLAT), Octave.getEmptyObj()), parser.expectPitch());
+        assertEquals(new Pitch(new Basenote('c'), Accidental.getInstance(Accidental.Type.DOUBLE_FLAT), Octave.getEmpty()), parser.expectPitch());
 
         parser = getParser("^A,");
-        assertEquals(new Pitch(new Basenote('A'), new Accidental(Accidental.Type.SHARP), new Octave(Octave.Type.DOWN, 1)), parser.expectPitch());
+        assertEquals(new Pitch(new Basenote('A'), Accidental.getInstance(Accidental.Type.SHARP), Octave.getDown(1)), parser.expectPitch());
 
         parser = getParser("B'");
-        assertEquals(new Pitch(new Basenote('B'), Accidental.getEmptyObj(), new Octave(Octave.Type.UP, 1)), parser.expectPitch());
+        assertEquals(new Pitch(new Basenote('B'), Accidental.getEmptyObj(), Octave.getUp(1)), parser.expectPitch());
     }
 
     @Test
@@ -92,6 +92,27 @@ public class ParserTest
     {
         Parser parser = getParser("z");
         assertEquals(Rest.getInstance(), parser.expectRest());
+    }
+
+
+    @Test
+    public void testNoteOrRest() throws Exception
+    {
+
+        Parser parser = getParser("z");
+
+        assertEquals(Rest.getInstance(), parser.expectNoteOrRest());
+
+        parser = getParser("B");
+
+        assertEquals(new Pitch(new Basenote('B'), Accidental.getEmptyObj(), Octave.getEmpty()), parser.expectNoteOrRest());
+
+        parser = getParser("__c");
+        assertEquals(new Pitch(new Basenote('c'), Accidental.getInstance(Accidental.Type.DOUBLE_FLAT), Octave.getEmpty()), parser.expectNoteOrRest());
+
+
+        parser = getParser("^D,,");
+        assertEquals(new Pitch(new Basenote('D'), Accidental.getInstance(Accidental.Type.SHARP), Octave.getDown(2)), parser.expectNoteOrRest());
     }
 
     public Parser getParser(String str)

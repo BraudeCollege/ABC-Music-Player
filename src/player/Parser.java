@@ -46,15 +46,15 @@ public class Parser
 
         switch (token.getType()) {
             case ACC_SHARP:
-                return new Accidental(Accidental.Type.SHARP);
+                return Accidental.getInstance(Accidental.Type.SHARP);
             case ACC_SHARP_DOUBLE:
-                return new Accidental(Accidental.Type.DOUBLE_SHARP);
+                return Accidental.getInstance(Accidental.Type.DOUBLE_SHARP);
             case ACC_FLAT:
-                return new Accidental(Accidental.Type.FLAT);
+                return Accidental.getInstance(Accidental.Type.FLAT);
             case ACC_FLAT_DOUBLE:
-                return new Accidental(Accidental.Type.DOUBLE_FLAT);
+                return Accidental.getInstance(Accidental.Type.DOUBLE_FLAT);
             case ACC_NEUTRAL:
-                return new Accidental(Accidental.Type.NEUTRAL);
+                return Accidental.getInstance(Accidental.Type.NEUTRAL);
         }
 
         lex.backtrack();
@@ -74,8 +74,8 @@ public class Parser
         int levels = token.getValue().length();
 
         switch (token.getType()){
-            case OCTAVE_UP: return new Octave(Octave.Type.UP, levels);
-            case OCTAVE_DOWN: return new Octave(Octave.Type.DOWN, levels);
+            case OCTAVE_UP: return Octave.getUp(levels);
+            case OCTAVE_DOWN: return Octave.getDown(levels);
         }
 
         lex.backtrack();
@@ -94,16 +94,14 @@ public class Parser
         try {
             ac = expectAccidental();
         } catch (UnexpectedTokenException e) {
-            lex.backtrack();
         }
 
         Basenote basenote = expectBasenote();
 
-        Octave octave = Octave.getEmptyObj();
+        Octave octave = Octave.getEmpty();
         try {
             octave = expectOctave();
         } catch (UnexpectedTokenException e) {
-            lex.backtrack();
         } catch (Lexer.RunOutOfTokenException e) {
         }
 
@@ -126,6 +124,26 @@ public class Parser
         lex.backtrack();
 
         throw new UnexpectedTokenException("Unexpected token '"+ token.getValue() +"', expect a Rest");
+    }
+
+    public NoteOrRest expectNoteOrRest() throws UnexpectedTokenException
+    {
+        NoteOrRest note = null;
+        try {
+            note = expectPitch();
+        } catch (UnexpectedTokenException e) { }
+
+        if (note == null) {
+            try {
+                note = expectRest();
+            } catch (UnexpectedTokenException e) { }
+        }
+
+        if (note != null)
+            return note;
+
+        throw new UnexpectedTokenException("Unexpected token, expect a Note or a Rest");
+
     }
 
     static class UnexpectedTokenException extends Exception {
