@@ -8,11 +8,18 @@ import java.util.List;
  */
 public class MultiNote implements NoteElement
 {
-   private List<Note> notes;
+    private List<Note> notes;
 
-    public MultiNote()
+    /**
+     * construct a multi-note element from a list of notes
+     * @param notes there must be at least one Note in notes
+     */
+    public MultiNote(List<Note> notes)
     {
-        this.notes = new ArrayList<>();
+        if (notes.isEmpty())
+            throw new IllegalArgumentException("There is at least one Note in notes");
+
+        this.notes = new ArrayList<>(notes);
     }
 
     /**

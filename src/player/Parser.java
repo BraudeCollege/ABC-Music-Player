@@ -261,9 +261,7 @@ public class Parser
             throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect an open bracket");
         }
 
-        MultiNote multiNote = new MultiNote();
-
-        multiNote.addNote(expectNote());
+        ArrayList<Note> notes = new ArrayList<>();
 
         while (true) {
 
@@ -273,11 +271,16 @@ public class Parser
             }
 
             try {
-                multiNote.addNote(expectNote());
+                notes.add(expectNote());
             } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
                 break;
             }
         }
+
+        if (notes.isEmpty())
+            throw new UnexpectedTokenException("A MuliNote consists of at least one Note, nothing found");
+
+        MultiNote multiNote = new MultiNote(notes);
 
         token = lex.nextToken();
         if (token.getType() != TokenType.CLOSE_BRACKET) {

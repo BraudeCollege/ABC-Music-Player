@@ -1,5 +1,6 @@
 package player.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,22 +8,35 @@ import java.util.List;
  */
 public class TupletElement implements AbstractSyntaxTree
 {
-
     private TupletSpec tupletSpec;
-
     private List<NoteElement> noteElements;
 
+    /**
+     * @param tupletSpec
+     * @param noteElements length of noteElements must equals tupletSpec.getCount()
+     * @throws IllegalArgumentException if noteElements.size() != tupletSpec.getCount()
+     */
     public TupletElement(TupletSpec tupletSpec, List<NoteElement> noteElements)
     {
         this.tupletSpec = tupletSpec;
-        this.noteElements = noteElements;
+
+        if (noteElements.size() != tupletSpec.getCount())
+            throw new IllegalArgumentException("Number of note elements must be " + tupletSpec.getCount() + " but received " + noteElements.size());
+
+        this.noteElements = new ArrayList<>(noteElements);
     }
 
+    /**
+     * @return _TODO: iteration ???
+     */
     public List<NoteElement> getNoteElements()
     {
-        return noteElements;
+        return new ArrayList(noteElements);
     }
 
+    /**
+     * @return number of note elements in this tuplet
+     */
     public TupletSpec getTupletSpec()
     {
         return tupletSpec;
