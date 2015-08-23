@@ -3,6 +3,8 @@ package player;
 import org.junit.Test;
 import player.ast.*;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 public class ParserTest
@@ -208,8 +210,26 @@ public class ParserTest
     @Test(expected = Parser.UnexpectedTokenException.class)
     public void testTupletSpecFails() throws Exception
     {
-        Parser parser = getParser("(x");
+        Parser parser = getParser("(A");
         parser.expectTupletSpec();
+    }
+
+    @Test
+    public void testTupletElement() throws Exception
+    {
+        Parser parser = getParser("(3 A1/2 [CDF] E");
+
+        ArrayList<NoteElement> notes = new ArrayList<>();
+        notes.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1,2)));
+        MultiNote mnote = new MultiNote();
+        mnote.addNote(new Note(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1,1)));
+        mnote.addNote(new Note(new Pitch(new Basenote('D'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1,1)));
+        mnote.addNote(new Note(new Pitch(new Basenote('F'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1,1)));
+        notes.add(mnote);
+        notes.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1,1)))
+
+        TupletElement tupletElement = new TupletElement(new TupletSpec(3), notes);
+        assertEquals(tupletElement, parser.expectTupletElement());
     }
 
     public Parser getParser(String str)
