@@ -17,12 +17,11 @@ public class Parser
     }
 
     /**
-     * @return
+     * @return an ast with the root is a basenote
+     * @throws player.Parser.UnexpectedTokenException if no basenote found
      */
     public AbstractSyntaxTree expectBasenote()
     {
-        // exception if !hasNext
-
         Token token =  lex.nextToken();
 
         switch (token.getType()) {
@@ -31,10 +30,14 @@ public class Parser
                 return new Basenote(token.getValue().charAt(0));
         }
 
-        return null;
+        throw new UnexpectedTokenException("Unexpected token '"+ token.getValue() +"', expect a Basenote");
     }
 
-    static class UnexpectedTokenException extends RuntimeException{
+    static class UnexpectedTokenException extends RuntimeException {
 
+        public UnexpectedTokenException(String message)
+        {
+            super(message);
+        }
     }
 }
