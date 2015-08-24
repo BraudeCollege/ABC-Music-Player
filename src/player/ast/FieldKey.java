@@ -1,9 +1,6 @@
 package player.ast;
 
-/**
- * Created by hieusun on 24.08.15.
- */
-public class FieldKey
+public class FieldKey implements AbstractSyntaxTree
 {
     private final Key key;
 

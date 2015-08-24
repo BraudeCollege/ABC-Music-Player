@@ -2,7 +2,6 @@ package player.ast;
 
 public class FieldNumber implements AbstractSyntaxTree
 {
-
     /**
      * Reference number in the Field-number
      */

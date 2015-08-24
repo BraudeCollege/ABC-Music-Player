@@ -1,9 +1,6 @@
 package player.ast;
 
-/**
- * Created by hieusun on 24.08.15.
- */
-public class FieldMeter
+public class FieldMeter implements OtherField
 {
     private final Meter meter;
 

@@ -1,6 +1,6 @@
 package player.ast;
 
-public class FieldTitle implements MidTuneField
+public class FieldTitle implements AbstractSyntaxTree
 {
     /**
      * title of the file

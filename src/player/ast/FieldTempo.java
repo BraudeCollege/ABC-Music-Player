@@ -1,9 +1,6 @@
 package player.ast;
 
-/**
- * Created by hieusun on 24.08.15.
- */
-public class FieldTempo
+public class FieldTempo implements OtherField
 {
     private final int tempo;
 

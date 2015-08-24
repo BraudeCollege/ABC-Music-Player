@@ -870,6 +870,25 @@ public class Parser
         return new FieldMeter(m);
     }
 
+    public FieldDefaultLength expectFieldDefaultLength() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+
+        if (token.getType() != TokenType.FIELD_L)
+        {
+            lex.backtrack();
+            throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect 'L:'");
+        }
+
+        ignoreSpaces();
+
+        NoteLengthStrict m = expectNoteLengthStrict();
+
+        ignoreSpaces();
+
+        return new FieldDefaultLength(m);
+    }
+
 
     static class UnexpectedTokenException extends Exception
     {

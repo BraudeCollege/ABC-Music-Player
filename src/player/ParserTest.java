@@ -704,6 +704,15 @@ public class ParserTest
         assertEquals(new FieldMeter(MeterC.getInstance()), getParser("M: C  \n").expectFieldMeter());
     }
 
+    @Test
+    public void testExpectFieldDefaultLength() throws Exception
+    {
+        FieldDefaultLength f = new FieldDefaultLength(new NoteLengthStrict(2,4));
+        assertEquals(f, getParser("L:2/4\n").expectFieldDefaultLength());
+        assertEquals(f, getParser("L: 2/4 \n").expectFieldDefaultLength());
+        assertEquals(f, getParser("L:2/4  \n").expectFieldDefaultLength());
+    }
+
     @Test(expected = Parser.UnexpectedTokenException.class)
     public void testNoteLengthStrictFails() throws Exception
     {

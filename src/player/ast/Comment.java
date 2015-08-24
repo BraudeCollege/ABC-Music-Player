@@ -1,6 +1,6 @@
 package player.ast;
 
-public class Comment implements AbcLine
+public class Comment implements AbcLine, OtherField
 {
     private final String text;
 

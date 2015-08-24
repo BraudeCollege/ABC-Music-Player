@@ -1,6 +1,6 @@
 package player.ast;
 
-public class FieldVoice implements MidTuneField
+public class FieldVoice implements MidTuneField, OtherField
 {
     /**
      * text of field voice

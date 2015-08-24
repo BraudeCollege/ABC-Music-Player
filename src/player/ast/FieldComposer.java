@@ -1,6 +1,6 @@
 package player.ast;
 
-public class FieldComposer implements MidTuneField
+public class FieldComposer implements OtherField
 {
     /**
      * name the composer
