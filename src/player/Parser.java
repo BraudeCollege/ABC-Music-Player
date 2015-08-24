@@ -1,5 +1,6 @@
 package player;
 
+import com.sun.xml.internal.xsom.impl.WildcardImpl;
 import player.ast.*;
 
 import java.util.ArrayList;
@@ -637,7 +638,7 @@ public class Parser
 
         if (token.getType() != TokenType.FIELD_T) {
             lex.backtrack();
-            throw new UnexpectedTokenException("Expect a Field_C");
+            throw new UnexpectedTokenException("Expect a Field_T");
         }
 
         String text = token.getValue().substring(2);
@@ -750,8 +751,7 @@ public class Parser
     {
         Token token = lex.nextToken();
 
-        if (token.getType() != TokenType.FIELD_K)
-        {
+        if (token.getType() != TokenType.FIELD_K) {
             lex.backtrack();
             throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect 'K:'");
         }
@@ -762,6 +762,8 @@ public class Parser
 
         ignoreSpaces();
 
+        expectLinefeed();
+
         return new FieldKey(k);
     }
 
@@ -771,21 +773,22 @@ public class Parser
      */
     public FieldTempo expectFieldTempo() throws UnexpectedTokenException
     {
-            Token token = lex.nextToken();
+        Token token = lex.nextToken();
 
-            if (token.getType() != TokenType.FIELD_Q)
-            {
-                lex.backtrack();
-                throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect 'Q:'");
-            }
+        if (token.getType() != TokenType.FIELD_Q) {
+            lex.backtrack();
+            throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect 'Q:'");
+        }
 
-            ignoreSpaces();
+        ignoreSpaces();
 
-            int t = expectNumber();
+        int t = expectNumber();
 
-            ignoreSpaces();
+        ignoreSpaces();
 
-            return new FieldTempo(t);
+        expectLinefeed();
+
+        return new FieldTempo(t);
     }
 
     /**
@@ -833,15 +836,18 @@ public class Parser
     {
         try {
             return expectC();
-        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
 
         try {
             return expectCPipe();
-        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
 
         try {
             return expectMeterFraction();
-        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
 
         throw new UnexpectedTokenException("Unexpected token, expect C or C| or a Meter Fraction");
     }
@@ -854,8 +860,7 @@ public class Parser
     {
         Token token = lex.nextToken();
 
-        if (token.getType() != TokenType.FIELD_M)
-        {
+        if (token.getType() != TokenType.FIELD_M) {
             lex.backtrack();
             throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect 'M:'");
         }
@@ -865,6 +870,8 @@ public class Parser
         Meter m = expectMeter();
 
         ignoreSpaces();
+
+        expectLinefeed();
 
         return new FieldMeter(m);
     }
@@ -877,8 +884,7 @@ public class Parser
     {
         Token token = lex.nextToken();
 
-        if (token.getType() != TokenType.FIELD_L)
-        {
+        if (token.getType() != TokenType.FIELD_L) {
             lex.backtrack();
             throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect 'L:'");
         }
@@ -888,6 +894,8 @@ public class Parser
         NoteLengthStrict m = expectNoteLengthStrict();
 
         ignoreSpaces();
+
+        expectLinefeed();
 
         return new FieldDefaultLength(m);
     }
@@ -900,29 +908,59 @@ public class Parser
     {
         try {
             return expectFieldComposer();
-        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
 
         try {
             return expectFieldDefaultLength();
-        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
 
         try {
             return expectFieldMeter();
-        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
 
         try {
             return expectFieldTempo();
-        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
 
         try {
             return expectFieldVoice();
-        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
 
         try {
             return expectComment();
-        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
 
         throw new UnexpectedTokenException("Expect either field-composer, field-default-length, field-meter, field-tempo, field-voice or comment, nothing found.");
+    }
+
+    public AbcHeader expectAbcHeader() throws UnexpectedTokenException
+    {
+        FieldNumber fn = expectFieldNumber();
+
+        try {
+            while (true)
+                expectComment();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
+
+        FieldTitle ft = expectFieldTitle();
+
+        List<OtherField> fields = new ArrayList<>();
+        try {
+            while (true)
+                fields.add(expectOtherField());
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
+
+        FieldKey fk = expectFieldKey();
+
+        return new AbcHeader(fn, ft, fields, fk);
     }
 
 

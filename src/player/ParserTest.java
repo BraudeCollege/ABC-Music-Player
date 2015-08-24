@@ -717,7 +717,7 @@ public class ParserTest
     public void testExpectOtherField() throws Exception
     {
         assertEquals(new Comment(" comment field"), getParser("% comment field\n").expectOtherField());
-        assertEquals(new FieldDefaultLength(new NoteLengthStrict(2,4)), getParser("L:2/4\n").expectOtherField());
+        assertEquals(new FieldDefaultLength(new NoteLengthStrict(2, 4)), getParser("L:2/4\n").expectOtherField());
     }
 
     @Test(expected = Parser.UnexpectedTokenException.class)
@@ -730,6 +730,35 @@ public class ParserTest
     public void testNoteLengthStrictFailsTwo() throws Exception
     {
         getParser("/2").expectNoteLengthStrict();
+    }
+
+    @Test
+    public void testExpectAbcHeader() throws Exception
+    {
+        List<OtherField> fields = new ArrayList<>();
+        fields.add(new FieldComposer("Beethoven"));
+        fields.add(new FieldDefaultLength(new NoteLengthStrict(2, 4)));
+        fields.add(new FieldTempo(120));
+        fields.add(new FieldMeter(MeterC.getInstance()));
+        fields.add(new FieldVoice("Voice1"));
+
+        Key key = new Key(new Keynote(new Basenote('C'), KeyAccidental.getSharp()), ModeMinor.getInstance());
+
+        AbcHeader header = new AbcHeader(new FieldNumber(1), new FieldTitle("ABC Title"), fields, new FieldKey(key));
+
+        assertEquals(header, getParser(
+                "X:1\n" +
+                "%Comment 1\n" +
+                "%Comment 2\n" +
+                "T:ABC Title\n" +
+                "C:Beethoven\n" +
+                "L:2/4\n" +
+                "Q:120\n" +
+                "M:C\n" +
+                "V:Voice1\n" +
+                "K:C#m\n"
+        ).expectAbcHeader());
+
     }
 
     public Parser getParser(String str)
