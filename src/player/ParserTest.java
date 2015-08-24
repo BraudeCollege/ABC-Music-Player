@@ -385,6 +385,46 @@ public class ParserTest
 
     }
 
+    @Test
+    public void testAbcLine() throws Exception
+    {
+        Parser parser = getParser("[C z3/4] |: (3 A/ B4 E/6 :|[2 ");
+
+        List<Element> elementLines = new ArrayList<>();
+
+        List<Note> notes = new ArrayList<>();
+        notes.add(new Note(new Pitch(new Basenote('C'),Accidental.getEmpty(),Octave.getEmpty()), new NoteLength(1,1)));
+        notes.add(new Note(Rest.getInstance(), new NoteLength(3,4)));
+        NoteElement multiNote = new MultiNote(notes);
+
+        Barline openRepeatBar = new Barline(Barline.Type.OPEN_REPEAT_BAR);
+        Barline closeRepeatBar = new Barline(Barline.Type.CLOSE_REPEAT_BAR);
+
+        TupletSpec tupletSpec = new TupletSpec(3);
+        List<NoteElement> noteElements = new ArrayList<>();
+        noteElements.add(new Note(new Pitch(new Basenote('A'),Accidental.getEmpty(),Octave.getEmpty()), new NoteLength(1,2)));
+        noteElements.add(new Note(new Pitch(new Basenote('B'),Accidental.getEmpty(),Octave.getEmpty()), new NoteLength(4,1)));
+        noteElements.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 6)));
+        TupletElement tupletElement = new TupletElement(tupletSpec,noteElements);
+
+        NthRepeat twiceRepeat = new NthRepeat(2);
+
+        elementLines.add(multiNote);
+        elementLines.add(openRepeatBar);
+        elementLines.add(tupletElement);
+        elementLines.add(closeRepeatBar);
+        elementLines.add(twiceRepeat);
+
+        assertEquals(new ElementLine(elementLines), parser.expectAbcLine());
+
+        parser = getParser("V: The field voice\n");
+        assertEquals(new FieldVoice(" The field voice"), parser.expectAbcLine());
+
+        parser = getParser("% this is a comment\n");
+        assertEquals(" this is a comment", parser.expectAbcLine());
+
+    }
+
     public Parser getParser(String str)
     {
         return new Parser(new Lexer(str));
