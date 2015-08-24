@@ -610,6 +610,15 @@ public class ParserTest
     }
 
     @Test
+    public void testExpectFieldKey() throws Exception
+    {
+        Key key = new Key(new Keynote(new Basenote('C'), KeyAccidental.getSharp()), ModeMinor.getInstance());
+        assertEquals(new FieldKey(key), getParser("K:C#m\n").expectFieldKey());
+        assertEquals(new FieldKey(key), getParser("K: C#m\n").expectFieldKey());
+        assertEquals(new FieldKey(key), getParser("K:C#m  \n").expectFieldKey());
+    }
+
+    @Test
     public void testNoteLengthStrict() throws Exception
     {
         Parser parser = getParser("3/4");

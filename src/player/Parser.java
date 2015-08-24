@@ -633,7 +633,6 @@ public class Parser
      */
     public FieldTitle expectFieldTitle() throws UnexpectedTokenException
     {
-
         Token token = lex.nextToken();
 
         if (token.getType() != TokenType.FIELD_T) {
@@ -747,6 +746,24 @@ public class Parser
         return new Key(keynote, m);
     }
 
+    public FieldKey expectFieldKey() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+
+        if (token.getType() != TokenType.FIELD_K)
+        {
+            lex.backtrack();
+            throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect 'K:'");
+        }
+
+        ignoreSpaces();
+
+        Key k = expectKey();
+
+        ignoreSpaces();
+
+        return new FieldKey(k);
+    }
 
 
     static class UnexpectedTokenException extends Exception
