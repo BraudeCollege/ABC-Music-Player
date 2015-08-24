@@ -653,6 +653,20 @@ public class Parser
         return new NoteLengthStrict(multiplier, divider) ;
     }
 
+    public KeyAccidental expectKeyAccidental() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+
+        switch (token.getType()) {
+            case SHARP:
+                return KeyAccidental.getSharp();
+            case b:
+                return KeyAccidental.getFlat();
+        }
+
+        throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect a Sharp(#) or a Flat(b)");
+    }
+
     static class UnexpectedTokenException extends Exception
     {
         public UnexpectedTokenException(String message)

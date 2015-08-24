@@ -4,9 +4,9 @@ public class FieldNumber implements AbstractSyntaxTree
 {
 
     /**
-     * Number in the Field number
+     * Reference number in the Field-number
      */
-    private int num;
+    private final int num;
 
     public FieldNumber(int num)
     {

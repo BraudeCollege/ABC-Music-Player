@@ -498,7 +498,7 @@ public class ParserTest
     }
 
     @Test
-    public void testfieldNumber() throws Exception
+    public void testExpectFieldNumber() throws Exception
     {
         Parser parser = getParser("X: 12\n");
         assertEquals(new FieldNumber(12), parser.expectFieldNumber());
@@ -541,6 +541,18 @@ public class ParserTest
         getParser("C:\n").expectFieldComposer();
     }
 
+    @Test
+    public void testKeyAccidental() throws Exception
+    {
+        assertEquals(KeyAccidental.getFlat(), getParser("b").expectKeyAccidental());
+        assertEquals(KeyAccidental.getSharp(), getParser("#").expectKeyAccidental());
+    }
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testKeyAccidentalFails() throws Exception
+    {
+        getParser("|").expectKeyAccidental();
+    }
 
     @Test
     public void testNoteLengthStrict() throws Exception
@@ -559,6 +571,12 @@ public class ParserTest
     public void testNoteLengthStrictFails() throws Exception
     {
         getParser("/").expectNoteLengthStrict();
+    }
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testNoteLengthStrictFailsTwo() throws Exception
+    {
+        getParser("/2").expectNoteLengthStrict();
     }
 
     public Parser getParser(String str)
