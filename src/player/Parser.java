@@ -1,6 +1,5 @@
 package player;
 
-import com.sun.xml.internal.xsom.impl.WildcardImpl;
 import player.ast.*;
 
 import java.util.ArrayList;
@@ -470,13 +469,9 @@ public class Parser
             throw new UnexpectedTokenException("Expect a Field_V");
         }
 
-        String text = token.getValue().substring(2);
+        String line = token.getValue().substring(2);
 
-        Pattern p = Pattern.compile("(.+)");
-        Matcher m = p.matcher(text);
-        m.find();
-
-        return new FieldVoice(m.group(1));
+        return new FieldVoice(removeLineFeed(line));
     }
 
     /**
@@ -500,13 +495,23 @@ public class Parser
             throw new UnexpectedTokenException("Expect a comment");
         }
 
-        String text = token.getValue().substring(1);
+        String line = token.getValue().substring(1);
 
+        return new Comment(removeLineFeed(line));
+    }
+
+    /**
+     * Remove trailing linefeeds from string
+     * @param str
+     * @return string with linefeeds at the end remove
+     */
+    private String removeLineFeed(String str)
+    {
         Pattern p = Pattern.compile("(.+)");
-        Matcher m = p.matcher(text);
+        Matcher m = p.matcher(str);
         m.find();
 
-        return new Comment(m.group(1));
+        return m.group(1);
     }
 
     /**
@@ -641,13 +646,9 @@ public class Parser
             throw new UnexpectedTokenException("Expect a Field_T");
         }
 
-        String text = token.getValue().substring(2);
+        String line = token.getValue().substring(2);
 
-        Pattern p = Pattern.compile("(.+)");
-        Matcher m = p.matcher(text);
-        m.find();
-
-        return new FieldTitle(m.group(1));
+        return new FieldTitle(removeLineFeed(line));
     }
 
     /**
@@ -664,13 +665,9 @@ public class Parser
             throw new UnexpectedTokenException("Expect a Field_C");
         }
 
-        String text = token.getValue().substring(2);
+        String line = token.getValue().substring(2);
 
-        Pattern p = Pattern.compile("(.+)");
-        Matcher m = p.matcher(text);
-        m.find();
-
-        return new FieldComposer(m.group(1));
+        return new FieldComposer(removeLineFeed(line));
     }
 
     public NoteLengthStrict expectNoteLengthStrict() throws UnexpectedTokenException
