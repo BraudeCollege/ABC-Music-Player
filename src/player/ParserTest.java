@@ -664,6 +664,18 @@ public class ParserTest
     }
 
     @Test
+    public void testMeterC() throws Exception
+    {
+        assertEquals(MeterC.getInstance(), getParser("C").expectC());
+    }
+
+    @Test
+    public void testMeterCPipe() throws Exception
+    {
+        assertEquals(MeterCPipe.getInstance(), getParser("C|").expectCPipe());
+    }
+
+    @Test
     public void testNoteLengthStrict() throws Exception
     {
         Parser parser = getParser("3/4");
@@ -674,6 +686,14 @@ public class ParserTest
 
         parser = getParser("2/2");
         assertEquals(new NoteLengthStrict(2, 2), parser.expectNoteLengthStrict());
+    }
+
+    @Test
+    public void testExpectMeter() throws Exception
+    {
+        assertEquals(new MeterFraction(2,4), getParser("2/4").expectMeter());
+        assertEquals(MeterC.getInstance(), getParser("C").expectMeter());
+        assertEquals(MeterCPipe.getInstance(), getParser("C|").expectMeter());
     }
 
     @Test(expected = Parser.UnexpectedTokenException.class)

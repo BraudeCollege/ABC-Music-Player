@@ -803,6 +803,54 @@ public class Parser
         return new MeterFraction(multiplier, divider);
     }
 
+    public MeterCPipe expectCPipe() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+
+        if (token.getType() == TokenType.C_PIPE)
+            return MeterCPipe.getInstance();
+
+        lex.backtrack();
+        throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect 'C_PIPE'");
+    }
+
+    public MeterC expectC() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+
+        if (token.getType() == TokenType.C)
+            return MeterC.getInstance();
+
+        lex.backtrack();
+        throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect 'C'");
+    }
+
+    /**
+     * @return
+     * @throws UnexpectedTokenException
+     */
+    public Meter expectMeter() throws UnexpectedTokenException
+    {
+        Meter m = null;
+
+        try {
+            m = expectC();
+            return m;
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+
+        try {
+            m = expectCPipe();
+            return m;
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+
+        try {
+            m = expectMeterFraction();
+            return m;
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+
+        throw new UnexpectedTokenException("Unexpected token, expect C or C| or a Meter Fraction");
+    }
+
 
     static class UnexpectedTokenException extends Exception
     {

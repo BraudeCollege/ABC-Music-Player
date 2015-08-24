@@ -1,6 +1,6 @@
 package player.ast;
 
-public class MeterFraction
+public class MeterFraction implements Meter
 {
     private final int multiplier;
     private final int divider;
