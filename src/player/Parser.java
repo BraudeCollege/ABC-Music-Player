@@ -553,6 +553,28 @@ public class Parser
         return expectComment();
     }
 
+    /**
+     * @return AbcMusic containing one or more AbcLine
+     * @throws UnexpectedTokenException if no AbcLine found
+     */
+    public AbcMusic expectAbcMusic() throws UnexpectedTokenException
+    {
+        ArrayList<AbcLine> lines = new ArrayList<>();
+
+        while (true) {
+            try {
+                lines.add(expectAbcLine());
+            } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+                break;
+            }
+        }
+
+        if (lines.isEmpty())
+            throw new UnexpectedTokenException("Expect an AbcLine but nothing found");
+
+        return new AbcMusic(lines);
+    }
+
     static class UnexpectedTokenException extends Exception
     {
         public UnexpectedTokenException(String message)
