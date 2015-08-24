@@ -4,6 +4,7 @@ import org.junit.Test;
 import player.ast.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -347,6 +348,41 @@ public class ParserTest
     {
         Parser parser = getParser("% this is a comment\n");
         assertEquals(" this is a comment", parser.expectComment());
+    }
+
+    @Test
+    public void testElementLine() throws Exception
+    {
+        Parser parser = getParser("[A z] |: (3 A B E :|[2 ");
+
+        List<Element> elementLines = new ArrayList<>();
+
+        List<Note> notes = new ArrayList<>();
+        notes.add(new Note(new Pitch(new Basenote('A'),Accidental.getEmpty(),Octave.getEmpty()), new NoteLength(1,1)));
+        notes.add(new Note(new Pitch(new Basenote('z'),Accidental.getEmpty(),Octave.getEmpty()), new NoteLength(1,1)));
+        NoteElement multiNote = new MultiNote(notes);
+
+        Barline openRepeatBar = new Barline(Barline.Type.OPEN_REPEAT_BAR);
+        Barline closeRepeatBar = new Barline(Barline.Type.CLOSE_REPEAT_BAR);
+
+        TupletSpec tupletSpec = new TupletSpec(3);
+        List<NoteElement> noteElements = new ArrayList<>();
+        noteElements.add(new Note(new Pitch(new Basenote('A'),Accidental.getEmpty(),Octave.getEmpty()), new NoteLength(1,1)));
+        noteElements.add(new Note(new Pitch(new Basenote('B'),Accidental.getEmpty(),Octave.getEmpty()), new NoteLength(1,1)));
+        noteElements.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
+        TupletElement tupletElement = new TupletElement(tupletSpec,noteElements);
+
+        NthRepeat twiceRepeat = new NthRepeat(2);
+
+        elementLines.add(multiNote);
+        elementLines.add(openRepeatBar);
+        elementLines.add(tupletElement);
+        elementLines.add(closeRepeatBar);
+        elementLines.add(twiceRepeat);
+
+        assertEquals(new ElementLine(elementLines), parser.expectElementLine());
+
+
     }
 
     public Parser getParser(String str)
