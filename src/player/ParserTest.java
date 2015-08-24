@@ -569,6 +569,18 @@ public class ParserTest
     }
 
     @Test
+    public void testExpectModeMinor() throws Exception
+    {
+        assertEquals(ModeMinor.getInstance(), getParser("m").expectModeMinor());
+    }
+    
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testExpectModeMinorFails() throws Exception
+    {
+        getParser("M").expectModeMinor();
+    }
+
+    @Test
     public void testNoteLengthStrict() throws Exception
     {
         Parser parser = getParser("3/4");

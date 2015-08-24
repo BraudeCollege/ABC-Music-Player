@@ -664,9 +664,15 @@ public class Parser
                 return KeyAccidental.getFlat();
         }
 
+        lex.backtrack();
+
         throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect a Sharp(#) or a Flat(b)");
     }
 
+    /**
+     * @return Keynote
+     * @throws UnexpectedTokenException if keynote not found
+     */
     public Keynote expectKeynote() throws UnexpectedTokenException
     {
         Basenote basenote = expectBasenote();
@@ -680,6 +686,23 @@ public class Parser
 
         return new Keynote(basenote, ka);
     }
+
+    /**
+     * @return a ModeMinor
+     * @throws UnexpectedTokenException if no mode minor found
+     */
+    public ModeMinor expectModeMinor() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+
+        if (token.getType() == TokenType.MODE_MINOR)
+            return ModeMinor.getInstance();
+
+        lex.backtrack();
+
+        throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect a mode-minor");
+    }
+
 
     static class UnexpectedTokenException extends Exception
     {
