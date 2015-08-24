@@ -396,6 +396,21 @@ public class Parser
         throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect a barline");
     }
 
+    /**
+     * @return NthRepeat
+     */
+    public NthRepeat expectNthRepeat() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+
+        if (token.getType() != TokenType.NTH_REPEAT) {
+            lex.backtrack();
+            throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect an nth-repeat");
+        }
+
+        return new NthRepeat(Integer.valueOf(token.getValue().substring(1)));
+    }
+
     static class UnexpectedTokenException extends Exception
     {
         public UnexpectedTokenException(String message)

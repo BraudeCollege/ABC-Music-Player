@@ -269,10 +269,30 @@ public class ParserTest
         getParser(":]").expectBarline();
     }
 
+
+    @Test
+    public void testNthRepeat() throws Exception
+    {
+        Parser parser = getParser("[1");
+
+        assertEquals(new NthRepeat(1), parser.expectNthRepeat());
+
+        parser = getParser("[2");
+        assertEquals(new NthRepeat(2), parser.expectNthRepeat());
+
+        parser = getParser("[10");
+        assertEquals(new NthRepeat(10), parser.expectNthRepeat());
+    }
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testNthRepeatFails() throws Exception
+    {
+        getParser("[").expectNthRepeat();
+    }
+
     public Parser getParser(String str)
     {
         return new Parser(new Lexer(str));
     }
-
 
 }

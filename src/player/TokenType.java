@@ -97,6 +97,8 @@ public enum TokenType {
     ACC_FLAT_DOUBLE("__"), ACC_FLAT("_"),
     ACC_NEUTRAL("\\="),
 
+    NTH_REPEAT("\\[[1-9][0-9]*"),
+
     OPEN_PAREN("\\("),
 
     DOUBLE_BAR("\\|\\|"),CLOSE_BAR("\\|\\]"), OPEN_BAR("\\[\\|"),
@@ -104,8 +106,6 @@ public enum TokenType {
 
     OPEN_BRACKET("\\["), CLOSE_BRACKET("\\]"),
 
-    REPEAT_1("\\[1"),
-    REPEAT_2("\\[2"),
     NUMBER("[1-9][0-9]*"),
     DIGIT("[0-9]"),
     COMMENT("%.+"),
