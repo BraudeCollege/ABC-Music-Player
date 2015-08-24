@@ -69,10 +69,7 @@ public class LexerTest
         assertEquals(new Token(TokenType.FIELD_X, "X:"), lex.nextToken());
         assertEquals(new Token(TokenType.NUMBER, "1"), lex.nextToken());
         assertEquals(new Token(TokenType.LINEFEED, "\n"), lex.nextToken());
-        assertEquals(new Token(TokenType.FIELD_T, "T:"), lex.nextToken());
-        assertEquals(new Token(TokenType.SPACE, " "), lex.nextToken()); // _TODO: should not inteprete as SPACE ???
-        assertEquals(new Token(TokenType.DOT_PLUS, "Note lengths and default note length"), lex.nextToken());
-        assertEquals(new Token(TokenType.LINEFEED, "\n"), lex.nextToken());
+        assertEquals(new Token(TokenType.FIELD_T, "T: Note lengths and default note length\n"), lex.nextToken());
         assertEquals(new Token(TokenType.FIELD_M, "M:"), lex.nextToken());
         assertEquals(new Token(TokenType.C, "C"), lex.nextToken());
         assertEquals(new Token(TokenType.LINEFEED, "\n"), lex.nextToken());
