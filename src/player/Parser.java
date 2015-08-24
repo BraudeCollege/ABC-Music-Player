@@ -593,6 +593,37 @@ public class Parser
         return new AbcMusic(lines);
     }
 
+    /**
+     * @return A FieldNumber specified a Number for the ABCfile
+     */
+    public FieldNumber expectFieldNumber() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+
+        if (token.getType() != TokenType.FIELD_X) {
+            lex.backtrack();
+            throw new UnexpectedTokenException("Expect a Field_X");
+        }
+
+        ignoreSpaces();
+
+        int num = expectNumber();
+
+        ignoreSpaces();
+
+        expectLinefeed();
+
+        return new FieldNumber(num);
+    }
+
+    private void ignoreSpaces()
+    {
+        try {
+            expectSpaces();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
+    }
+
     static class UnexpectedTokenException extends Exception
     {
         public UnexpectedTokenException(String message)

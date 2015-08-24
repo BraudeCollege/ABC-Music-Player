@@ -10,6 +10,7 @@ import static org.junit.Assert.*;
 
 public class ParserTest
 {
+
     @Test
     public void testBasenote() throws Exception
     {
@@ -442,7 +443,7 @@ public class ParserTest
         Barline openRepeatBar1 = new Barline(Barline.Type.OPEN_REPEAT_BAR);
         Barline closeRepeatBar1 = new Barline(Barline.Type.CLOSE_REPEAT_BAR);
 
-        TupletSpec tupletSpec1= new TupletSpec(3);
+        TupletSpec tupletSpec1 = new TupletSpec(3);
         List<NoteElement> noteElements1 = new ArrayList<>();
         noteElements1.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)));
         noteElements1.add(new Note(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(4, 1)));
@@ -496,6 +497,49 @@ public class ParserTest
 
     }
 
+    @Test
+    public void testfieldNumber() throws Exception
+    {
+        Parser parser = getParser("X: 12\n");
+        assertEquals(new FieldNumber(12), parser.expectFieldNumber());
+
+        parser = getParser("X:1\n");
+        assertEquals(new FieldNumber(1), parser.expectFieldNumber());
+
+        parser = getParser("X:2 \n");
+        assertEquals(new FieldNumber(2), parser.expectFieldNumber());
+
+        parser = getParser("X: 3 \n");
+        assertEquals(new FieldNumber(3), parser.expectFieldNumber());
+    }
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testExpectFieldNumberFail() throws Exception
+    {
+        getParser("X: \n").expectFieldNumber();
+    }
+
+    @Test
+    public void testFieldComposer() throws Exception
+    {
+        Parser parser = getParser("X: 12\n");
+        assertEquals(new FieldNumber(12), parser.expectFieldNumber());
+
+        parser = getParser("X:1\n");
+        assertEquals(new FieldNumber(1), parser.expectFieldNumber());
+
+        parser = getParser("X:2 \n");
+        assertEquals(new FieldNumber(2), parser.expectFieldNumber());
+
+        parser = getParser("X: 3 \n");
+        assertEquals(new FieldNumber(3), parser.expectFieldNumber());
+    }
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testExpectFieldNumberFail() throws Exception
+    {
+        getParser("X: \n").expectFieldNumber();
+    }
     public Parser getParser(String str)
     {
         return new Parser(new Lexer(str));
