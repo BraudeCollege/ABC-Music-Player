@@ -618,6 +618,18 @@ public class ParserTest
         assertEquals(new FieldKey(key), getParser("K:C#m  \n").expectFieldKey());
     }
 
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testExpectFieldKeyFails() throws Exception
+    {
+        getParser("K:  \n").expectFieldKey();
+    }
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testExpectFieldKeyFailsTwo() throws Exception
+    {
+        getParser("T: C\n").expectFieldKey();
+    }
+
     @Test
     public void testNoteLengthStrict() throws Exception
     {
