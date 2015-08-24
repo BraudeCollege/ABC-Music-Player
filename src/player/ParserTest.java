@@ -545,6 +545,7 @@ public class ParserTest
     @Test
     public void testNoteLengthStrict() throws Exception
     {
+        Parser parser = getParser("3/4");
 
 
     }
