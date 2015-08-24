@@ -220,13 +220,13 @@ public class ParserTest
         Parser parser = getParser("(3 A1/2 [CDF] E");
 
         ArrayList<NoteElement> notes = new ArrayList<>();
-        notes.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1,2)));
+        notes.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)));
         ArrayList<Note> mulNotes = new ArrayList<>();
         mulNotes.add(new Note(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
         mulNotes.add(new Note(new Pitch(new Basenote('D'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
         mulNotes.add(new Note(new Pitch(new Basenote('F'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
         notes.add(new MultiNote(mulNotes));
-        notes.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1,1)));
+        notes.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
 
         TupletElement tupletElement = new TupletElement(new TupletSpec(3), notes);
         assertEquals(tupletElement, parser.expectTupletElement());
@@ -294,8 +294,32 @@ public class ParserTest
     @Test
     public void testElement() throws Exception
     {
+        Parser parser = getParser("[A1/2 z/3]");
+        ArrayList<Note> notes = new ArrayList<>();
+        notes.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)));
+        notes.add(new Note(Rest.getInstance(), new NoteLength(1, 3)));
+        assertEquals(new MultiNote(notes), parser.expectElement());
 
+        parser = getParser("(3 A1/2 [CDF] E");
 
+        ArrayList<NoteElement> notes2 = new ArrayList<>();
+        notes2.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1,2)));
+
+        ArrayList<Note> mulNotes = new ArrayList<>();
+        mulNotes.add(new Note(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
+        mulNotes.add(new Note(new Pitch(new Basenote('D'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
+        mulNotes.add(new Note(new Pitch(new Basenote('F'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
+        notes2.add(new MultiNote(mulNotes));
+        notes2.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1,1)));
+
+        TupletElement tupletElement = new TupletElement(new TupletSpec(3), notes2);
+        assertEquals(tupletElement, parser.expectElement());
+
+        Parser pars = getParser("||");
+        assertEquals(Barline.getInstance(Barline.Type.DOUBLE_BAR), pars.expectElement());
+
+        parser = getParser("[2");
+        assertEquals(new NthRepeat(2), parser.expectElement());
     }
 
     public Parser getParser(String str)
