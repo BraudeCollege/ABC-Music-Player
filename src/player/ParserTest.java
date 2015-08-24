@@ -347,7 +347,7 @@ public class ParserTest
     public void testExpectComment() throws Exception
     {
         Parser parser = getParser("% this is a comment\n");
-        assertEquals(" this is a comment", parser.expectComment());
+        assertEquals(new Comment(" this is a comment"), parser.expectComment());
     }
 
     @Test
@@ -381,8 +381,6 @@ public class ParserTest
         elementLines.add(twiceRepeat);
 
         assertEquals(new ElementLine(elementLines), parser.expectElementLine());
-
-
     }
 
     @Test
@@ -421,7 +419,7 @@ public class ParserTest
         assertEquals(new FieldVoice(" The field voice"), parser.expectAbcLine());
 
         parser = getParser("% this is a comment\n");
-        assertEquals(" this is a comment", parser.expectAbcLine());
+        assertEquals(new Comment(" this is a comment"), parser.expectAbcLine());
 
     }
 

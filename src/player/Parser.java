@@ -491,7 +491,7 @@ public class Parser
      * @return comment string
      * @throws UnexpectedTokenException
      */
-    public String expectComment() throws UnexpectedTokenException
+    public Comment expectComment() throws UnexpectedTokenException
     {
         Token token = lex.nextToken();
         if (token.getType() != TokenType.COMMENT) {
@@ -499,7 +499,7 @@ public class Parser
             throw new UnexpectedTokenException("Expect a comment");
         }
 
-        return token.getValue().substring(1);
+        return new Comment(token.getValue().substring(1));
     }
 
     /**
@@ -529,6 +529,28 @@ public class Parser
 
         return new ElementLine(elements);
 
+    }
+
+    public AbcLine expectAbcLine() throws UnexpectedTokenException
+    {
+        AbcLine line = null;
+        try {
+            line = expectElementLine();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
+
+        if (line != null)
+            return line;
+
+        try {
+            line = expectMidTuneField();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
+
+        if (line != null)
+            return line;
+
+        return expectComment();
     }
 
     static class UnexpectedTokenException extends Exception
