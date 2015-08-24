@@ -99,8 +99,8 @@ public enum TokenType {
 
     OPEN_PAREN("\\("),
 
-    DOUBLE_BAR("\\|\\|"),CLOSE_BAR("\\|\\]"), SINGLE_BAR("\\|"),OPEN_BAR("\\[\\|"),
-    OPEN_REPEAT_BAR("\\|:"), CLOSE_REPEAT_BAR(":\\|"),
+    DOUBLE_BAR("\\|\\|"),CLOSE_BAR("\\|\\]"), OPEN_BAR("\\[\\|"),
+    OPEN_REPEAT_BAR("\\|:"), CLOSE_REPEAT_BAR(":\\|"), SINGLE_BAR("\\|"),
 
     OPEN_BRACKET("\\["), CLOSE_BRACKET("\\]"),
 

@@ -372,6 +372,30 @@ public class Parser
         return new TupletElement(tupletSpec, noteElements);
     }
 
+    public Barline expectBarline() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+
+        switch (token.getType()) {
+            case SINGLE_BAR:
+                return Barline.getInstance(Barline.Type.SINGLE_BAR);
+            case DOUBLE_BAR:
+                return Barline.getInstance(Barline.Type.DOUBLE_BAR);
+            case OPEN_BAR:
+                return Barline.getInstance(Barline.Type.OPEN_BAR);
+            case CLOSE_BAR:
+                return Barline.getInstance(Barline.Type.CLOSE_BAR);
+            case OPEN_REPEAT_BAR:
+                return Barline.getInstance(Barline.Type.OPEN_REPEAT_BAR);
+            case CLOSE_REPEAT_BAR:
+                return Barline.getInstance(Barline.Type.CLOSE_REPEAT_BAR);
+        }
+
+        lex.backtrack();
+
+        throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect a barline");
+    }
+
     static class UnexpectedTokenException extends Exception
     {
         public UnexpectedTokenException(String message)

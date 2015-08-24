@@ -232,8 +232,47 @@ public class ParserTest
         assertEquals(tupletElement, parser.expectTupletElement());
     }
 
+    @Test
+    public void testBarline() throws Exception
+    {
+        Parser pars = getParser("||");
+        assertEquals(Barline.getInstance(Barline.Type.DOUBLE_BAR), pars.expectBarline());
+
+        pars = getParser("|]");
+        assertEquals(Barline.getInstance(Barline.Type.CLOSE_BAR), pars.expectBarline());
+
+        pars = getParser("|");
+        assertEquals(Barline.getInstance(Barline.Type.SINGLE_BAR), pars.expectBarline());
+
+        pars = getParser("[|");
+        assertEquals(Barline.getInstance(Barline.Type.OPEN_BAR), pars.expectBarline());
+
+        pars = getParser("|:");
+        assertEquals(Barline.getInstance(Barline.Type.OPEN_REPEAT_BAR), pars.expectBarline());
+
+        pars = getParser(":|");
+        assertEquals(Barline.getInstance(Barline.Type.CLOSE_REPEAT_BAR), pars.expectBarline());
+
+
+    }
+
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testBarlineFail() throws Exception
+    {
+        getParser("[x").expectBarline();
+    }
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testBarlineFailTwo() throws Exception
+    {
+        getParser(":]").expectBarline();
+    }
+
     public Parser getParser(String str)
     {
         return new Parser(new Lexer(str));
     }
+
+
 }
