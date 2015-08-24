@@ -520,6 +520,28 @@ public class ParserTest
     }
 
     @Test
+    public void testFieldTitle() throws Exception
+    {
+        Parser parser = getParser("T:Abc\n");
+        assertEquals(new FieldTitle("Abc"), parser.expectFieldTitle());
+
+        parser = getParser("T: abc\n");
+        assertEquals(new FieldTitle(" abc"), parser.expectFieldTitle());
+
+        parser = getParser("T:2 \n");
+        assertEquals(new FieldTitle("2 "), parser.expectFieldTitle());
+
+        parser = getParser("T: xyz's \n");
+        assertEquals(new FieldTitle(" xyz's "), parser.expectFieldTitle());
+    }
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testExpectFieldTitleFail() throws Exception
+    {
+        getParser("C:\n").expectFieldTitle();
+    }
+
+    @Test
     public void testFieldComposer() throws Exception
     {
         Parser parser = getParser("C:Abc\n");

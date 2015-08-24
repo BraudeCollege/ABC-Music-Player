@@ -616,6 +616,9 @@ public class Parser
         return new FieldNumber(num);
     }
 
+    /**
+     * discard spaces
+     */
     private void ignoreSpaces()
     {
         try {
@@ -624,6 +627,33 @@ public class Parser
         }
     }
 
+    /**
+     * @return FieldTitle
+     * @throws UnexpectedTokenException if no title composer is found
+     */
+    public FieldTitle expectFieldTitle() throws UnexpectedTokenException
+    {
+
+        Token token = lex.nextToken();
+
+        if (token.getType() != TokenType.FIELD_T) {
+            lex.backtrack();
+            throw new UnexpectedTokenException("Expect a Field_C");
+        }
+
+        String text = token.getValue().substring(2);
+
+        Pattern p = Pattern.compile("(.+)");
+        Matcher m = p.matcher(text);
+        m.find();
+
+        return new FieldTitle(m.group(1));
+    }
+
+    /**
+     * @return FieldComposer
+     * @throws UnexpectedTokenException if no field composer is found
+     */
     public FieldComposer expectFieldComposer() throws UnexpectedTokenException
     {
 
@@ -716,6 +746,7 @@ public class Parser
 
         return new Key(keynote, m);
     }
+
 
 
     static class UnexpectedTokenException extends Exception
