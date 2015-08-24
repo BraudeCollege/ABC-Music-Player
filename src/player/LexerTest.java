@@ -73,8 +73,7 @@ public class LexerTest
         assertEquals(new Token(TokenType.FIELD_M, "M:"), lex.nextToken());
         assertEquals(new Token(TokenType.C, "C"), lex.nextToken());
         assertEquals(new Token(TokenType.LINEFEED, "\n"), lex.nextToken());
-        assertEquals(new Token(TokenType.COMMENT, "% A shit on the head is some comments"), lex.nextToken());
-        assertEquals(new Token(TokenType.LINEFEED, "\n"), lex.nextToken());
+        assertEquals(new Token(TokenType.COMMENT, "% A shit on the head is some comments\n"), lex.nextToken());
         assertEquals(new Token(TokenType.FIELD_K, "K:"), lex.nextToken());
         assertEquals(new Token(TokenType.C, "C"), lex.nextToken());
         assertEquals(new Token(TokenType.LINEFEED, "\n"), lex.nextToken());

@@ -108,7 +108,7 @@ public enum TokenType {
 
     NUMBER("[1-9][0-9]*"),
     DIGIT("[0-9]"),
-    COMMENT("%.+"),
+    COMMENT("%.+(?:\\n|\\n\\r)"),
     DOT_PLUS(".+"),
     LINEFEED("(?:\\n|\\n\\r)");
 

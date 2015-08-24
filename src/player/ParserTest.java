@@ -353,7 +353,7 @@ public class ParserTest
     @Test
     public void testElementLine() throws Exception
     {
-        Parser parser = getParser("[A z] |: (3 A B E :|[2 ");
+        Parser parser = getParser("[A z] |: (3 A B E :|[2 \n");
 
         List<Element> elementLines = new ArrayList<>();
 
@@ -386,7 +386,7 @@ public class ParserTest
     @Test
     public void testAbcLine() throws Exception
     {
-        Parser parser = getParser("[C z3/4] |: (3 A/ B4 E/6 :|[2");
+        Parser parser = getParser("[C z3/4] |: (3 A/ B4 E/6 :|[2  \n");
 
         List<Element> elementLines = new ArrayList<>();
 
@@ -429,7 +429,7 @@ public class ParserTest
         Parser parser = getParser("[C z3/4] |: (3 A/ B4 E/6 :|[2 \n"
                         + "V: The field voice\n" +
                         "% this is a comment\n" +
-                        "[A z] |: (3 A B E :|[2 "
+                        "[A z] |: (3 A B E :|[2\n"
         );
 
         List<Element> elements1 = new ArrayList<>();

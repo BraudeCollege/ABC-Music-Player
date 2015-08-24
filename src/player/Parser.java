@@ -499,7 +499,13 @@ public class Parser
             throw new UnexpectedTokenException("Expect a comment");
         }
 
-        return new Comment(token.getValue().substring(1));
+        String text = token.getValue().substring(1);
+
+        Pattern p = Pattern.compile("(.+)");
+        Matcher m = p.matcher(text);
+        m.find();
+
+        return new Comment(m.group(1));
     }
 
     /**
@@ -527,8 +533,20 @@ public class Parser
         if (elements.isEmpty())
             throw new UnexpectedTokenException("At least one Element expected but nothing found");
 
+        expectLinefeed();
+
         return new ElementLine(elements);
 
+    }
+
+    private void expectLinefeed() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+
+        if (token.getType() != TokenType.LINEFEED) {
+            lex.backtrack();
+            throw new UnexpectedTokenException("Linefeed expected but nothing found");
+        }
     }
 
     public AbcLine expectAbcLine() throws UnexpectedTokenException
