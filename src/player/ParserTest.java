@@ -322,6 +322,26 @@ public class ParserTest
         assertEquals(new NthRepeat(2), parser.expectElement());
     }
 
+    @Test
+    public void testFieldVoice() throws Exception
+    {
+        Parser parser = getParser("V: The field voice\n");
+        assertEquals(new FieldVoice("The field voice"), parser.expectFieldVoice());
+    }
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testFieldVoiceFails() throws Exception
+    {
+        getParser("X: 1\n").expectFieldVoice();
+    }
+
+    @Test
+    public void testMidTuneField()
+    {
+        Parser parser = getParser("V: The field voice\n");
+        assertEquals(new FieldVoice("The field voice"), parser.expectMidTuneField());
+    }
+
     public Parser getParser(String str)
     {
         return new Parser(new Lexer(str));
