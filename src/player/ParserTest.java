@@ -651,6 +651,19 @@ public class ParserTest
     }
 
     @Test
+    public void testMeterFraction() throws Exception
+    {
+        assertEquals(new MeterFraction(2,4), getParser("2/4").expectMeterFraction());
+        assertEquals(new MeterFraction(5,10), getParser("5/10").expectMeterFraction());
+    }
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testMeterFractionFails() throws Exception
+    {
+        getParser("5/ #").expectMeterFraction();
+    }
+
+    @Test
     public void testNoteLengthStrict() throws Exception
     {
         Parser parser = getParser("3/4");

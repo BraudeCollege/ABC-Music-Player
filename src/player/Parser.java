@@ -788,6 +788,21 @@ public class Parser
             return new FieldTempo(t);
     }
 
+    /**
+     * @return
+     * @throws UnexpectedTokenException
+     */
+    public MeterFraction expectMeterFraction() throws UnexpectedTokenException
+    {
+        int multiplier = expectNumber();
+
+        expectSlash();
+
+        int divider = expectNumber();
+
+        return new MeterFraction(multiplier, divider);
+    }
+
 
     static class UnexpectedTokenException extends Exception
     {
