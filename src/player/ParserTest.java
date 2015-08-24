@@ -538,7 +538,7 @@ public class ParserTest
     @Test(expected = Parser.UnexpectedTokenException.class)
     public void testExpectFieldComposerFail() throws Exception
     {
-        getParser("X: \n").expectFieldNumber();
+        getParser("C:\n").expectFieldComposer();
     }
 
 
@@ -546,8 +546,19 @@ public class ParserTest
     public void testNoteLengthStrict() throws Exception
     {
         Parser parser = getParser("3/4");
+        assertEquals(new NoteLengthStrict(3, 4), parser.expectNoteLengthStrict());
 
+        parser = getParser("1/4");
+        assertEquals(new NoteLengthStrict(1, 4), parser.expectNoteLengthStrict());
 
+        parser = getParser("2/2");
+        assertEquals(new NoteLengthStrict(2, 2), parser.expectNoteLengthStrict());
+    }
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testNoteLengthStrictFails() throws Exception
+    {
+        getParser("/").expectNoteLengthStrict();
     }
 
     public Parser getParser(String str)

@@ -643,6 +643,16 @@ public class Parser
         return new FieldComposer(m.group(1));
     }
 
+    public NoteLengthStrict expectNoteLengthStrict() throws UnexpectedTokenException
+    {
+
+        int multiplier = expectNumber();
+        expectSlash();
+        int divider = expectNumber();
+
+        return new NoteLengthStrict(multiplier, divider) ;
+    }
+
     static class UnexpectedTokenException extends Exception
     {
         public UnexpectedTokenException(String message)
