@@ -765,6 +765,29 @@ public class Parser
         return new FieldKey(k);
     }
 
+    /**
+     * @return FieldTempo
+     * @throws UnexpectedTokenException
+     */
+    public FieldTempo expectFieldTempo() throws UnexpectedTokenException
+    {
+            Token token = lex.nextToken();
+
+            if (token.getType() != TokenType.FIELD_Q)
+            {
+                lex.backtrack();
+                throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect 'Q:'");
+            }
+
+            ignoreSpaces();
+
+            int t = expectNumber();
+
+            ignoreSpaces();
+
+            return new FieldTempo(t);
+    }
+
 
     static class UnexpectedTokenException extends Exception
     {

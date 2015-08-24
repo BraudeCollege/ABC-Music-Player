@@ -631,6 +631,26 @@ public class ParserTest
     }
 
     @Test
+    public void testExpectFieldTempo() throws Exception
+    {
+        assertEquals(new FieldTempo(120), getParser("Q:120\n").expectFieldTempo());
+        assertEquals(new FieldTempo(120), getParser("Q: 120 \n").expectFieldTempo());
+        assertEquals(new FieldTempo(120), getParser("Q:120  \n").expectFieldTempo());
+    }
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testExpectFieldTempoFails() throws Exception
+    {
+        getParser("Q:  \n").expectFieldTempo();
+    }
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testExpectFieldTempoFailsTwo() throws Exception
+    {
+        getParser("T: 120\n").expectFieldTempo();
+    }
+
+    @Test
     public void testNoteLengthStrict() throws Exception
     {
         Parser parser = getParser("3/4");
