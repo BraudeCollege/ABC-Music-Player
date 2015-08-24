@@ -4,6 +4,8 @@ import player.ast.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Perform semantic analysis and produce an abstract syntax tree
@@ -453,6 +455,43 @@ public class Parser
         if (element != null) return element;
 
         throw new UnexpectedTokenException("Expect an Element but nothing found");
+    }
+
+    /**
+     * @return FieldVoice
+     * @throws UnexpectedTokenException if field voice is not found
+     */
+    public FieldVoice expectFieldVoice() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+        if (token.getType() != TokenType.FIELD_V) {
+            lex.backtrack();
+            throw new UnexpectedTokenException("Expect a Field_V");
+        }
+
+        String text = token.getValue().substring(2);
+
+        Pattern p = Pattern.compile("(.+)");
+        Matcher m = p.matcher(text);
+        m.find();
+
+        return new FieldVoice(m.group(1));
+    }
+
+    public MidTuneField expectMidTuneField() throws UnexpectedTokenException
+    {
+        return expectFieldVoice();
+    }
+
+    public String expectComment() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+        if (token.getType() != TokenType.COMMENT) {
+            lex.backtrack();
+            throw new UnexpectedTokenException("Expect a comment");
+        }
+
+        return token.getValue().substring(1);
     }
 
     static class UnexpectedTokenException extends Exception

@@ -326,7 +326,7 @@ public class ParserTest
     public void testExpectFieldVoice() throws Exception
     {
         Parser parser = getParser("V: The field voice\n");
-        assertEquals(new FieldVoice("The field voice"), parser.expectFieldVoice());
+        assertEquals(new FieldVoice(" The field voice"), parser.expectFieldVoice());
     }
 
     @Test(expected = Parser.UnexpectedTokenException.class)
@@ -336,10 +336,10 @@ public class ParserTest
     }
 
     @Test
-    public void testExpectMidTuneField()
+    public void testExpectMidTuneField() throws Exception
     {
         Parser parser = getParser("V: The field voice\n");
-        assertEquals(new FieldVoice("The field voice"), parser.expectMidTuneField());
+        assertEquals(new FieldVoice(" The field voice"), parser.expectMidTuneField());
     }
 
     @Test
