@@ -6,7 +6,7 @@ import java.util.List;
 /**
  *
  */
-public class TupletElement implements AbstractSyntaxTree
+public class TupletElement implements Element
 {
     private TupletSpec tupletSpec;
     private List<NoteElement> noteElements;

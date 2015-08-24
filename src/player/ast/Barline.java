@@ -1,6 +1,6 @@
 package player.ast;
 
-public class Barline implements AbstractSyntaxTree
+public class Barline implements Element
 {
     public enum Type
     {

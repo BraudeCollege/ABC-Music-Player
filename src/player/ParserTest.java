@@ -290,6 +290,14 @@ public class ParserTest
         getParser("[").expectNthRepeat();
     }
 
+
+    @Test
+    public void testElement() throws Exception
+    {
+
+
+    }
+
     public Parser getParser(String str)
     {
         return new Parser(new Lexer(str));

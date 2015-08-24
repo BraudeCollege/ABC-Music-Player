@@ -1,6 +1,6 @@
 package player.ast;
 
-public class NthRepeat implements AbstractSyntaxTree
+public class NthRepeat implements Element
 {
     /**
      * number of repeats
