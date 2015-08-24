@@ -624,6 +624,25 @@ public class Parser
         }
     }
 
+    public FieldComposer expectFieldComposer() throws UnexpectedTokenException
+    {
+
+        Token token = lex.nextToken();
+
+        if (token.getType() != TokenType.FIELD_C) {
+            lex.backtrack();
+            throw new UnexpectedTokenException("Expect a Field_C");
+        }
+
+        String text = token.getValue().substring(2);
+
+        Pattern p = Pattern.compile("(.+)");
+        Matcher m = p.matcher(text);
+        m.find();
+
+        return new FieldComposer(m.group(1));
+    }
+
     static class UnexpectedTokenException extends Exception
     {
         public UnexpectedTokenException(String message)

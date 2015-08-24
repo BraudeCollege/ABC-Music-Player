@@ -75,7 +75,7 @@ public enum TokenType {
 //    text ::= .*
 
     SPACE(" +"),
-    FIELD_X("X:"), FIELD_T("T:.+(?:\\n|\\n\\r)"), FIELD_C("C:"), FIELD_L("L:"),
+    FIELD_X("X:"), FIELD_T("T:.+(?:\\n|\\n\\r)"), FIELD_C("C:.+(?:\\n|\\n\\r)"), FIELD_L("L:"),
     FIELD_M("M:"), FIELD_Q("Q:"), FIELD_V("V:.+(?:\\n|\\n\\r)"), FIELD_K("K:"),
 
     SHARP("#"),

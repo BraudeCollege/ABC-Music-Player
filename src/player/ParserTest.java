@@ -522,27 +522,35 @@ public class ParserTest
     @Test
     public void testFieldComposer() throws Exception
     {
-        Parser parser = getParser("X: 12\n");
-        assertEquals(new FieldNumber(12), parser.expectFieldNumber());
+        Parser parser = getParser("C:Abc\n");
+        assertEquals(new FieldComposer("Abc"), parser.expectFieldComposer());
 
-        parser = getParser("X:1\n");
-        assertEquals(new FieldNumber(1), parser.expectFieldNumber());
+        parser = getParser("C: abc\n");
+        assertEquals(new FieldComposer(" abc"), parser.expectFieldComposer());
 
-        parser = getParser("X:2 \n");
-        assertEquals(new FieldNumber(2), parser.expectFieldNumber());
+        parser = getParser("C:2 \n");
+        assertEquals(new FieldComposer("2 "), parser.expectFieldComposer());
 
-        parser = getParser("X: 3 \n");
-        assertEquals(new FieldNumber(3), parser.expectFieldNumber());
+        parser = getParser("C: xyz's \n");
+        assertEquals(new FieldComposer(" xyz's "), parser.expectFieldComposer());
     }
 
     @Test(expected = Parser.UnexpectedTokenException.class)
-    public void testExpectFieldNumberFail() throws Exception
+    public void testExpectFieldComposerFail() throws Exception
     {
         getParser("X: \n").expectFieldNumber();
     }
+
+
+    @Test
+    public void testNoteLengthStrict() throws Exception
+    {
+
+
+    }
+
     public Parser getParser(String str)
     {
         return new Parser(new Lexer(str));
     }
-
 }
