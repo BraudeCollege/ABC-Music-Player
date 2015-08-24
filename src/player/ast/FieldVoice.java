@@ -1,11 +1,7 @@
 package player.ast;
 
-/**
- * Created by DucNguyenMinh on 8/24/15.
- */
 public class FieldVoice implements MidTuneField
 {
-
     /**
      * text of field voice
      */
@@ -38,7 +34,6 @@ public class FieldVoice implements MidTuneField
         FieldVoice that = (FieldVoice) o;
 
         return !(text != null ? !text.equals(that.text) : that.text != null);
-
     }
 
     @Override
@@ -49,7 +44,6 @@ public class FieldVoice implements MidTuneField
 
     public String getText()
     {
-
         return text;
     }
 }
