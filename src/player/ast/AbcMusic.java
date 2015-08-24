@@ -32,4 +32,12 @@ public class AbcMusic
     {
         return lines != null ? lines.hashCode() : 0;
     }
+
+    @Override
+    public String toString()
+    {
+        return "AbcMusic{" +
+                "lines=" + lines +
+                '}';
+    }
 }
