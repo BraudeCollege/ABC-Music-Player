@@ -372,6 +372,10 @@ public class Parser
         return new TupletElement(tupletSpec, noteElements);
     }
 
+    /**
+     * @return a barline
+     * @throws UnexpectedTokenException if no barline is found
+     */
     public Barline expectBarline() throws UnexpectedTokenException
     {
         Token token = lex.nextToken();
@@ -397,7 +401,8 @@ public class Parser
     }
 
     /**
-     * @return NthRepeat
+     * @return an NthRepeat
+     * @throws UnexpectedTokenException if no NthRepeat bar is found
      */
     public NthRepeat expectNthRepeat() throws UnexpectedTokenException
     {
@@ -409,6 +414,45 @@ public class Parser
         }
 
         return new NthRepeat(Integer.valueOf(token.getValue().substring(1)));
+    }
+
+    /**
+     * @return an Element
+     * @throws UnexpectedTokenException if no element is found
+     */
+    public Element expectElement() throws UnexpectedTokenException
+    {
+        Element element = null;
+
+        try {
+            element = expectNoteElement();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
+
+        if (element != null) return element;
+
+        try {
+            element = expectTupletElement();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
+
+        if (element != null) return element;
+
+        try {
+            element = expectBarline();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
+
+        if (element != null) return element;
+
+        try {
+            element = expectNthRepeat();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
+
+        if (element != null) return element;
+
+        throw new UnexpectedTokenException("Expect an Element but nothing found");
     }
 
     static class UnexpectedTokenException extends Exception

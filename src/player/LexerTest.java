@@ -41,7 +41,7 @@ public class LexerTest
         assertTrue(lex.hasNext());
         assertEquals(new Token(TokenType.SLASH, "/"), lex.nextToken());
         assertTrue(lex.hasNext());
-        assertEquals(new Token(TokenType.DIGIT, "2"), lex.nextToken());
+        assertEquals(new Token(TokenType.NUMBER, "2"), lex.nextToken());
         assertFalse(lex.hasNext());
         assertFalse(lex.hasNext());
     }
@@ -67,7 +67,7 @@ public class LexerTest
 
 
         assertEquals(new Token(TokenType.FIELD_X, "X:"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "1"), lex.nextToken());
+        assertEquals(new Token(TokenType.NUMBER, "1"), lex.nextToken());
         assertEquals(new Token(TokenType.LINEFEED, "\n"), lex.nextToken());
         assertEquals(new Token(TokenType.FIELD_T, "T:"), lex.nextToken());
         assertEquals(new Token(TokenType.SPACE, " "), lex.nextToken()); // _TODO: should not inteprete as SPACE ???
@@ -82,14 +82,13 @@ public class LexerTest
         assertEquals(new Token(TokenType.C, "C"), lex.nextToken());
         assertEquals(new Token(TokenType.LINEFEED, "\n"), lex.nextToken());
         assertEquals(new Token(TokenType.FIELD_L, "L:"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "1"), lex.nextToken());
+        assertEquals(new Token(TokenType.NUMBER, "1"), lex.nextToken());
         assertEquals(new Token(TokenType.SLASH, "/"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "1"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "6"), lex.nextToken());
+        assertEquals(new Token(TokenType.NUMBER, "16"), lex.nextToken());
         assertEquals(new Token(TokenType.LINEFEED, "\n"), lex.nextToken());
         assertEquals(new Token(TokenType.A, "A"), lex.nextToken());
         assertEquals(new Token(TokenType.SLASH, "/"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "2"), lex.nextToken());
+        assertEquals(new Token(TokenType.NUMBER, "2"), lex.nextToken());
         assertEquals(new Token(TokenType.SPACE, " "), lex.nextToken());
         assertEquals(new Token(TokenType.A, "A"), lex.nextToken());
         assertEquals(new Token(TokenType.SLASH, "/"), lex.nextToken());
@@ -97,34 +96,31 @@ public class LexerTest
         assertEquals(new Token(TokenType.A, "A"), lex.nextToken());
         assertEquals(new Token(TokenType.SPACE, " "), lex.nextToken());
         assertEquals(new Token(TokenType.A, "A"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "2"), lex.nextToken());
+        assertEquals(new Token(TokenType.NUMBER, "2"), lex.nextToken());
         assertEquals(new Token(TokenType.SPACE, " "), lex.nextToken());
         assertEquals(new Token(TokenType.A, "A"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "3"), lex.nextToken());
+        assertEquals(new Token(TokenType.NUMBER, "3"), lex.nextToken());
         assertEquals(new Token(TokenType.SPACE, " "), lex.nextToken());
         assertEquals(new Token(TokenType.A, "A"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "4"), lex.nextToken());
+        assertEquals(new Token(TokenType.NUMBER, "4"), lex.nextToken());
         assertEquals(new Token(TokenType.SPACE, " "), lex.nextToken());
         assertEquals(new Token(TokenType.A, "A"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "6"), lex.nextToken());
+        assertEquals(new Token(TokenType.NUMBER, "6"), lex.nextToken());
         assertEquals(new Token(TokenType.SPACE, " "), lex.nextToken());
         assertEquals(new Token(TokenType.A, "A"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "7"), lex.nextToken());
+        assertEquals(new Token(TokenType.NUMBER, "7"), lex.nextToken());
         assertEquals(new Token(TokenType.SPACE, " "), lex.nextToken());
         assertEquals(new Token(TokenType.A, "A"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "8"), lex.nextToken());
+        assertEquals(new Token(TokenType.NUMBER, "8"), lex.nextToken());
         assertEquals(new Token(TokenType.SPACE, " "), lex.nextToken());
         assertEquals(new Token(TokenType.A, "A"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "1"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "2"), lex.nextToken());
+        assertEquals(new Token(TokenType.NUMBER, "12"), lex.nextToken());
         assertEquals(new Token(TokenType.SPACE, " "), lex.nextToken());
         assertEquals(new Token(TokenType.A, "A"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "1"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "5"), lex.nextToken());
+        assertEquals(new Token(TokenType.NUMBER, "15"), lex.nextToken());
         assertEquals(new Token(TokenType.SPACE, " "), lex.nextToken());
         assertEquals(new Token(TokenType.A, "A"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "1"), lex.nextToken());
-        assertEquals(new Token(TokenType.DIGIT, "6"), lex.nextToken());
+        assertEquals(new Token(TokenType.NUMBER, "16"), lex.nextToken());
         assertEquals(new Token(TokenType.CLOSE_BAR, "|]"), lex.nextToken());
         assertEquals(new Token(TokenType.LINEFEED, "\n"), lex.nextToken());
 
