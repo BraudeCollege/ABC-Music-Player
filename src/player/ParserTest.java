@@ -323,7 +323,7 @@ public class ParserTest
     }
 
     @Test
-    public void testFieldVoice() throws Exception
+    public void testExpectFieldVoice() throws Exception
     {
         Parser parser = getParser("V: The field voice\n");
         assertEquals(new FieldVoice("The field voice"), parser.expectFieldVoice());
@@ -336,10 +336,17 @@ public class ParserTest
     }
 
     @Test
-    public void testMidTuneField()
+    public void testExpectMidTuneField()
     {
         Parser parser = getParser("V: The field voice\n");
         assertEquals(new FieldVoice("The field voice"), parser.expectMidTuneField());
+    }
+
+    @Test
+    public void testExpectComment() throws Exception
+    {
+        Parser parser = getParser("% this is a comment\n");
+        assertEquals(" this is a comment", parser.expectComment());
     }
 
     public Parser getParser(String str)
