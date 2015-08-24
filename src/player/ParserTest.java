@@ -581,6 +581,13 @@ public class ParserTest
     }
 
     @Test
+    public void testExpectKey() throws Exception
+    {
+        assertEquals(new Key(new Keynote(new Basenote('C'), KeyAccidental.getSharp()), ModeMinor.getInstance()), getParser("C#m").expectKey());
+        assertEquals(new Key(new Keynote(new Basenote('C'), KeyAccidental.getSharp()), ModeMinor.getNone()), getParser("C#").expectKey());
+    }
+
+    @Test
     public void testNoteLengthStrict() throws Exception
     {
         Parser parser = getParser("3/4");

@@ -703,6 +703,20 @@ public class Parser
         throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect a mode-minor");
     }
 
+    public Key expectKey() throws UnexpectedTokenException
+    {
+        Keynote keynote = expectKeynote();
+
+        ModeMinor m = ModeMinor.getNone();
+
+        try {
+            m = expectModeMinor();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
+
+        return new Key(keynote, m);
+    }
+
 
     static class UnexpectedTokenException extends Exception
     {
