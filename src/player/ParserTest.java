@@ -555,6 +555,20 @@ public class ParserTest
     }
 
     @Test
+    public void testExpectKeynote() throws Exception
+    {
+        assertEquals(new Keynote(new Basenote('C'), KeyAccidental.getSharp()), getParser("C#").expectKeynote());
+        assertEquals(new Keynote(new Basenote('b'), KeyAccidental.getFlat()), getParser("bb").expectKeynote());
+        assertEquals(new Keynote(new Basenote('A'), KeyAccidental.getNone()), getParser("A").expectKeynote());
+    }
+
+    @Test(expected = Parser.UnexpectedTokenException.class)
+    public void testExpectKeynoteFails() throws Exception
+    {
+        getParser("||").expectKeynote();
+    }
+
+    @Test
     public void testNoteLengthStrict() throws Exception
     {
         Parser parser = getParser("3/4");

@@ -650,7 +650,7 @@ public class Parser
         expectSlash();
         int divider = expectNumber();
 
-        return new NoteLengthStrict(multiplier, divider) ;
+        return new NoteLengthStrict(multiplier, divider);
     }
 
     public KeyAccidental expectKeyAccidental() throws UnexpectedTokenException
@@ -665,6 +665,20 @@ public class Parser
         }
 
         throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect a Sharp(#) or a Flat(b)");
+    }
+
+    public Keynote expectKeynote() throws UnexpectedTokenException
+    {
+        Basenote basenote = expectBasenote();
+
+        KeyAccidental ka = KeyAccidental.getNone();
+
+        try {
+            ka = expectKeyAccidental();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+        }
+
+        return new Keynote(basenote, ka);
     }
 
     static class UnexpectedTokenException extends Exception

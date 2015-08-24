@@ -5,7 +5,7 @@ public class KeyAccidental implements AbstractSyntaxTree
 
     public enum Type
     {
-        FLAT, SHARP
+        FLAT, SHARP, NONE
     }
 
     private final Type type;
@@ -33,6 +33,13 @@ public class KeyAccidental implements AbstractSyntaxTree
         return new KeyAccidental(Type.FLAT);
     }
 
+    /**
+     * @return Null Object of KeyAccidental
+     */
+    public static KeyAccidental getNone()
+    {
+        return new KeyAccidental(Type.NONE);
+    }
     /**
      * @return type of key-accidental
      */
