@@ -359,7 +359,7 @@ public class ParserTest
 
         List<Note> notes = new ArrayList<>();
         notes.add(new Note(new Pitch(new Basenote('A'),Accidental.getEmpty(),Octave.getEmpty()), new NoteLength(1,1)));
-        notes.add(new Note(new Pitch(new Basenote('z'),Accidental.getEmpty(),Octave.getEmpty()), new NoteLength(1,1)));
+        notes.add(new Note(Rest.getInstance(), new NoteLength(1,1)));
         NoteElement multiNote = new MultiNote(notes);
 
         Barline openRepeatBar = new Barline(Barline.Type.OPEN_REPEAT_BAR);
