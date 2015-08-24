@@ -831,26 +831,25 @@ public class Parser
      */
     public Meter expectMeter() throws UnexpectedTokenException
     {
-        Meter m = null;
-
         try {
-            m = expectC();
-            return m;
+            return expectC();
         } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
 
         try {
-            m = expectCPipe();
-            return m;
+            return expectCPipe();
         } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
 
         try {
-            m = expectMeterFraction();
-            return m;
+            return expectMeterFraction();
         } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
 
         throw new UnexpectedTokenException("Unexpected token, expect C or C| or a Meter Fraction");
     }
 
+    /**
+     * @return FieldMeter
+     * @throws UnexpectedTokenException
+     */
     public FieldMeter expectFieldMeter() throws UnexpectedTokenException
     {
         Token token = lex.nextToken();
@@ -870,6 +869,10 @@ public class Parser
         return new FieldMeter(m);
     }
 
+    /**
+     * @return FieldDefaultLength
+     * @throws UnexpectedTokenException
+     */
     public FieldDefaultLength expectFieldDefaultLength() throws UnexpectedTokenException
     {
         Token token = lex.nextToken();
@@ -887,6 +890,39 @@ public class Parser
         ignoreSpaces();
 
         return new FieldDefaultLength(m);
+    }
+
+    /**
+     * @return Objects whose class implements OtherField
+     * @throws UnexpectedTokenException
+     */
+    public OtherField expectOtherField() throws UnexpectedTokenException
+    {
+        try {
+            return expectFieldComposer();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+
+        try {
+            return expectFieldDefaultLength();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+
+        try {
+            return expectFieldMeter();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+
+        try {
+            return expectFieldTempo();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+
+        try {
+            return expectFieldVoice();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+
+        try {
+            return expectComment();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {}
+
+        throw new UnexpectedTokenException("Expect either field-composer, field-default-length, field-meter, field-tempo, field-voice or comment, nothing found.");
     }
 
 

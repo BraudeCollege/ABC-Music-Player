@@ -713,6 +713,13 @@ public class ParserTest
         assertEquals(f, getParser("L:2/4  \n").expectFieldDefaultLength());
     }
 
+    @Test
+    public void testExpectOtherField() throws Exception
+    {
+        assertEquals(new Comment(" comment field"), getParser("% comment field\n").expectOtherField());
+        assertEquals(new FieldDefaultLength(new NoteLengthStrict(2,4)), getParser("L:2/4\n").expectOtherField());
+    }
+
     @Test(expected = Parser.UnexpectedTokenException.class)
     public void testNoteLengthStrictFails() throws Exception
     {
