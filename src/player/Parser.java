@@ -478,11 +478,19 @@ public class Parser
         return new FieldVoice(m.group(1));
     }
 
+    /**
+     * @return MidTuneField
+     * @throws UnexpectedTokenException no MidTuneField is found
+     */
     public MidTuneField expectMidTuneField() throws UnexpectedTokenException
     {
         return expectFieldVoice();
     }
 
+    /**
+     * @return comment string
+     * @throws UnexpectedTokenException
+     */
     public String expectComment() throws UnexpectedTokenException
     {
         Token token = lex.nextToken();
@@ -492,6 +500,35 @@ public class Parser
         }
 
         return token.getValue().substring(1);
+    }
+
+    /**
+     * @return collection of elements
+     * @throws UnexpectedTokenException if no element is found
+     */
+    public ElementLine expectElementLine() throws UnexpectedTokenException
+    {
+        ArrayList<Element> elements = new ArrayList<>();
+
+        while (true) {
+
+            try {
+                expectSpaces();
+            } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+            }
+
+            try {
+                elements.add(expectElement());
+            } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
+                break;
+            }
+        }
+
+        if (elements.isEmpty())
+            throw new UnexpectedTokenException("At least one Element expected but nothing found");
+
+        return new ElementLine(elements);
+
     }
 
     static class UnexpectedTokenException extends Exception

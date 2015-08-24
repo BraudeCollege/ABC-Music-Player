@@ -1,5 +1,5 @@
 package player.ast;
 
-public interface MidTuneField extends AbstractSyntaxTree
+public interface MidTuneField extends AbcLine
 {
 }
