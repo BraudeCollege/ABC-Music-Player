@@ -696,6 +696,14 @@ public class ParserTest
         assertEquals(MeterCPipe.getInstance(), getParser("C|").expectMeter());
     }
 
+    @Test
+    public void testExpectFieldMeter() throws Exception
+    {
+        assertEquals(new FieldMeter(new MeterFraction(2,4)), getParser("M:2/4\n").expectFieldMeter());
+        assertEquals(new FieldMeter(MeterCPipe.getInstance()), getParser("M: C|\n").expectFieldMeter());
+        assertEquals(new FieldMeter(MeterC.getInstance()), getParser("M: C  \n").expectFieldMeter());
+    }
+
     @Test(expected = Parser.UnexpectedTokenException.class)
     public void testNoteLengthStrictFails() throws Exception
     {

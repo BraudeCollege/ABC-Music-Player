@@ -851,6 +851,25 @@ public class Parser
         throw new UnexpectedTokenException("Unexpected token, expect C or C| or a Meter Fraction");
     }
 
+    public FieldMeter expectFieldMeter() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+
+        if (token.getType() != TokenType.FIELD_M)
+        {
+            lex.backtrack();
+            throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect 'M:'");
+        }
+
+        ignoreSpaces();
+
+        Meter m = expectMeter();
+
+        ignoreSpaces();
+
+        return new FieldMeter(m);
+    }
+
 
     static class UnexpectedTokenException extends Exception
     {
