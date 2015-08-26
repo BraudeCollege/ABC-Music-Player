@@ -960,6 +960,15 @@ public class Parser
         return new AbcHeader(fn, ft, fields, fk);
     }
 
+    /**
+     * @return
+     * @throws UnexpectedTokenException
+     */
+    public AbcTune expectAbcTune() throws UnexpectedTokenException
+    {
+        return new AbcTune(expectAbcHeader(), expectAbcMusic());
+    }
+
 
     static class UnexpectedTokenException extends Exception
     {

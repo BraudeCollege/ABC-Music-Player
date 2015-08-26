@@ -758,7 +758,102 @@ public class ParserTest
                 "V:Voice1\n" +
                 "K:C#m\n"
         ).expectAbcHeader());
+    }
 
+    @Test
+    public void testExpectAbcTune() throws Exception
+    {
+        List<OtherField> fields = new ArrayList<>();
+        fields.add(new FieldComposer("Beethoven"));
+        fields.add(new FieldDefaultLength(new NoteLengthStrict(2, 4)));
+        fields.add(new FieldTempo(120));
+        fields.add(new FieldMeter(MeterC.getInstance()));
+        fields.add(new FieldVoice("Voice1"));
+
+        Key key = new Key(new Keynote(new Basenote('C'), KeyAccidental.getSharp()), ModeMinor.getInstance());
+
+        AbcHeader header = new AbcHeader(new FieldNumber(1), new FieldTitle("ABC Title"), fields, new FieldKey(key));
+
+        Parser parser = getParser(
+                "X:1\n" +
+                "%Comment 1\n" +
+                "%Comment 2\n" +
+                "T:ABC Title\n" +
+                "C:Beethoven\n" +
+                "L:2/4\n" +
+                "Q:120\n" +
+                "M:C\n" +
+                "V:Voice1\n" +
+                "K:C#m\n" +
+                "[C z3/4] |: (3 A/ B4 E/6 :|[2 \n"
+                + "V: The field voice\n" +
+                "% this is a comment\n" +
+                "[A z] |: (3 A B E :|[2\n"
+        );
+
+        List<Element> elements1 = new ArrayList<>();
+
+        List<Note> notes1 = new ArrayList<>();
+        notes1.add(new Note(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
+        notes1.add(new Note(Rest.getInstance(), new NoteLength(3, 4)));
+        NoteElement multiNote1 = new MultiNote(notes1);
+
+        Barline openRepeatBar1 = new Barline(Barline.Type.OPEN_REPEAT_BAR);
+        Barline closeRepeatBar1 = new Barline(Barline.Type.CLOSE_REPEAT_BAR);
+
+        TupletSpec tupletSpec1 = new TupletSpec(3);
+        List<NoteElement> noteElements1 = new ArrayList<>();
+        noteElements1.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)));
+        noteElements1.add(new Note(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(4, 1)));
+        noteElements1.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 6)));
+        TupletElement tupletElement1 = new TupletElement(tupletSpec1, noteElements1);
+
+        NthRepeat twiceRepeat = new NthRepeat(2);
+
+        elements1.add(multiNote1);
+        elements1.add(openRepeatBar1);
+        elements1.add(tupletElement1);
+        elements1.add(closeRepeatBar1);
+        elements1.add(twiceRepeat);
+
+
+        List<Element> elements = new ArrayList<>();
+
+        List<Note> notes = new ArrayList<>();
+        notes.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
+        notes.add(new Note(Rest.getInstance(), new NoteLength(1, 1)));
+        NoteElement multiNote = new MultiNote(notes);
+
+        Barline openRepeatBar = new Barline(Barline.Type.OPEN_REPEAT_BAR);
+        Barline closeRepeatBar = new Barline(Barline.Type.CLOSE_REPEAT_BAR);
+
+        TupletSpec tupletSpec = new TupletSpec(3);
+        List<NoteElement> noteElements = new ArrayList<>();
+        noteElements.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
+        noteElements.add(new Note(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
+        noteElements.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
+        TupletElement tupletElement = new TupletElement(tupletSpec, noteElements);
+
+        elements.add(multiNote);
+        elements.add(openRepeatBar);
+        elements.add(tupletElement);
+        elements.add(closeRepeatBar);
+        elements.add(twiceRepeat);
+
+        AbcLine elementLine = new ElementLine(elements1);
+        AbcLine fieldVoice = new FieldVoice(" The field voice");
+        AbcLine comment = new Comment(" this is a comment");
+        AbcLine elementLine1 = new ElementLine(elements);
+
+        List<AbcLine> abcLines = new ArrayList<>();
+        abcLines.add(elementLine);
+        abcLines.add(fieldVoice);
+        abcLines.add(comment);
+        abcLines.add(elementLine1);
+
+        AbcMusic body = new AbcMusic(abcLines);
+
+        assertEquals(new AbcTune(header, body), parser.expectAbcTune());
     }
 
     public Parser getParser(String str)
