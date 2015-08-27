@@ -46,4 +46,10 @@ public class FieldTitle implements AbstractSyntaxTree
     {
         return title;
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }

@@ -46,4 +46,10 @@ public class FieldVoice implements MidTuneField, OtherField
     {
         return text;
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }

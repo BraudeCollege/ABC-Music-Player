@@ -45,4 +45,10 @@ public class FieldTempo implements OtherField
                 "tempo=" + tempo +
                 '}';
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }
