@@ -5,4 +5,5 @@ package player.ast;
  */
 public interface AbstractSyntaxTree
 {
+    public <R> R accept(AbcVisitor<R> visitor);
 }

@@ -1,14 +1,12 @@
 package player.ast;
 
-import player.AbcPlayer;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by hieusun on 24.08.15.
  */
-public class AbcHeader
+public class AbcHeader implements AbstractSyntaxTree
 {
     private final FieldNumber fieldNumber;
     private final FieldTitle fieldTitle;
@@ -99,8 +97,9 @@ public class AbcHeader
                 '}';
     }
 
-    public void accept(AbcPlayer abcPlayer)
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
     {
-        abcPlayer.on(this);
+        return visitor.on(this);
     }
 }

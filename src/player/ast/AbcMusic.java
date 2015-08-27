@@ -5,7 +5,7 @@ import player.AbcPlayer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AbcMusic
+public class AbcMusic implements AbstractSyntaxTree
 {
     private final List<AbcLine> lines;
 
@@ -46,5 +46,11 @@ public class AbcMusic
     public void accept(AbcPlayer abcPlayer)
     {
         abcPlayer.on(this);
+    }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
     }
 }

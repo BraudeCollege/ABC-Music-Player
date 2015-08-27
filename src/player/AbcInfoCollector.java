@@ -5,8 +5,6 @@ import player.ast.*;
 
 public class AbcInfoCollector implements AbcVisitor
 {
-
-
     @Override
     public void on(AbcTune tune)
     {

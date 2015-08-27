@@ -3,9 +3,8 @@ package player;
 import player.ast.*;
 import sound.SequencePlayer;
 
-public class AbcPlayer implements AbcVisitor
+public class AbcPlayer implements AbcVisitor<Void>
 {
-
     /**
      * SequencePlayer plays pitches and rest
      */
@@ -20,118 +19,120 @@ public class AbcPlayer implements AbcVisitor
     }
 
     @Override
-    public void on(AbcTune tune)
+    public Void on(AbcTune tune)
     {
         tune.getHeader().accept(this);
         tune.getBody().accept(this);
+
+        return null;
     }
 
     @Override
-    public void on(AbcHeader node)
+    public Void on(AbcHeader header)
     {
-
+        return null;
     }
 
     @Override
-    public void on(AbcMusic node)
+    public Void on(AbcMusic body)
     {
-
+        return null;
     }
 
     @Override
-    public void on(FieldNumber field)
+    public Void on(FieldNumber field)
     {
-
+        return null;
     }
 
     @Override
-    public void on(FieldTitle field)
+    public Void on(FieldTitle field)
     {
-
+        return null;
     }
 
     @Override
-    public void on(FieldKey field)
+    public Void on(FieldKey field)
     {
-
+        return null;
     }
 
     @Override
-    public void on(FieldVoice field)
+    public Void on(FieldVoice field)
     {
-
+        return null;
     }
 
     @Override
-    public void on(Comment c)
+    public Void on(Comment c)
     {
-
+        return null;
     }
 
     @Override
-    public void on(ElementLine line)
+    public Void on(ElementLine line)
     {
-
+        return null;
     }
 
     @Override
-    public void on(Element element)
+    public Void on(Element element)
     {
-
+        return null;
     }
 
     @Override
-    public void on(NthRepeat repeat)
+    public Void on(NthRepeat repeat)
     {
-
+        return null;
     }
 
     @Override
-    public void on(Barline bar)
+    public Void on(Barline bar)
     {
-
+        return null;
     }
 
     @Override
-    public void on(TupletElement element)
+    public Void on(TupletElement element)
     {
-
+        return null;
     }
 
     @Override
-    public void on(Note note)
+    public Void on(Note note)
     {
-
+        return null;
     }
 
     @Override
-    public void on(MultiNote note)
+    public Void on(MultiNote note)
     {
-
+        return null;
     }
 
     @Override
-    public void on(NoteLength noteLength)
+    public Void on(NoteLength noteLength)
     {
-
+        return null;
     }
 
     @Override
-    public void on(Rest rest)
+    public Void on(Rest rest)
     {
-
+        return null;
     }
 
     @Override
-    public void on(Pitch pitch)
+    public Void on(Pitch pitch)
     {
-
+        return null;
     }
 
     @Override
-    public void on(Basenote basenote)
+    public Void on(Basenote basenote)
     {
-
+        return null;
     }
 
 
