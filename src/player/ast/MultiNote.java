@@ -57,6 +57,12 @@ public class MultiNote implements NoteElement
                 '}';
     }
 
+
+    public List<Note> getNotes()
+    {
+        return notes;
+    }
+
     @Override
     public <R> R accept(AbcVisitor<R> visitor)
     {

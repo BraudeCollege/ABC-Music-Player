@@ -21,6 +21,7 @@ public class AbcInfoCollector implements AbcVisitor<Void>
      */
     private int beatsPerBar;
 
+
     /**
      * minimum length of all the notes
      */
@@ -32,7 +33,7 @@ public class AbcInfoCollector implements AbcVisitor<Void>
         // TODO: const or static variable
         defaultNoteLength = new RationalNumber(1,8);
         tempo = 100;
-        minNoteLength = new RationalNumber(Integer.MIN_VALUE, 1);
+        minNoteLength = null;
 
         root.accept(this);
     }
@@ -154,8 +155,9 @@ public class AbcInfoCollector implements AbcVisitor<Void>
     }
 
     @Override
-    public Void on(TupletElement element)
+    public Void on(TupletElement tuplet)
     {
+        tuplet.getNoteElements().stream().forEach(noteElement -> noteElement.accept(this));
         return null;
     }
 
@@ -167,15 +169,16 @@ public class AbcInfoCollector implements AbcVisitor<Void>
 
         RationalNumber realNoteLength = rationalLength.multiply(defaultNoteLength);
 
-        if (realNoteLength.compare(minNoteLength) < 0)
+        if (minNoteLength == null || realNoteLength.compare(minNoteLength) < 0)
             minNoteLength = realNoteLength;
 
         return null;
     }
 
     @Override
-    public Void on(MultiNote note)
+    public Void on(MultiNote multiNote)
     {
+        multiNote.getNotes().stream().forEach(note -> note.accept(this) );
         return null;
     }
 
@@ -280,8 +283,8 @@ public class AbcInfoCollector implements AbcVisitor<Void>
         return beatsPerBar;
     }
 
-    public RationalNumber getMinLength()
+    public RationalNumber getMinNoteLength()
     {
-        return minLength;
+        return minNoteLength;
     }
 }

@@ -36,7 +36,7 @@ public class AbcInfoCollectorTest
     @Test
     public void testGetDefaultLength()
     {
-        AbcInfoCollector collector = new AbcInfoCollector(abcTune);
+//        AbcInfoCollector collector = new AbcInfoCollector(abcTune);
 
     }
 
@@ -66,7 +66,7 @@ public class AbcInfoCollectorTest
     public void testMinLength() throws Exception
     {
         AbcInfoCollector collector = new AbcInfoCollector(abcTune);
-        assertEquals(new RationalNumber(1,12), collector.getMinLength());
+        assertEquals(new RationalNumber(1,12), collector.getMinNoteLength());
     }
 
     public Parser getParser(String str)
