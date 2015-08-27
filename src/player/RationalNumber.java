@@ -14,14 +14,13 @@ public class RationalNumber
     //  Constructor: Sets up the rational number by ensuring a nonzero
     //  denominator and making only the numerator signed.
     //-----------------------------------------------------------------
-    public RationalNumber (int numer, int denom)
+    public RationalNumber(int numer, int denom)
     {
         if (denom == 0)
             denom = 1;
 
         // Make the numerator "store" the sign
-        if (denom < 0)
-        {
+        if (denom < 0) {
             numer = numer * -1;
             denom = denom * -1;
         }
@@ -35,7 +34,7 @@ public class RationalNumber
     //-----------------------------------------------------------------
     //  Returns the numerator of this rational number.
     //-----------------------------------------------------------------
-    public int getNumerator ()
+    public int getNumerator()
     {
         return numerator;
     }
@@ -43,7 +42,7 @@ public class RationalNumber
     //-----------------------------------------------------------------
     //  Returns the denominator of this rational number.
     //-----------------------------------------------------------------
-    public int getDenominator ()
+    public int getDenominator()
     {
         return denominator;
     }
@@ -51,9 +50,9 @@ public class RationalNumber
     //-----------------------------------------------------------------
     //  Returns the reciprocal of this rational number.
     //-----------------------------------------------------------------
-    public RationalNumber reciprocal ()
+    public RationalNumber reciprocal()
     {
-        return new RationalNumber (denominator, numerator);
+        return new RationalNumber(denominator, numerator);
     }
 
     //-----------------------------------------------------------------
@@ -61,72 +60,71 @@ public class RationalNumber
     //  A common denominator is found by multiplying the individual
     //  denominators.
     //-----------------------------------------------------------------
-    public RationalNumber add (RationalNumber op2)
+    public RationalNumber add(RationalNumber op2)
     {
         int commonDenominator = denominator * op2.getDenominator();
         int numerator1 = numerator * op2.getDenominator();
         int numerator2 = op2.getNumerator() * denominator;
         int sum = numerator1 + numerator2;
 
-        return new RationalNumber (sum, commonDenominator);
+        return new RationalNumber(sum, commonDenominator);
     }
 
     //-----------------------------------------------------------------
     //  Subtracts the rational number passed as a parameter from this
     //  rational number.
     //-----------------------------------------------------------------
-    public RationalNumber subtract (RationalNumber op2)
+    public RationalNumber subtract(RationalNumber op2)
     {
         int commonDenominator = denominator * op2.getDenominator();
         int numerator1 = numerator * op2.getDenominator();
         int numerator2 = op2.getNumerator() * denominator;
         int difference = numerator1 - numerator2;
 
-        return new RationalNumber (difference, commonDenominator);
+        return new RationalNumber(difference, commonDenominator);
     }
 
     //-----------------------------------------------------------------
     //  Multiplies this rational number by the one passed as a
     //  parameter.
     //-----------------------------------------------------------------
-    public RationalNumber multiply (RationalNumber op2)
+    public RationalNumber multiply(RationalNumber op2)
     {
         int numer = numerator * op2.getNumerator();
         int denom = denominator * op2.getDenominator();
 
-        return new RationalNumber (numer, denom);
+        return new RationalNumber(numer, denom);
     }
 
     //-----------------------------------------------------------------
     //  Divides this rational number by the one passed as a parameter
     //  by multiplying by the reciprocal of the second rational.
     //-----------------------------------------------------------------
-    public RationalNumber divide (RationalNumber op2)
+    public RationalNumber divide(RationalNumber op2)
     {
-        return multiply (op2.reciprocal());
+        return multiply(op2.reciprocal());
     }
 
     //-----------------------------------------------------------------
     //  Determines if this rational number is equal to the one passed
     //  as a parameter.  Assumes they are both reduced.
     //-----------------------------------------------------------------
-    public boolean equals (RationalNumber op2)
+    public boolean equals(RationalNumber op2)
     {
-        return ( numerator == op2.getNumerator() &&
-                denominator == op2.getDenominator() );
+        return (numerator == op2.getNumerator() &&
+                denominator == op2.getDenominator());
     }
 
     //-----------------------------------------------------------------
     //  Returns this rational number as a string.
     //-----------------------------------------------------------------
-    public String toString ()
+    public String toString()
     {
         String result;
 
         if (numerator == 0)
             result = "0";
-        else
-        if (denominator == 1)
+        else if (denominator == 1)
             result = numerator + "";
         else
             result = numerator + "/" + denominator;
@@ -134,26 +132,39 @@ public class RationalNumber
         return result;
     }
 
+    /**
+     * Compare the current rational number with the given Rational number op2
+     * @param op2 Operand2 to compare with
+     * @return < 0 if op1 > op2
+     *         0 if op1 = op2
+     *         > 0 if op1 < op2
+     */
+    public int compare(RationalNumber op2)
+    {
+        RationalNumber result = this.subtract(op2);
+        return result.numerator;
+    }
+
     //-----------------------------------------------------------------
     //  Reduces this rational number by dividing both the numerator
     //  and the denominator by their greatest common divisor.
     //-----------------------------------------------------------------
-    private void reduce ()
+    private void reduce()
     {
-        if (numerator != 0)
-        {
-            int common = gcd (Math.abs(numerator), denominator);
+        if (numerator != 0) {
+            int common = gcd(Math.abs(numerator), denominator);
 
             numerator = numerator / common;
             denominator = denominator / common;
         }
     }
 
+
     //-----------------------------------------------------------------
     //  Computes and returns the greatest common divisor of the two
     //  positive parameters. Uses Euclid's algorithm.
     //-----------------------------------------------------------------
-    private int gcd (int num1, int num2)
+    private int gcd(int num1, int num2)
     {
         while (num1 != num2)
             if (num1 > num2)
