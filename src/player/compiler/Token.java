@@ -1,4 +1,4 @@
-package player;
+package player.compiler;
 
 /**
  * Represent a token produced by a lexer

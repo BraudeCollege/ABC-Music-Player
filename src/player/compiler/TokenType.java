@@ -1,4 +1,4 @@
-package player;
+package player.compiler;
 
 /**
  * Created by DucNguyenMinh on 8/18/15.

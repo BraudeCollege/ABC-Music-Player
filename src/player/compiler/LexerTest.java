@@ -1,4 +1,4 @@
-package player;
+package player.compiler;
 
 
 import org.junit.Test;

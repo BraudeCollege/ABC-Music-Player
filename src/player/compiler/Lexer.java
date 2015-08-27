@@ -1,4 +1,4 @@
-package player;
+package player.compiler;
 
 import java.util.*;
 import java.util.regex.Matcher;

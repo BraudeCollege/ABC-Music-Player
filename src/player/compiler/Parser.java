@@ -1,4 +1,4 @@
-package player;
+package player.compiler;
 
 import player.ast.*;
 
@@ -22,8 +22,8 @@ public class Parser
 
     /**
      * @return an ast with the root is a basenote
-     * @throws player.Parser.UnexpectedTokenException if no basenote found
-     * @throws player.Lexer.RunOutOfTokenException    if there is no token left
+     * @throws Parser.UnexpectedTokenException if no basenote found
+     * @throws Lexer.RunOutOfTokenException    if there is no token left
      */
     public Basenote expectBasenote() throws UnexpectedTokenException
     {
@@ -54,8 +54,8 @@ public class Parser
 
     /**
      * @return an ast with the root is an Accidental
-     * @throws player.Parser.UnexpectedTokenException if no basenote found
-     * @throws player.Lexer.RunOutOfTokenException    if there is no token left
+     * @throws Parser.UnexpectedTokenException if no basenote found
+     * @throws Lexer.RunOutOfTokenException    if there is no token left
      */
     public Accidental expectAccidental() throws UnexpectedTokenException
     {
@@ -81,8 +81,8 @@ public class Parser
 
     /**
      * @return an ast with the root is an Octave
-     * @throws player.Parser.UnexpectedTokenException if no basenote found
-     * @throws player.Lexer.RunOutOfTokenException    if there is no token left
+     * @throws Parser.UnexpectedTokenException if no basenote found
+     * @throws Lexer.RunOutOfTokenException    if there is no token left
      */
     public Octave expectOctave() throws UnexpectedTokenException
     {
@@ -104,8 +104,8 @@ public class Parser
 
     /**
      * @return an ast with the root is a Pitch
-     * @throws player.Parser.UnexpectedTokenException if no basenote found
-     * @throws player.Lexer.RunOutOfTokenException    if there is no token left
+     * @throws Parser.UnexpectedTokenException if no basenote found
+     * @throws Lexer.RunOutOfTokenException    if there is no token left
      */
     public Pitch expectPitch() throws UnexpectedTokenException
     {
@@ -130,8 +130,8 @@ public class Parser
 
     /**
      * @return an ast with the root is a Rest
-     * @throws player.Parser.UnexpectedTokenException if no rest is found
-     * @throws player.Lexer.RunOutOfTokenException    if there is no token left
+     * @throws Parser.UnexpectedTokenException if no rest is found
+     * @throws Lexer.RunOutOfTokenException    if there is no token left
      */
     public Rest expectRest() throws UnexpectedTokenException
     {
@@ -296,7 +296,7 @@ public class Parser
     /**
      * expect a '/' character
      *
-     * @throws player.Parser.UnexpectedTokenException if there is no slash
+     * @throws Parser.UnexpectedTokenException if there is no slash
      */
     private void expectSlash() throws UnexpectedTokenException
     {
