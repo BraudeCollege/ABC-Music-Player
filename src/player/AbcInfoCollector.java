@@ -26,7 +26,7 @@ public class AbcInfoCollector implements AbcVisitor<Void>
     /**
      * Default note length
      */
-    private RationalPair defaultNoteLength;
+    private RationalNumber defaultNoteLength;
 
     public AbcInfoCollector(AbstractSyntaxTree root)
     {
@@ -86,7 +86,7 @@ public class AbcInfoCollector implements AbcVisitor<Void>
     {
         NoteLengthStrict noteLengthStrict = field.getNoteLengthStrict();
 
-        defaultNoteLength = new RationalPair(noteLengthStrict.getMultiplier(), noteLengthStrict.getDivider());
+        defaultNoteLength = new RationalNumber(noteLengthStrict.getMultiplier(), noteLengthStrict.getDivider());
 
         return null;
     }
@@ -241,8 +241,10 @@ public class AbcInfoCollector implements AbcVisitor<Void>
      */
     public int getBpm()
     {
-        double quarterNoteLength = 1.0 / 4.0;
-        double noteLength = (double) defaultNoteLength.muliplier / defaultNoteLength.divider;
-        return (int) (this.tempo * noteLength / quarterNoteLength);
+        RationalNumber quarterNoteLength = new RationalNumber(1,4);
+        RationalNumber tempo = new RationalNumber(this.tempo, 1);
+        RationalNumber bpm = tempo.multiply(defaultNoteLength).divide(quarterNoteLength);
+
+        return Math.floorDiv(bpm.getNumerator(), bpm.getDenominator());
     }
 }

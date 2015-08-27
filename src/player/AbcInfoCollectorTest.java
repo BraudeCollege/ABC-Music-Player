@@ -41,7 +41,7 @@ public class AbcInfoCollectorTest
     }
 
     @Test
-    public void testOnTempo() throws Exception
+    public void testGetBpm() throws Exception
     {
         AbcInfoCollector collector = new AbcInfoCollector(abcTune);
 
@@ -50,6 +50,16 @@ public class AbcInfoCollectorTest
         collector.on(new FieldDefaultLength(new NoteLengthStrict(4,8)));
 
         assertEquals(240, collector.getBpm());
+    }
+
+    @Test
+    public void testBeatsPerBar() throws Exception
+    {
+        AbcInfoCollector collector = new AbcInfoCollector(abcTune);
+
+        collector.on(new FieldMeter(new MeterFraction(4,4)));
+
+        assertEquals(4, collector.getBeatsPerBar());
     }
 
     public Parser getParser(String str)
