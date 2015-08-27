@@ -20,6 +20,7 @@ public interface AbcVisitor<R>
     public R on(FieldComposer field);
     public R on(FieldDefaultLength field);
     public R on(FieldMeter field);
+    public R on(FieldTempo field);
     public R on(Comment c);
     public R on(ElementLine line);
     public R on(Element element);
