@@ -42,4 +42,10 @@ public class NthRepeat implements Element
                 "times=" + times +
                 '}';
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }

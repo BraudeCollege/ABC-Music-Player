@@ -1,7 +1,13 @@
 package player.ast;
 
-public class ModeMinor
+public class ModeMinor implements AbstractSyntaxTree
 {
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
+
     public enum Type
     {
         MODE_MINOR, NONE

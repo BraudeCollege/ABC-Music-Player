@@ -60,4 +60,10 @@ public class MeterFraction implements Meter
                 ", divider=" + divider +
                 '}';
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }

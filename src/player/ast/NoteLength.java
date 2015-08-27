@@ -3,7 +3,7 @@ package player.ast;
 /**
  * Represents a note length Exp: "2/4", "4", "/", "4/", "/4"
  */
-public class NoteLength
+public class NoteLength implements AbstractSyntaxTree
 {
 
     private int multiplier;
@@ -67,5 +67,11 @@ public class NoteLength
                 "divider=" + divider +
                 ", multiplier=" + multiplier +
                 '}';
+    }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
     }
 }

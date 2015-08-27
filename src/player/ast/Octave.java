@@ -6,6 +6,12 @@ package player.ast;
 public class Octave implements AbstractSyntaxTree
 {
 
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
+
     public enum Type
     {
         UP, DOWN, NONE

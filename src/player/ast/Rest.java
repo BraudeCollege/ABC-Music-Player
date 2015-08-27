@@ -14,4 +14,12 @@ public class Rest implements NoteOrRest
 
         return instance;
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+
+        return visitor.on(this);
+
+    }
 }

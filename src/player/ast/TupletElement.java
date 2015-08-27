@@ -71,4 +71,10 @@ public class TupletElement implements Element
                 ", tupletSpec=" + tupletSpec +
                 '}';
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }

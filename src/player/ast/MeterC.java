@@ -24,4 +24,10 @@ public class MeterC implements Meter
     {
         return "MeterC";
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }

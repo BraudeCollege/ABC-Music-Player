@@ -3,7 +3,7 @@ package player.ast;
 /**
  * Created by hieusun on 24.08.15.
  */
-public class Keynote
+public class Keynote implements AbstractSyntaxTree
 {
     private final Basenote basenote;
 
@@ -63,5 +63,11 @@ public class Keynote
                 "basenote=" + basenote +
                 ", keyAccidental=" + keyAccidental +
                 '}';
+    }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
     }
 }

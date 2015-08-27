@@ -64,4 +64,10 @@ public class Note implements NoteElement
                 ", noteOrRest=" + noteOrRest +
                 '}';
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }
