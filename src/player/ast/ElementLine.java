@@ -30,6 +30,11 @@ public class ElementLine implements AbcLine
 
     }
 
+    public List<Element> getElements()
+    {
+        return elements;
+    }
+
     @Override
     public int hashCode()
     {

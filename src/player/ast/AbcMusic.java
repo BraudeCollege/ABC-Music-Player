@@ -29,6 +29,11 @@ public class AbcMusic implements AbstractSyntaxTree
 
     }
 
+    public List<AbcLine> getLines()
+    {
+        return lines;
+    }
+
     @Override
     public int hashCode()
     {

@@ -62,6 +62,13 @@ public class AbcInfoCollectorTest
         assertEquals(4, collector.getBeatsPerBar());
     }
 
+    @Test
+    public void testMinLength() throws Exception
+    {
+        AbcInfoCollector collector = new AbcInfoCollector(abcTune);
+        assertEquals(new RationalNumber(1,12), collector.getMinLength());
+    }
+
     public Parser getParser(String str)
     {
         return new Parser(new Lexer(str));

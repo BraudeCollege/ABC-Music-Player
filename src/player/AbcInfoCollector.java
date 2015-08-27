@@ -21,26 +21,47 @@ public class AbcInfoCollector implements AbcVisitor<Void>
      */
     private int beatsPerBar;
 
+    /**
+     * minimum length of all the notes
+     */
+    private RationalNumber minNoteLength;
+
     public AbcInfoCollector(AbstractSyntaxTree root)
     {
+        // TODO: test the defaults
+        // TODO: const or static variable
+        defaultNoteLength = new RationalNumber(1,8);
+        tempo = 100;
+        minNoteLength = new RationalNumber(Integer.MIN_VALUE, 1);
+
         root.accept(this);
     }
 
     @Override
     public Void on(AbcTune tune)
     {
+        tune.getHeader().accept(this);
+        tune.getBody().accept(this);
+
         return null;
     }
 
     @Override
     public Void on(AbcHeader header)
     {
+        header.getFieldNumber().accept(this);
+        header.getFieldKey().accept(this);
+        header.getFieldTitle().accept(this);
+        header.getOtherFields().stream().forEach(field -> field.accept(this));
+
         return null;
     }
 
     @Override
     public Void on(AbcMusic body)
     {
+        body.getLines().stream().forEach(line -> line.accept(this));
+
         return null;
     }
 
@@ -110,6 +131,7 @@ public class AbcInfoCollector implements AbcVisitor<Void>
     @Override
     public Void on(ElementLine line)
     {
+        line.getElements().stream().forEach(element -> element.accept(this));
         return null;
     }
 
@@ -140,6 +162,14 @@ public class AbcInfoCollector implements AbcVisitor<Void>
     @Override
     public Void on(Note note)
     {
+        NoteLength length = note.getNoteLength();
+        RationalNumber rationalLength = new RationalNumber(length.getMultiplier(), length.getDivider());
+
+        RationalNumber realNoteLength = rationalLength.multiply(defaultNoteLength);
+
+        if (realNoteLength.compare(minNoteLength) < 0)
+            minNoteLength = realNoteLength;
+
         return null;
     }
 
@@ -238,7 +268,7 @@ public class AbcInfoCollector implements AbcVisitor<Void>
      */
     public int getBpm()
     {
-        RationalNumber quarterNoteLength = new RationalNumber(1,4);
+        RationalNumber quarterNoteLength = new RationalNumber(1, 4);
         RationalNumber tempo = new RationalNumber(this.tempo, 1);
         RationalNumber bpm = tempo.multiply(defaultNoteLength).divide(quarterNoteLength);
 
@@ -248,5 +278,10 @@ public class AbcInfoCollector implements AbcVisitor<Void>
     public int getBeatsPerBar()
     {
         return beatsPerBar;
+    }
+
+    public RationalNumber getMinLength()
+    {
+        return minLength;
     }
 }
