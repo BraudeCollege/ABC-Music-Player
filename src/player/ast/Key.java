@@ -3,7 +3,7 @@ package player.ast;
 /**
  * Created by hieusun on 24.08.15.
  */
-public class Key
+public class Key implements AbstractSyntaxTree
 {
     private final Keynote keynote;
     private final ModeMinor modeMinor;
@@ -62,5 +62,11 @@ public class Key
                 "keynote=" + keynote +
                 ", modeMinor=" + modeMinor +
                 '}';
+    }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
     }
 }

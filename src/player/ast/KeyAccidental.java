@@ -3,6 +3,12 @@ package player.ast;
 public class KeyAccidental implements AbstractSyntaxTree
 {
 
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
+
     public enum Type
     {
         FLAT, SHARP, NONE
