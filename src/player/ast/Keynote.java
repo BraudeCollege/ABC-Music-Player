@@ -1,8 +1,5 @@
 package player.ast;
 
-/**
- * Created by hieusun on 24.08.15.
- */
 public class Keynote implements AbstractSyntaxTree
 {
     private final Basenote basenote;

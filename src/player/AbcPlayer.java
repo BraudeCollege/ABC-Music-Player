@@ -64,6 +64,30 @@ public class AbcPlayer implements AbcVisitor<Void>
     }
 
     @Override
+    public Void on(FieldComposer field)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(FieldDefaultLength field)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(FieldMeter field)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(FieldTempo field)
+    {
+        return null;
+    }
+
+    @Override
     public Void on(Comment c)
     {
         return null;
@@ -131,6 +155,30 @@ public class AbcPlayer implements AbcVisitor<Void>
 
     @Override
     public Void on(Basenote basenote)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(Accidental acc)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(Octave octave)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(KeyAccidental keyAccidental)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(Keynote keynote)
     {
         return null;
     }

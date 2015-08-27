@@ -2,20 +2,19 @@ package player;
 
 import org.junit.Before;
 import org.junit.Test;
-import player.ast.AbstractSyntaxTree;
+import player.ast.AbcTune;
 import player.compiler.Lexer;
 import player.compiler.Parser;
 
 public class AbcInfoCollectorTest
 {
 
-    private AbstractSyntaxTree ast;
+    private AbcTune abcTune;
 
     @Before
     public void setUp() throws Exception
     {
-
-        ast = (getParser("X:1\n" +
+        abcTune = getParser("X:1\n" +
                 "%Comment 1\n" +
                 "%Comment 2\n" +
                 "T:ABC Title\n" +
@@ -28,7 +27,7 @@ public class AbcInfoCollectorTest
                 "[C z3/4] |: (3 A/ B4 E/6 :|[2 \n"
                 + "V: The field voice\n" +
                 "% this is a comment\n" +
-                "[A z] |: (3 A B E :|[2\n")).expectAbcTune();
+                "[A z] |: (3 A B E :|[2\n").expectAbcTune();
 
     }
 
@@ -37,9 +36,7 @@ public class AbcInfoCollectorTest
     {
         AbcInfoCollector collector = new AbcInfoCollector();
 
-//        assertEquals();
-
-
+        collector.on(abcTune);
     }
 
     public Parser getParser(String str)
