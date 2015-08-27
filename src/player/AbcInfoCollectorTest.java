@@ -2,14 +2,16 @@ package player;
 
 import org.junit.Before;
 import org.junit.Test;
-import player.ast.AbcTune;
+import static org.junit.Assert.*;
+
+import player.ast.*;
 import player.compiler.Lexer;
 import player.compiler.Parser;
 
 public class AbcInfoCollectorTest
 {
 
-    private AbcTune abcTune;
+    private AbstractSyntaxTree abcTune;
 
     @Before
     public void setUp() throws Exception
@@ -19,7 +21,7 @@ public class AbcInfoCollectorTest
                 "%Comment 2\n" +
                 "T:ABC Title\n" +
                 "C:Beethoven\n" +
-                "L:2/4\n" +
+                "L:4/8\n" +
                 "Q:120\n" +
                 "M:C\n" +
                 "V:Voice1\n" +
@@ -34,9 +36,20 @@ public class AbcInfoCollectorTest
     @Test
     public void testGetDefaultLength()
     {
-        AbcInfoCollector collector = new AbcInfoCollector();
+        AbcInfoCollector collector = new AbcInfoCollector(abcTune);
 
-        collector.on(abcTune);
+    }
+
+    @Test
+    public void testOnTempo() throws Exception
+    {
+        AbcInfoCollector collector = new AbcInfoCollector(abcTune);
+
+        collector.on(new FieldTempo(120));
+
+        collector.on(new FieldDefaultLength(new NoteLengthStrict(4,8)));
+
+        assertEquals(240, collector.getBpm());
     }
 
     public Parser getParser(String str)

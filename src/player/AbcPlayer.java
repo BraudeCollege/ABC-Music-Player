@@ -82,10 +82,7 @@ public class AbcPlayer implements AbcVisitor<Void>
     }
 
     @Override
-    public Void on(FieldTempo field)
-    {
-        return null;
-    }
+    public Void on(FieldTempo field) { return null; }
 
     @Override
     public Void on(Comment c)
@@ -179,6 +176,42 @@ public class AbcPlayer implements AbcVisitor<Void>
 
     @Override
     public Void on(Keynote keynote)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(NoteLengthStrict noteLengthStrict)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(ModeMinor modeMinor)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(MeterFraction meterFraction)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(MeterCPipe meterCPipe)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(MeterC meterC)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(Key key)
     {
         return null;
     }

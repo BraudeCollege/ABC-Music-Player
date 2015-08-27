@@ -5,6 +5,33 @@ import player.ast.*;
 
 public class AbcInfoCollector implements AbcVisitor<Void>
 {
+    class RationalPair
+    {
+        public final int muliplier;
+
+        public final int divider;
+
+        public RationalPair(int muliplier, int divider)
+        {
+            this.muliplier = muliplier;
+            this.divider = divider;
+        }
+    }
+
+    /**
+     * The number of default-length notes per minute.
+     */
+    private int tempo;
+
+    /**
+     * Default note length
+     */
+    private RationalPair defaultNoteLength;
+
+    public AbcInfoCollector(AbstractSyntaxTree root)
+    {
+        root.accept(this);
+    }
 
     @Override
     public Void on(AbcTune tune)
@@ -57,6 +84,10 @@ public class AbcInfoCollector implements AbcVisitor<Void>
     @Override
     public Void on(FieldDefaultLength field)
     {
+        NoteLengthStrict noteLengthStrict = field.getNoteLengthStrict();
+
+        defaultNoteLength = new RationalPair(noteLengthStrict.getMultiplier(), noteLengthStrict.getDivider());
+
         return null;
     }
 
@@ -69,6 +100,7 @@ public class AbcInfoCollector implements AbcVisitor<Void>
     @Override
     public Void on(FieldTempo field)
     {
+        tempo = field.getTempo();
         return null;
     }
 
@@ -166,5 +198,51 @@ public class AbcInfoCollector implements AbcVisitor<Void>
     public Void on(Keynote keynote)
     {
         return null;
+    }
+
+    @Override
+    public Void on(NoteLengthStrict noteLengthStrict)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(ModeMinor modeMinor)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(MeterFraction meterFraction)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(MeterCPipe meterCPipe)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(MeterC meterC)
+    {
+        return null;
+    }
+
+    @Override
+    public Void on(Key key)
+    {
+        return null;
+    }
+
+    /**
+     * @return beats per minute, where each beat equals a quarter note
+     */
+    public int getBpm()
+    {
+        double quarterNoteLength = 1.0 / 4.0;
+        double noteLength = (double) defaultNoteLength.muliplier / defaultNoteLength.divider;
+        return (int) (this.tempo * noteLength / quarterNoteLength);
     }
 }
