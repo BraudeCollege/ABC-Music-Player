@@ -1,5 +1,7 @@
 package player.ast;
 
+import player.AbcPlayer;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,5 +97,10 @@ public class AbcHeader
                 ", otherFields=" + otherFields +
                 ", fieldKey=" + fieldKey +
                 '}';
+    }
+
+    public void accept(AbcPlayer abcPlayer)
+    {
+        abcPlayer.on(this);
     }
 }

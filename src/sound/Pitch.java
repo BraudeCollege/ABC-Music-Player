@@ -84,7 +84,7 @@ public class Pitch {
      * E'; transposing E down by 1 octave produces E, .
      */
     public Pitch octaveTranspose(int octavesUp) {
-	return new Pitch(value, accidental, octave + octavesUp);
+        return new Pitch(value, accidental, octave + octavesUp);
     }
 
     /**
