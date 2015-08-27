@@ -35,4 +35,6 @@ public interface AbcVisitor<R>
     public R on(Basenote basenote);
     public R on(Accidental acc);
     public R on(Octave octave);
+    public R on(KeyAccidental keyAccidental);
+    public R on(Keynote keynote);
 }
