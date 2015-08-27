@@ -45,4 +45,10 @@ public class FieldKey implements AbstractSyntaxTree
                 "key=" + key +
                 '}';
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }

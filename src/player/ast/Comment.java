@@ -42,5 +42,13 @@ public class Comment implements AbcLine, OtherField
     {
         return text;
     }
+
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }
+
 

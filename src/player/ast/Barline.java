@@ -78,4 +78,10 @@ public class Barline implements Element
                 "type=" + type +
                 '}';
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }

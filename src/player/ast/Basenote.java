@@ -48,4 +48,10 @@ public class Basenote implements AbstractSyntaxTree
                 "symbol=" + symbol +
                 '}';
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }

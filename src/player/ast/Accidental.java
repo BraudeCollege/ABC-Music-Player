@@ -84,4 +84,10 @@ public class Accidental implements AbstractSyntaxTree
                 "type=" + type +
                 '}';
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }

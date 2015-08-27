@@ -45,4 +45,10 @@ public class FieldMeter implements OtherField
                 "meter=" + meter +
                 '}';
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }

@@ -43,4 +43,10 @@ public class ElementLine implements AbcLine
                 "elements=" + elements +
                 '}';
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }

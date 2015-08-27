@@ -17,6 +17,9 @@ public interface AbcVisitor<R>
     public R on(FieldTitle field);
     public R on(FieldKey field);
     public R on(FieldVoice field);
+    public R on(FieldComposer field);
+    public R on(FieldDefaultLength field);
+    public R on(FieldMeter field);
     public R on(Comment c);
     public R on(ElementLine line);
     public R on(Element element);
@@ -29,4 +32,6 @@ public interface AbcVisitor<R>
     public R on(Rest rest);
     public R on(Pitch pitch);
     public R on(Basenote basenote);
+    public R on(Accidental acc);
+    public R on(Octave octave);
 }

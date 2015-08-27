@@ -42,4 +42,10 @@ public class FieldNumber implements AbstractSyntaxTree
                 "num=" + num +
                 '}';
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }

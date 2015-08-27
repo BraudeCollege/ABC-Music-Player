@@ -63,4 +63,10 @@ public class AbcTune implements AbstractSyntaxTree
                 ", body=" + body +
                 '}';
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }

@@ -42,4 +42,10 @@ public class FieldDefaultLength implements OtherField
                 "noteLengthStrict=" + noteLengthStrict +
                 '}';
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }

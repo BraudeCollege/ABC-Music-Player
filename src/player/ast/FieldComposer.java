@@ -46,4 +46,10 @@ public class FieldComposer implements OtherField
     {
         return name;
     }
+
+    @Override
+    public <R> R accept(AbcVisitor<R> visitor)
+    {
+        return visitor.on(this);
+    }
 }
