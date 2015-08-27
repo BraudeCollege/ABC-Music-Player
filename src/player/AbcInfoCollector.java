@@ -5,18 +5,6 @@ import player.ast.*;
 
 public class AbcInfoCollector implements AbcVisitor<Void>
 {
-    class RationalPair
-    {
-        public final int muliplier;
-
-        public final int divider;
-
-        public RationalPair(int muliplier, int divider)
-        {
-            this.muliplier = muliplier;
-            this.divider = divider;
-        }
-    }
 
     /**
      * The number of default-length notes per minute.
@@ -27,6 +15,11 @@ public class AbcInfoCollector implements AbcVisitor<Void>
      * Default note length
      */
     private RationalNumber defaultNoteLength;
+
+    /**
+     * Beats per bar
+     */
+    private int beatsPerBar;
 
     public AbcInfoCollector(AbstractSyntaxTree root)
     {
@@ -94,6 +87,10 @@ public class AbcInfoCollector implements AbcVisitor<Void>
     @Override
     public Void on(FieldMeter field)
     {
+        Meter meter = field.getMeter();
+
+        this.beatsPerBar = meter.getUpper();
+
         return null;
     }
 
@@ -246,5 +243,10 @@ public class AbcInfoCollector implements AbcVisitor<Void>
         RationalNumber bpm = tempo.multiply(defaultNoteLength).divide(quarterNoteLength);
 
         return Math.floorDiv(bpm.getNumerator(), bpm.getDenominator());
+    }
+
+    public int getBeatsPerBar()
+    {
+        return beatsPerBar;
     }
 }

@@ -30,4 +30,16 @@ public class MeterC implements Meter
     {
         return visitor.on(this);
     }
+
+    @Override
+    public int getUpper()
+    {
+        return 4;
+    }
+
+    @Override
+    public int getLower()
+    {
+        return 4;
+    }
 }

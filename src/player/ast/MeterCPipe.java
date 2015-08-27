@@ -30,4 +30,16 @@ public class MeterCPipe implements Meter
     {
         return visitor.on(this);
     }
+
+    @Override
+    public int getUpper()
+    {
+        return 2;
+    }
+
+    @Override
+    public int getLower()
+    {
+        return 2;
+    }
 }
