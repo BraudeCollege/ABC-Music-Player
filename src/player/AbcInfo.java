@@ -3,7 +3,7 @@ package player;
 
 import player.ast.*;
 
-public class AbcInfoCollector
+public class AbcInfo
 {
     class InfoVisitor implements AbcVisitor<Void>
     {
@@ -279,23 +279,11 @@ public class AbcInfoCollector
      */
     private InfoVisitor infoVisitor;
 
-    public AbcInfoCollector(AbstractSyntaxTree root)
+    public AbcInfo(AbstractSyntaxTree root)
     {
         infoVisitor = new InfoVisitor();
 
         root.accept(infoVisitor);
-    }
-
-    /**
-     * @return beats per minute, where each beat equals a quarter note
-     */
-    public int getBpm()
-    {
-        RationalNumber quarterNoteLength = new RationalNumber(1, 4);
-        RationalNumber tempo = new RationalNumber(this.tempo, 1);
-        RationalNumber bpm = tempo.multiply(defaultNoteLength).divide(quarterNoteLength);
-
-        return Math.floorDiv(bpm.getNumerator(), bpm.getDenominator());
     }
 
     /**

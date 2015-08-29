@@ -8,7 +8,7 @@ import player.ast.*;
 import player.compiler.Lexer;
 import player.compiler.Parser;
 
-public class AbcInfoCollectorTest
+public class AbcInfoTest
 {
 
     private AbstractSyntaxTree abcTune;
@@ -44,7 +44,7 @@ public class AbcInfoCollectorTest
                 "K:C#m\n" +
                 "A\n").expectAbcTune();
 
-        AbcInfoCollector collector = new AbcInfoCollector(abcTune);
+        AbcInfo collector = new AbcInfo(abcTune);
 
         assertEquals(new RationalNumber(1,8), collector.getDefaultNoteLength());
         assertEquals(100, collector.getTempo());
@@ -53,32 +53,27 @@ public class AbcInfoCollectorTest
     }
 
     @Test
-    public void testGetBpm() throws Exception
-    {
-        AbcInfoCollector collector = new AbcInfoCollector(abcTune);
-        assertEquals(240, collector.getBpm());
-    }
-
-    @Test
     public void testMinLength() throws Exception
     {
-        AbcInfoCollector collector = new AbcInfoCollector(abcTune);
+        AbcInfo collector = new AbcInfo(abcTune);
         assertEquals(new RationalNumber(1,12), collector.getMinNoteLength());
     }
 
     @Test
-    public void testTextFields() throws Exception
+    public void testFields() throws Exception
     {
         abcTune = getParser("X:103\n" +
                 "T:ABC Title\n" +
                 "C:Mozart\n" +
+                "M:C|\n" +
                 "K:C#m\n" +
                 "A\n").expectAbcTune();
 
-        AbcInfoCollector collector = new AbcInfoCollector(abcTune);
+        AbcInfo collector = new AbcInfo(abcTune);
 
         assertEquals("Mozart", collector.getComposer());
         assertEquals("ABC Title", collector.getTitle());
         assertEquals(103, collector.getId());
+        assertEquals(MeterCPipe.getInstance(), collector.getMeter());
     }
 }
