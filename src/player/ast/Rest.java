@@ -1,25 +1,49 @@
 package player.ast;
 
-public class Rest implements NoteOrRest
+public class Rest implements Note
 {
+    private final NoteLength noteLength;
 
-    private static Rest instance;
+    public Rest(NoteLength noteLength)
+    {
+        this.noteLength = noteLength;
+    }
 
-    private Rest() {}
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    public static Rest getInstance() {
+        Rest rest = (Rest) o;
 
-        if (instance == null)
-            instance = new Rest();
+        return !(noteLength != null ? !noteLength.equals(rest.noteLength) : rest.noteLength != null);
 
-        return instance;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return noteLength != null ? noteLength.hashCode() : 0;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Rest{" +
+                "noteLength=" + noteLength +
+                '}';
     }
 
     @Override
     public <R> R accept(AbcVisitor<R> visitor)
     {
-
         return visitor.on(this);
+    }
 
+    @Override
+    public NoteLength getNoteLength()
+    {
+        return noteLength;
     }
 }

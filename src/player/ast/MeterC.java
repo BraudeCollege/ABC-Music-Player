@@ -42,4 +42,22 @@ public class MeterC implements Meter
     {
         return 4;
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+
+        if (o == null) return false;
+
+        Meter meter = (Meter) o;
+
+        return getLower() == meter.getLower() && getUpper() == meter.getUpper();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return 31 * getLower() + getUpper();
+    }
 }

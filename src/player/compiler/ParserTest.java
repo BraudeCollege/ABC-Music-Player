@@ -78,24 +78,26 @@ public class ParserTest
     @Test
     public void testPitch() throws Exception
     {
-        Parser parser = getParser("B");
-        assertEquals(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty()), parser.expectPitch());
+        Parser parser = getParser("B/2");
+        assertEquals(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1,2)), parser.expectPitch());
+
+        NoteLength noteLength = new NoteLength(1,1);
 
         parser = getParser("__c");
-        assertEquals(new Pitch(new Basenote('c'), Accidental.getInstance(Accidental.Type.DOUBLE_FLAT), Octave.getEmpty()), parser.expectPitch());
+        assertEquals(new Pitch(new Basenote('c'), Accidental.getInstance(Accidental.Type.DOUBLE_FLAT), Octave.getEmpty(), noteLength), parser.expectPitch());
 
         parser = getParser("^A,");
-        assertEquals(new Pitch(new Basenote('A'), Accidental.getInstance(Accidental.Type.SHARP), Octave.getDown(1)), parser.expectPitch());
+        assertEquals(new Pitch(new Basenote('A'), Accidental.getInstance(Accidental.Type.SHARP), Octave.getDown(1), noteLength), parser.expectPitch());
 
         parser = getParser("B'");
-        assertEquals(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getUp(1)), parser.expectPitch());
+        assertEquals(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getUp(1), noteLength), parser.expectPitch());
     }
 
     @Test
     public void testExpectRest() throws Exception
     {
-        Parser parser = getParser("z");
-        assertEquals(Rest.getInstance(), parser.expectRest());
+        Parser parser = getParser("z2");
+        assertEquals(new Rest(new NoteLength(2,1)), parser.expectRest());
     }
 
     @Test
@@ -121,42 +123,22 @@ public class ParserTest
     }
 
     @Test
-    public void testNoteOrRest() throws Exception
-    {
-
-        Parser parser = getParser("z");
-
-        assertEquals(Rest.getInstance(), parser.expectNoteOrRest());
-
-        parser = getParser("B");
-
-        assertEquals(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty()), parser.expectNoteOrRest());
-
-        parser = getParser("__c");
-        assertEquals(new Pitch(new Basenote('c'), Accidental.getInstance(Accidental.Type.DOUBLE_FLAT), Octave.getEmpty()), parser.expectNoteOrRest());
-
-
-        parser = getParser("^D,,");
-        assertEquals(new Pitch(new Basenote('D'), Accidental.getInstance(Accidental.Type.SHARP), Octave.getDown(2)), parser.expectNoteOrRest());
-    }
-
-    @Test
     public void testNote() throws Exception
     {
         Parser parser = getParser("A");
-        assertEquals(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)), parser.expectNote());
+        assertEquals(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)), parser.expectNote());
 
         parser = getParser("^^A,2/3");
-        assertEquals(new Note(new Pitch(new Basenote('A'), Accidental.getInstance(Accidental.Type.DOUBLE_SHARP), Octave.getDown(1)), new NoteLength(2, 3)), parser.expectNote());
+        assertEquals(new Pitch(new Basenote('A'), Accidental.getInstance(Accidental.Type.DOUBLE_SHARP), Octave.getDown(1), new NoteLength(2, 3)), parser.expectNote());
 
         parser = getParser("^B2/4");
-        assertEquals(new Note(new Pitch(new Basenote('B'), Accidental.getInstance(Accidental.Type.SHARP), Octave.getEmpty()), new NoteLength(2, 4)), parser.expectNote());
+        assertEquals(new Pitch(new Basenote('B'), Accidental.getInstance(Accidental.Type.SHARP), Octave.getEmpty(), new NoteLength(2, 4)), parser.expectNote());
 
         parser = getParser("C2/");
-        assertEquals(new Note(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(2, 2)), parser.expectNote());
+        assertEquals(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(2, 2)), parser.expectNote());
 
         parser = getParser("z/3");
-        assertEquals(new Note(Rest.getInstance(), new NoteLength(1, 3)), parser.expectNote());
+        assertEquals(new Rest(new NoteLength(1, 3)), parser.expectNote());
 
     }
 
@@ -167,10 +149,10 @@ public class ParserTest
         Parser parser = getParser("[A1/2 z/3 B _C']");
 
         ArrayList<Note> notes = new ArrayList<>();
-        notes.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)));
-        notes.add(new Note(Rest.getInstance(), new NoteLength(1, 3)));
-        notes.add(new Note(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        notes.add(new Note(new Pitch(new Basenote('C'), Accidental.getInstance(Accidental.Type.FLAT), Octave.getUp(1)), new NoteLength(1, 1)));
+        notes.add(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 2)));
+        notes.add(new Rest(new NoteLength(1, 3)));
+        notes.add(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        notes.add(new Pitch(new Basenote('C'), Accidental.getInstance(Accidental.Type.FLAT), Octave.getUp(1), new NoteLength(1, 1)));
 
         assertEquals(new MultiNote(notes), parser.expectMultiNote());
     }
@@ -181,13 +163,13 @@ public class ParserTest
         Parser parser = getParser("[A1/2 z/3]");
 
         ArrayList<Note> notes = new ArrayList<>();
-        notes.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)));
-        notes.add(new Note(Rest.getInstance(), new NoteLength(1, 3)));
+        notes.add(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 2)));
+        notes.add(new Rest(new NoteLength(1, 3)));
 
         assertEquals(new MultiNote(notes), parser.expectNoteElement());
 
         parser = getParser("A1/2");
-        assertEquals(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)), parser.expectNoteElement());
+        assertEquals(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 2)), parser.expectNoteElement());
     }
 
     @Test(expected = Parser.UnexpectedTokenException.class)
@@ -222,13 +204,13 @@ public class ParserTest
         Parser parser = getParser("(3 A1/2 [CDF] E");
 
         ArrayList<NoteElement> notes = new ArrayList<>();
-        notes.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)));
+        notes.add(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 2)));
         ArrayList<Note> mulNotes = new ArrayList<>();
-        mulNotes.add(new Note(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        mulNotes.add(new Note(new Pitch(new Basenote('D'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        mulNotes.add(new Note(new Pitch(new Basenote('F'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
+        mulNotes.add(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        mulNotes.add(new Pitch(new Basenote('D'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        mulNotes.add(new Pitch(new Basenote('F'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
         notes.add(new MultiNote(mulNotes));
-        notes.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
+        notes.add(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
 
         TupletElement tupletElement = new TupletElement(new TupletSpec(3), notes);
         assertEquals(tupletElement, parser.expectTupletElement());
@@ -298,21 +280,21 @@ public class ParserTest
     {
         Parser parser = getParser("[A1/2 z/3]");
         ArrayList<Note> notes = new ArrayList<>();
-        notes.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)));
-        notes.add(new Note(Rest.getInstance(), new NoteLength(1, 3)));
+        notes.add(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 2)));
+        notes.add(new Rest(new NoteLength(1, 3)));
         assertEquals(new MultiNote(notes), parser.expectElement());
 
         parser = getParser("(3 A1/2 [CDF] E");
 
         ArrayList<NoteElement> notes2 = new ArrayList<>();
-        notes2.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)));
+        notes2.add(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 2)));
 
         ArrayList<Note> mulNotes = new ArrayList<>();
-        mulNotes.add(new Note(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        mulNotes.add(new Note(new Pitch(new Basenote('D'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        mulNotes.add(new Note(new Pitch(new Basenote('F'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
+        mulNotes.add(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        mulNotes.add(new Pitch(new Basenote('D'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        mulNotes.add(new Pitch(new Basenote('F'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
         notes2.add(new MultiNote(mulNotes));
-        notes2.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
+        notes2.add(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
 
         TupletElement tupletElement = new TupletElement(new TupletSpec(3), notes2);
         assertEquals(tupletElement, parser.expectElement());
@@ -359,8 +341,8 @@ public class ParserTest
         List<Element> elementLines = new ArrayList<>();
 
         List<Note> notes = new ArrayList<>();
-        notes.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        notes.add(new Note(Rest.getInstance(), new NoteLength(1, 1)));
+        notes.add(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        notes.add(new Rest(new NoteLength(1, 1)));
         NoteElement multiNote = new MultiNote(notes);
 
         Barline openRepeatBar = new Barline(Barline.Type.OPEN_REPEAT_BAR);
@@ -368,9 +350,9 @@ public class ParserTest
 
         TupletSpec tupletSpec = new TupletSpec(3);
         List<NoteElement> noteElements = new ArrayList<>();
-        noteElements.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        noteElements.add(new Note(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        noteElements.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
+        noteElements.add(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        noteElements.add(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        noteElements.add(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
         TupletElement tupletElement = new TupletElement(tupletSpec, noteElements);
 
         NthRepeat twiceRepeat = new NthRepeat(2);
@@ -392,8 +374,8 @@ public class ParserTest
         List<Element> elementLines = new ArrayList<>();
 
         List<Note> notes = new ArrayList<>();
-        notes.add(new Note(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        notes.add(new Note(Rest.getInstance(), new NoteLength(3, 4)));
+        notes.add(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        notes.add(new Rest(new NoteLength(3, 4)));
         NoteElement multiNote = new MultiNote(notes);
 
         Barline openRepeatBar = new Barline(Barline.Type.OPEN_REPEAT_BAR);
@@ -401,9 +383,9 @@ public class ParserTest
 
         TupletSpec tupletSpec = new TupletSpec(3);
         List<NoteElement> noteElements = new ArrayList<>();
-        noteElements.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)));
-        noteElements.add(new Note(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(4, 1)));
-        noteElements.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 6)));
+        noteElements.add(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 2)));
+        noteElements.add(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(4, 1)));
+        noteElements.add(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 6)));
         TupletElement tupletElement = new TupletElement(tupletSpec, noteElements);
 
         NthRepeat twiceRepeat = new NthRepeat(2);
@@ -436,8 +418,8 @@ public class ParserTest
         List<Element> elements1 = new ArrayList<>();
 
         List<Note> notes1 = new ArrayList<>();
-        notes1.add(new Note(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        notes1.add(new Note(Rest.getInstance(), new NoteLength(3, 4)));
+        notes1.add(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        notes1.add(new Rest(new NoteLength(3, 4)));
         NoteElement multiNote1 = new MultiNote(notes1);
 
         Barline openRepeatBar1 = new Barline(Barline.Type.OPEN_REPEAT_BAR);
@@ -445,9 +427,9 @@ public class ParserTest
 
         TupletSpec tupletSpec1 = new TupletSpec(3);
         List<NoteElement> noteElements1 = new ArrayList<>();
-        noteElements1.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)));
-        noteElements1.add(new Note(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(4, 1)));
-        noteElements1.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 6)));
+        noteElements1.add(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 2)));
+        noteElements1.add(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(4, 1)));
+        noteElements1.add(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 6)));
         TupletElement tupletElement1 = new TupletElement(tupletSpec1, noteElements1);
 
         NthRepeat twiceRepeat = new NthRepeat(2);
@@ -462,8 +444,8 @@ public class ParserTest
         List<Element> elements = new ArrayList<>();
 
         List<Note> notes = new ArrayList<>();
-        notes.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        notes.add(new Note(Rest.getInstance(), new NoteLength(1, 1)));
+        notes.add(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        notes.add(new Rest(new NoteLength(1, 1)));
         NoteElement multiNote = new MultiNote(notes);
 
         Barline openRepeatBar = new Barline(Barline.Type.OPEN_REPEAT_BAR);
@@ -471,9 +453,9 @@ public class ParserTest
 
         TupletSpec tupletSpec = new TupletSpec(3);
         List<NoteElement> noteElements = new ArrayList<>();
-        noteElements.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        noteElements.add(new Note(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        noteElements.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
+        noteElements.add(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        noteElements.add(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        noteElements.add(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
         TupletElement tupletElement = new TupletElement(tupletSpec, noteElements);
 
         elements.add(multiNote);
@@ -794,8 +776,8 @@ public class ParserTest
         List<Element> elements1 = new ArrayList<>();
 
         List<Note> notes1 = new ArrayList<>();
-        notes1.add(new Note(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        notes1.add(new Note(Rest.getInstance(), new NoteLength(3, 4)));
+        notes1.add(new Pitch(new Basenote('C'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        notes1.add(new Rest(new NoteLength(3, 4)));
         NoteElement multiNote1 = new MultiNote(notes1);
 
         Barline openRepeatBar1 = new Barline(Barline.Type.OPEN_REPEAT_BAR);
@@ -803,9 +785,9 @@ public class ParserTest
 
         TupletSpec tupletSpec1 = new TupletSpec(3);
         List<NoteElement> noteElements1 = new ArrayList<>();
-        noteElements1.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 2)));
-        noteElements1.add(new Note(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(4, 1)));
-        noteElements1.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 6)));
+        noteElements1.add(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 2)));
+        noteElements1.add(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(4, 1)));
+        noteElements1.add(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 6)));
         TupletElement tupletElement1 = new TupletElement(tupletSpec1, noteElements1);
 
         NthRepeat twiceRepeat = new NthRepeat(2);
@@ -820,8 +802,8 @@ public class ParserTest
         List<Element> elements = new ArrayList<>();
 
         List<Note> notes = new ArrayList<>();
-        notes.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        notes.add(new Note(Rest.getInstance(), new NoteLength(1, 1)));
+        notes.add(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        notes.add(new Rest(new NoteLength(1, 1)));
         NoteElement multiNote = new MultiNote(notes);
 
         Barline openRepeatBar = new Barline(Barline.Type.OPEN_REPEAT_BAR);
@@ -829,9 +811,9 @@ public class ParserTest
 
         TupletSpec tupletSpec = new TupletSpec(3);
         List<NoteElement> noteElements = new ArrayList<>();
-        noteElements.add(new Note(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        noteElements.add(new Note(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
-        noteElements.add(new Note(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty()), new NoteLength(1, 1)));
+        noteElements.add(new Pitch(new Basenote('A'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        noteElements.add(new Pitch(new Basenote('B'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
+        noteElements.add(new Pitch(new Basenote('E'), Accidental.getEmpty(), Octave.getEmpty(), new NoteLength(1, 1)));
         TupletElement tupletElement = new TupletElement(tupletSpec, noteElements);
 
         elements.add(multiNote);

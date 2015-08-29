@@ -5,24 +5,24 @@ package player.ast;
  */
 public class NoteLengthStrict implements AbstractSyntaxTree
 {
-    private int multiplier;
+    private int upper;
 
-    private int divider;
+    private int lower;
 
-    public NoteLengthStrict(int multiplier, int divider)
+    public NoteLengthStrict(int upper, int lower)
     {
-        this.multiplier = multiplier;
-        this.divider = divider;
+        this.upper = upper;
+        this.lower = lower;
     }
 
-    public int getDivider()
+    public int getLower()
     {
-        return divider;
+        return lower;
     }
 
-    public int getMultiplier()
+    public int getUpper()
     {
-        return multiplier;
+        return upper;
     }
 
     @Override
@@ -33,16 +33,16 @@ public class NoteLengthStrict implements AbstractSyntaxTree
 
         NoteLengthStrict that = (NoteLengthStrict) o;
 
-        if (multiplier != that.multiplier) return false;
-        return divider == that.divider;
+        if (upper != that.upper) return false;
+        return lower == that.lower;
 
     }
 
     @Override
     public int hashCode()
     {
-        int result = multiplier;
-        result = 31 * result + divider;
+        int result = upper;
+        result = 31 * result + lower;
         return result;
     }
 
@@ -50,8 +50,8 @@ public class NoteLengthStrict implements AbstractSyntaxTree
     public String toString()
     {
         return "NoteLengthStrict{" +
-                "divider=" + divider +
-                ", multiplier=" + multiplier +
+                "upper=" + upper +
+                ", lower=" + lower +
                 '}';
     }
 

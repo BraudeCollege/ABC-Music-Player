@@ -6,7 +6,7 @@ package player;
 //  Represents one rational number with a numerator and denominator.
 //********************************************************************
 
-public class RationalNumber
+public class RationalNumber implements Comparable<RationalNumber>
 {
     private int numerator, denominator;
 
@@ -132,19 +132,6 @@ public class RationalNumber
         return result;
     }
 
-    /**
-     * Compare the current rational number with the given Rational number op2
-     * @param op2 Operand2 to compare with
-     * @return < 0 if op1 > op2
-     *         0 if op1 = op2
-     *         > 0 if op1 < op2
-     */
-    public int compare(RationalNumber op2)
-    {
-        RationalNumber result = this.subtract(op2);
-        return result.numerator;
-    }
-
     //-----------------------------------------------------------------
     //  Reduces this rational number by dividing both the numerator
     //  and the denominator by their greatest common divisor.
@@ -194,5 +181,17 @@ public class RationalNumber
         int result = numerator;
         result = 31 * result + denominator;
         return result;
+    }
+
+    @Override
+    public int compareTo(RationalNumber b)
+    {
+        RationalNumber a = this;
+        int lhs = a.numerator * b.denominator;
+        int rhs = a.denominator * b.numerator;
+        if (lhs < rhs) return -1;
+        if (lhs > rhs) return +1;
+
+        return 0;
     }
 }

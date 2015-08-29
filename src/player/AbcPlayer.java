@@ -3,6 +3,9 @@ package player;
 import player.ast.*;
 import sound.SequencePlayer;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
+
 public class AbcPlayer implements AbcVisitor<Void>
 {
     /**
@@ -10,12 +13,33 @@ public class AbcPlayer implements AbcVisitor<Void>
      */
     private final SequencePlayer sequencePlayer;
 
-    /**
-     * @param sequencePlayer
-     */
-    public AbcPlayer(SequencePlayer sequencePlayer)
+    private static final RationalNumber CROCHET_NOTE_LENGTH = new RationalNumber(1, 4);
+
+    private final RationalNumber minNoteLength;
+
+    private RationalNumber defaultNoteLength;
+
+    private int currentTick;
+
+    public AbcPlayer(AbstractSyntaxTree ast, AbcInfoCollector abcInfoCollector) throws InvalidMidiDataException, MidiUnavailableException
     {
-        this.sequencePlayer = sequencePlayer;
+        int ticksPerQuarterNote = 1;
+
+        currentTick = 0;
+
+        defaultNoteLength = abcInfoCollector.getDefaultNoteLength();
+
+        minNoteLength = abcInfoCollector.getMinNoteLength();
+
+        if (CROCHET_NOTE_LENGTH.compareTo(minNoteLength) > 0) {
+            // TODO: round it up!!!
+            ticksPerQuarterNote = CROCHET_NOTE_LENGTH.divide(minNoteLength).getNumerator();
+        }
+
+        this.sequencePlayer = new SequencePlayer(abcInfoCollector.getBpm(), ticksPerQuarterNote);
+
+        // start traverse the tree
+        ast.accept(this);
     }
 
     @Override
@@ -36,6 +60,7 @@ public class AbcPlayer implements AbcVisitor<Void>
     @Override
     public Void on(AbcMusic body)
     {
+        body.getLines().stream().forEach(line -> line.accept(this));
         return null;
     }
 
@@ -93,12 +118,14 @@ public class AbcPlayer implements AbcVisitor<Void>
     @Override
     public Void on(ElementLine line)
     {
+        line.getElements().stream().forEach(element -> element.accept(this));
         return null;
     }
 
     @Override
     public Void on(Element element)
     {
+        element.accept(this);
         return null;
     }
 
@@ -121,14 +148,9 @@ public class AbcPlayer implements AbcVisitor<Void>
     }
 
     @Override
-    public Void on(Note note)
+    public Void on(MultiNote mnote)
     {
-        return null;
-    }
-
-    @Override
-    public Void on(MultiNote note)
-    {
+        mnote.getNotes().stream().forEach(note -> note.accept(this));
         return null;
     }
 
@@ -147,6 +169,20 @@ public class AbcPlayer implements AbcVisitor<Void>
     @Override
     public Void on(Pitch pitch)
     {
+        NoteLength nl = pitch.getNoteLength();
+
+        RationalNumber rationalNoteLength = new RationalNumber(nl.getMultiplier(), nl.getDivider());
+
+        RationalNumber realNoteLength = rationalNoteLength.multiply(defaultNoteLength);
+
+        int ticks = realNoteLength.divide(minNoteLength).getNumerator();
+
+        sound.Pitch soundPitch = new sound.Pitch(pitch.getBasenote().getSymbol());
+
+        sequencePlayer.addNote(soundPitch.toMidiNote(), currentTick, ticks);
+
+        currentTick += ticks;
+
         return null;
     }
 
@@ -216,10 +252,14 @@ public class AbcPlayer implements AbcVisitor<Void>
         return null;
     }
 
-
     @Override
     public String toString()
     {
         return sequencePlayer.toString();
+    }
+
+    public void play() throws MidiUnavailableException
+    {
+        sequencePlayer.play();
     }
 }

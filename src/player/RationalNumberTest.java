@@ -15,8 +15,8 @@ public class RationalNumberTest
         RationalNumber op2 = new RationalNumber(3,5);
         RationalNumber op3 = new RationalNumber(2,5);
 
-        assertTrue(op1.compare(op2) < 0);
-        assertTrue(op2.compare(op3) > 0);
-        assertTrue(op1.compare(op3) == 0);
+        assertTrue(op1.compareTo(op2) < 0);
+        assertTrue(op2.compareTo(op3) > 0);
+        assertTrue(op1.compareTo(op3) == 0);
     }
 }

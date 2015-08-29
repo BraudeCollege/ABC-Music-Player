@@ -26,40 +26,37 @@ public class AbcInfoCollectorTest
                 "M:C\n" +
                 "V:Voice1\n" +
                 "K:C#m\n" +
-                "[C z3/4] |: (3 A/ B4 E/6 :|[2 \n"
-                + "V: The field voice\n" +
-                "% this is a comment\n" +
+                "[C z3/4] |: (3 A/ B4 E/6 :|[2 \n" +
                 "[A z] |: (3 A B E :|[2\n").expectAbcTune();
 
     }
 
-    @Test
-    public void testGetDefaultLength()
+    private Parser getParser(String str)
     {
-//        AbcInfoCollector collector = new AbcInfoCollector(abcTune);
+        return new Parser(new Lexer(str));
+    }
 
+    @Test
+    public void testDefaults() throws Exception
+    {
+        abcTune = getParser("X:1\n" +
+                "T:ABC Title\n" +
+                "K:C#m\n" +
+                "A\n").expectAbcTune();
+
+        AbcInfoCollector collector = new AbcInfoCollector(abcTune);
+
+        assertEquals(new RationalNumber(1,8), collector.getDefaultNoteLength());
+        assertEquals(100, collector.getTempo());
+        assertEquals(new MeterFraction(4,4), collector.getMeter());
+        assertEquals("Unknown", collector.getComposer());
     }
 
     @Test
     public void testGetBpm() throws Exception
     {
         AbcInfoCollector collector = new AbcInfoCollector(abcTune);
-
-        collector.on(new FieldTempo(120));
-
-        collector.on(new FieldDefaultLength(new NoteLengthStrict(4,8)));
-
         assertEquals(240, collector.getBpm());
-    }
-
-    @Test
-    public void testBeatsPerBar() throws Exception
-    {
-        AbcInfoCollector collector = new AbcInfoCollector(abcTune);
-
-        collector.on(new FieldMeter(new MeterFraction(4,4)));
-
-        assertEquals(4, collector.getBeatsPerBar());
     }
 
     @Test
@@ -69,9 +66,19 @@ public class AbcInfoCollectorTest
         assertEquals(new RationalNumber(1,12), collector.getMinNoteLength());
     }
 
-    public Parser getParser(String str)
+    @Test
+    public void testTextFields() throws Exception
     {
-        return new Parser(new Lexer(str));
-    }
+        abcTune = getParser("X:103\n" +
+                "T:ABC Title\n" +
+                "C:Mozart\n" +
+                "K:C#m\n" +
+                "A\n").expectAbcTune();
 
+        AbcInfoCollector collector = new AbcInfoCollector(abcTune);
+
+        assertEquals("Mozart", collector.getComposer());
+        assertEquals("ABC Title", collector.getTitle());
+        assertEquals(103, collector.getId());
+    }
 }

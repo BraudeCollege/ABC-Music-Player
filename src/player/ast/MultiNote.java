@@ -22,15 +22,6 @@ public class MultiNote implements NoteElement
         this.notes = new ArrayList<>(notes);
     }
 
-    /**
-     * Add a note to the note list
-     * @param note
-     */
-    public void addNote(Note note)
-    {
-        this.notes.add(note);
-    }
-
     @Override
     public boolean equals(Object o)
     {

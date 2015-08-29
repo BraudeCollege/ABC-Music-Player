@@ -1,9 +1,5 @@
 package player.ast;
 
-import player.ast.*;
-
-import javax.sound.midi.MidiUnavailableException;
-
 /**
  * Visitor interface of Abc data structure
  *
@@ -44,8 +40,6 @@ public interface AbcVisitor<R>
     public R on(Barline bar);
 
     public R on(TupletElement element);
-
-    public R on(Note note);
 
     public R on(MultiNote note);
 

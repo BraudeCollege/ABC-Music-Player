@@ -103,49 +103,6 @@ public class Parser
     }
 
     /**
-     * @return an ast with the root is a Pitch
-     * @throws Parser.UnexpectedTokenException if no basenote found
-     * @throws Lexer.RunOutOfTokenException    if there is no token left
-     */
-    public Pitch expectPitch() throws UnexpectedTokenException
-    {
-        Accidental ac = Accidental.getEmpty();
-        try {
-            ac = expectAccidental();
-        } catch (UnexpectedTokenException e) {
-        }
-
-        Basenote basenote = expectBasenote();
-
-        Octave octave = Octave.getEmpty();
-        try {
-            octave = expectOctave();
-        } catch (UnexpectedTokenException e) {
-        } catch (Lexer.RunOutOfTokenException e) {
-        }
-
-        return new Pitch(basenote, ac, octave);
-    }
-
-
-    /**
-     * @return an ast with the root is a Rest
-     * @throws Parser.UnexpectedTokenException if no rest is found
-     * @throws Lexer.RunOutOfTokenException    if there is no token left
-     */
-    public Rest expectRest() throws UnexpectedTokenException
-    {
-        Token token = lex.nextToken();
-
-        if (token.getType() == TokenType.REST)
-            return Rest.getInstance();
-
-        lex.backtrack();
-
-        throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect a Rest");
-    }
-
-    /**
      * @return an ast with the root is a NoteElement
      * @throws UnexpectedTokenException
      */
@@ -175,26 +132,20 @@ public class Parser
      * @return an ast with the root is a NoteOrRest
      * @throws UnexpectedTokenException
      */
-    public NoteOrRest expectNoteOrRest() throws UnexpectedTokenException
+    public Note expectNote() throws UnexpectedTokenException
     {
         NoteOrRest note = null;
         try {
-            note = expectPitch();
-        } catch (UnexpectedTokenException e) {
+            return expectPitch();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
         }
 
-        if (note == null) {
-            try {
-                note = expectRest();
-            } catch (UnexpectedTokenException e) {
-            }
+        try {
+            return expectRest();
+        } catch (UnexpectedTokenException | Lexer.RunOutOfTokenException e) {
         }
-
-        if (note != null)
-            return note;
 
         throw new UnexpectedTokenException("Unexpected token, expect a Note or a Rest");
-
     }
 
     /**
@@ -222,19 +173,6 @@ public class Parser
 
         return new NoteLength(multiplier, divider);
     }
-
-    /**
-     * @return a note
-     */
-    public Note expectNote() throws UnexpectedTokenException
-    {
-        NoteOrRest noteOrRest = expectNoteOrRest();
-
-        NoteLength noteLength = expectNoteLength();
-
-        return new Note(noteOrRest, noteLength);
-    }
-
 
     /**
      * @return int read from lexer
@@ -967,6 +905,43 @@ public class Parser
     public AbcTune expectAbcTune() throws UnexpectedTokenException
     {
         return new AbcTune(expectAbcHeader(), expectAbcMusic());
+    }
+
+    public Pitch expectPitch() throws UnexpectedTokenException
+    {
+
+        Accidental ac = Accidental.getEmpty();
+        try {
+            ac = expectAccidental();
+        } catch (UnexpectedTokenException e) {
+        }
+
+        Basenote basenote = expectBasenote();
+
+        Octave octave = Octave.getEmpty();
+        try {
+            octave = expectOctave();
+        } catch (UnexpectedTokenException e) {
+        } catch (Lexer.RunOutOfTokenException e) {
+        }
+
+        NoteLength noteLength = expectNoteLength();
+
+        return new Pitch(basenote, ac, octave, noteLength);
+    }
+
+    public Rest expectRest() throws UnexpectedTokenException
+    {
+        Token token = lex.nextToken();
+
+        if (token.getType() != TokenType.REST) {
+
+            lex.backtrack();
+
+            throw new UnexpectedTokenException("Unexpected token '" + token.getValue() + "', expect a Rest");
+        }
+
+        return new Rest(expectNoteLength());
     }
 
 
