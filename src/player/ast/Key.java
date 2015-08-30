@@ -1,11 +1,9 @@
 package player.ast;
 
-/**
- * Created by hieusun on 24.08.15.
- */
 public class Key implements AbstractSyntaxTree
 {
     private final Keynote keynote;
+
     private final ModeMinor modeMinor;
 
     /**

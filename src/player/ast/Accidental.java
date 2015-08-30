@@ -4,7 +4,22 @@ public class Accidental implements AbstractSyntaxTree
 {
     public enum Type
     {
-        SHARP, DOUBLE_SHARP, FLAT, DOUBLE_FLAT, NEUTRAL, NONE
+        SHARP(1), DOUBLE_SHARP(2), FLAT(-1), DOUBLE_FLAT(-2), NEUTRAL(0), NONE(0);
+
+        private final int amount;
+
+        private Type(int amount)
+        {
+            this.amount = amount;
+        }
+
+        /**
+         * @return amount of semitones this accidental gives to the note
+         */
+        public int getAmount()
+        {
+            return amount;
+        }
     }
 
     /**

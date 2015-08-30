@@ -25,7 +25,7 @@ public class NoteLength implements AbstractSyntaxTree
      *
      * @return Get the divider
      */
-    public int getDivider()
+    public int getLower()
     {
         return divider;
     }
@@ -34,7 +34,7 @@ public class NoteLength implements AbstractSyntaxTree
      *
      * @return Get the Multiplier
      */
-    public int getMultiplier()
+    public int getUpper()
     {
         return multiplier;
     }

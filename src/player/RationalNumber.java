@@ -151,15 +151,15 @@ public class RationalNumber implements Comparable<RationalNumber>
     //  Computes and returns the greatest common divisor of the two
     //  positive parameters. Uses Euclid's algorithm.
     //-----------------------------------------------------------------
-    private int gcd(int num1, int num2)
+    private int gcd(int a, int b)
     {
-        while (num1 != num2)
-            if (num1 > num2)
-                num1 = num1 - num2;
-            else
-                num2 = num2 - num1;
+        while (b > 0) {
+            int temp = b;
+            b = a % b; // % is remainder
+            a = temp;
+        }
 
-        return num1;
+        return a;
     }
 
     @Override

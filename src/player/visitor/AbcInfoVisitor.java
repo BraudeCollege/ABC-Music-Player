@@ -4,6 +4,9 @@ package player.visitor;
 import player.RationalNumber;
 import player.ast.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Visitor that traverse the abc tree and extract it's information
  */
@@ -50,14 +53,31 @@ class AbcInfoVisitor implements AbcVisitor<Void>
      */
     private RationalNumber minNoteLength;
 
+    /**
+     * Smallest note length that is represented by one tick
+     */
+    private RationalNumber unitNoteLength;
+
+    /**
+     * Smallest note length that is represented by one tick
+     */
+    private KeySignature keySignature;
+
+    /**
+     * @param ast
+     */
+    private Set<RationalNumber> noteLengths;
+
     public AbcInfoVisitor(AbstractSyntaxTree ast)
     {
+        noteLengths = new HashSet<>();
+
         // traverse the ast
         ast.accept(this);
 
         // default minimum note length is 1/4
         if (minNoteLength == null)
-            minNoteLength = new RationalNumber(1,4);
+            minNoteLength = new RationalNumber(1, 4);
     }
 
     /**
@@ -123,10 +143,10 @@ class AbcInfoVisitor implements AbcVisitor<Void>
     {
         int ticksPerQuarterNote = 1;
 
-        RationalNumber minNoteLength = getMinNoteLength();
+        RationalNumber unitNoteLength = getUnitNoteLength();
 
-        if (QUARTER_NOTE_LENGTH.compareTo(minNoteLength) > 0) {
-            ticksPerQuarterNote = QUARTER_NOTE_LENGTH.divide(minNoteLength).getNumerator();
+        if (QUARTER_NOTE_LENGTH.compareTo(unitNoteLength) > 0) {
+            ticksPerQuarterNote = QUARTER_NOTE_LENGTH.divide(unitNoteLength).getNumerator();
         }
 
         return ticksPerQuarterNote;
@@ -134,8 +154,8 @@ class AbcInfoVisitor implements AbcVisitor<Void>
 
     /**
      * @return Beats per minute, where each beat equals a quarter note.
-     *         The returned value will be the biggest integer
-     *         that is smaller than the actual BPM.
+     * The returned value will be the biggest integer
+     * that is smaller than the actual BPM.
      */
     public int getBpm()
     {
@@ -190,6 +210,10 @@ class AbcInfoVisitor implements AbcVisitor<Void>
     @Override
     public Void on(FieldKey field)
     {
+        Key key = field.getKey();
+
+        keySignature = KeySignature.getKey(key.getKeynote(), key.getModeMinor());
+
         return null;
     }
 
@@ -266,7 +290,25 @@ class AbcInfoVisitor implements AbcVisitor<Void>
     @Override
     public Void on(TupletElement tuplet)
     {
-        tuplet.getNoteElements().stream().forEach(noteElement -> noteElement.accept(this));
+
+        int tupletCount = tuplet.getTupletSpec().getCount();
+
+        Set<RationalNumber> tupletNoteLengths = (new AbcTupletNoteLengthVisitor(tuplet, defaultNoteLength)).getNoteLengths();
+
+        RationalNumber aNoteLength = (RationalNumber) tupletNoteLengths.toArray()[0];
+
+        switch (tupletCount) {
+            case 2:
+                noteLengths.add(aNoteLength.multiply(new RationalNumber(3, 2))); break;
+            case 3:
+                noteLengths.add(aNoteLength.multiply(new RationalNumber(2, 3))); break;
+            case 4:
+                noteLengths.add(aNoteLength.multiply(new RationalNumber(3, 4))); break;
+            default:
+                // ignore this tuplet, only handle duplet triplet and quadruplet
+                tuplet.getNoteElements().stream().forEach(noteElement -> noteElement.accept(this));
+        }
+
         return null;
     }
 
@@ -280,12 +322,15 @@ class AbcInfoVisitor implements AbcVisitor<Void>
     @Override
     public Void on(NoteLength length)
     {
-        RationalNumber rationalLength = new RationalNumber(length.getMultiplier(), length.getDivider());
+        RationalNumber rationalLength = new RationalNumber(length.getUpper(), length.getLower());
 
         RationalNumber realNoteLength = rationalLength.multiply(defaultNoteLength);
 
         if (minNoteLength == null || realNoteLength.compareTo(minNoteLength) < 0)
             minNoteLength = realNoteLength;
+
+        // save the real note length
+        noteLengths.add(realNoteLength);
 
         return null;
     }
@@ -375,5 +420,28 @@ class AbcInfoVisitor implements AbcVisitor<Void>
     {
         meter = meterC;
         return null;
+    }
+
+    public RationalNumber getUnitNoteLength()
+    {
+        if (unitNoteLength == null) {
+
+            int[] denoms = noteLengths.stream().mapToInt(RationalNumber::getDenominator).toArray();
+
+            int lcm = MathHelpers.lcm(denoms);
+
+            unitNoteLength = new RationalNumber(1, lcm);
+        }
+
+        return unitNoteLength;
+    }
+
+    /**
+     * @return key signature specified in abc header
+     *         if it's invalid, default to C major
+     */
+    public KeySignature getKeySignature()
+    {
+        return keySignature;
     }
 }

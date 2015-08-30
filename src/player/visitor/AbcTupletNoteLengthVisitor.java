@@ -1,21 +1,29 @@
 package player.visitor;
 
+import player.RationalNumber;
 import player.ast.*;
 
-/**
- * Performs semantic validator on ABC Abstract Syntax Tree
- * TODO: warning about correctness of calculated bpm
- * TODO: correctness of note-length
- * TODO: Tuplet notes
- */
-class AbcValidateVisitor implements AbcVisitor<Void>
+import java.util.HashSet;
+import java.util.Set;
+
+public class AbcTupletNoteLengthVisitor implements AbcVisitor<Void>
 {
-    /**
-     * @param ast root of abstract syntax tree
-     */
-    public AbcValidateVisitor(AbstractSyntaxTree ast)
+    private Set<RationalNumber> noteLengths;
+
+    private RationalNumber defaultNoteLength;
+
+    public AbcTupletNoteLengthVisitor(TupletElement tuplet, RationalNumber defaultNoteLength)
     {
-        ast.accept(this);
+        noteLengths = new HashSet<>();
+
+        this.defaultNoteLength = defaultNoteLength;
+
+        tuplet.accept(this);
+    }
+
+    public Set<RationalNumber> getNoteLengths()
+    {
+        return new HashSet<>(noteLengths);
     }
 
     @Override
@@ -115,32 +123,43 @@ class AbcValidateVisitor implements AbcVisitor<Void>
     }
 
     @Override
-    public Void on(TupletElement element)
+    public Void on(TupletElement tuplet)
     {
+        tuplet.getNoteElements().stream().forEach(noteElement -> noteElement.accept(this));
         return null;
     }
 
     @Override
-    public Void on(MultiNote note)
+    public Void on(MultiNote multiNote)
     {
+        multiNote.getNotes().stream().forEach(note -> note.accept(this));
         return null;
     }
 
     @Override
-    public Void on(NoteLength noteLength)
+    public Void on(NoteLength length)
     {
+        RationalNumber rationalLength = new RationalNumber(length.getUpper(), length.getLower());
+
+        RationalNumber realNoteLength = rationalLength.multiply(defaultNoteLength);
+
+        // save the real note length
+        noteLengths.add(realNoteLength);
+
         return null;
     }
 
     @Override
     public Void on(Rest rest)
     {
+        rest.getNoteLength().accept(this);
         return null;
     }
 
     @Override
     public Void on(Pitch pitch)
     {
+        pitch.getNoteLength().accept(this);
         return null;
     }
 
