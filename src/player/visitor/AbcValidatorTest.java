@@ -1,8 +1,8 @@
-package player;
+package player.visitor;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class AbcPlayerTest
+public class AbcValidatorTest
 {
 }

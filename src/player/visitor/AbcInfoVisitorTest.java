@@ -1,14 +1,15 @@
-package player;
+package player.visitor;
 
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import player.RationalNumber;
 import player.ast.*;
 import player.compiler.Lexer;
 import player.compiler.Parser;
 
-public class AbcInfoTest
+public class AbcInfoVisitorTest
 {
 
     private AbstractSyntaxTree abcTune;
@@ -44,9 +45,9 @@ public class AbcInfoTest
                 "K:C#m\n" +
                 "A\n").expectAbcTune();
 
-        AbcInfo collector = new AbcInfo(abcTune);
+        AbcInfoVisitor collector = new AbcInfoVisitor(abcTune);
 
-        assertEquals(new RationalNumber(1,8), collector.getDefaultNoteLength());
+        assertEquals(new RationalNumber(1, 8), collector.getDefaultNoteLength());
         assertEquals(100, collector.getTempo());
         assertEquals(new MeterFraction(4,4), collector.getMeter());
         assertEquals("Unknown", collector.getComposer());
@@ -55,8 +56,9 @@ public class AbcInfoTest
     @Test
     public void testMinLength() throws Exception
     {
-        AbcInfo collector = new AbcInfo(abcTune);
-        assertEquals(new RationalNumber(1,12), collector.getMinNoteLength());
+        AbcInfoVisitor collector = new AbcInfoVisitor(abcTune);
+
+        assertEquals(new RationalNumber(1, 12), collector.getMinNoteLength());
     }
 
     @Test
@@ -69,11 +71,35 @@ public class AbcInfoTest
                 "K:C#m\n" +
                 "A\n").expectAbcTune();
 
-        AbcInfo collector = new AbcInfo(abcTune);
+        AbcInfoVisitor collector = new AbcInfoVisitor(abcTune);
 
         assertEquals("Mozart", collector.getComposer());
         assertEquals("ABC Title", collector.getTitle());
         assertEquals(103, collector.getId());
         assertEquals(MeterCPipe.getInstance(), collector.getMeter());
+    }
+
+    @Test
+    public void testGetBpm() throws Exception
+    {
+        AbstractSyntaxTree ast = getParser(
+                "X:103\n" +
+                "T:ABC Title\n" +
+                "K:C#m\n" +
+                "A\n").expectAbcTune();
+
+
+        AbcInfoVisitor info = new AbcInfoVisitor(ast);
+
+        info.on(new FieldTempo(101));
+        info.on(new FieldDefaultLength(new NoteLengthStrict(1,8)));
+
+        assertEquals(50, info.getBpm());
+
+        info = new AbcInfoVisitor(ast);
+
+        info.on(new FieldTempo(105));
+        info.on(new FieldDefaultLength(new NoteLengthStrict(1,16)));
+        assertEquals(26, info.getBpm());
     }
 }

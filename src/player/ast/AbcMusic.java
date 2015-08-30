@@ -1,7 +1,5 @@
 package player.ast;
 
-import player.AbcPlayer;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,11 +44,6 @@ public class AbcMusic implements AbstractSyntaxTree
         return "AbcMusic{" +
                 "lines=" + lines +
                 '}';
-    }
-
-    public void accept(AbcPlayer abcPlayer)
-    {
-        abcPlayer.on(this);
     }
 
     @Override
