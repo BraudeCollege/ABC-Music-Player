@@ -373,24 +373,28 @@ class AbcInfoVisitor implements AbcVisitor<Void>
     @Override
     public Void on(KeyAccidental keyAccidental)
     {
+        // ignore, not get called
         return null;
     }
 
     @Override
     public Void on(Keynote keynote)
     {
+        // ignore, not get called
         return null;
     }
 
     @Override
     public Void on(ModeMinor modeMinor)
     {
+        // ignore, not get called
         return null;
     }
 
     @Override
     public Void on(Key key)
     {
+        // ignore, not get called
         return null;
     }
 

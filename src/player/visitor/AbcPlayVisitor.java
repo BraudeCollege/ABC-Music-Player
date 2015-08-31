@@ -30,9 +30,15 @@ class AbcPlayVisitor implements AbcVisitor<Void>
     private int currentTick;
 
     /**
+     * notes will have different lengths at different times (playing tuplet)
+     * if it's 1/1, normal notes will be played without any difference
+     */
+    private RationalNumber noteLengthMultiplier = new RationalNumber(1,1);
+
+    /**
      * contains information about the current abc tune
      */
-    private AbcInfoVisitor abcInfo;
+    private final AbcInfoVisitor abcInfo;
 
     /**
      * @param ast root of ABC AbstractSyntaxTree != null
@@ -180,8 +186,25 @@ class AbcPlayVisitor implements AbcVisitor<Void>
     }
 
     @Override
-    public Void on(TupletElement element)
+    public Void on(TupletElement tuplet)
     {
+        int tupletCount = tuplet.getTupletSpec().getCount();
+
+        switch (tupletCount) {
+            case 2:
+                noteLengthMultiplier = new RationalNumber(3, 2); break;
+            case 3:
+                noteLengthMultiplier = new RationalNumber(2, 3); break;
+            case 4:
+                noteLengthMultiplier = new RationalNumber(3, 4); break;
+        }
+
+        // play the notes
+        tuplet.getNoteElements().stream().forEach(noteElement -> noteElement.accept(this));
+
+        // reset noteLengthMultiplier to 1/1
+        noteLengthMultiplier = new RationalNumber(1,1);
+
         return null;
     }
 
@@ -241,11 +264,13 @@ class AbcPlayVisitor implements AbcVisitor<Void>
      */
     private int getTicksToPlay(NoteLength nl)
     {
-        RationalNumber rationalNoteLength = new RationalNumber(nl.getUpper(), nl.getLower());
+        RationalNumber relativeNoteLength = new RationalNumber(nl.getUpper(), nl.getLower());
 
-        RationalNumber realNoteLength = rationalNoteLength.multiply(abcInfo.getDefaultNoteLength());
+        RationalNumber absoluteNoteLength = relativeNoteLength
+                .multiply(abcInfo.getDefaultNoteLength()) // all the note length based on the given defaultNoteLength
+                .multiply(noteLengthMultiplier); // will be different while playing tuplets
 
-        int ticks = realNoteLength.divide(abcInfo.getUnitNoteLength()).getNumerator();
+        int ticks = absoluteNoteLength.divide(abcInfo.getUnitNoteLength()).getNumerator();
 
         return ticks;
     }
