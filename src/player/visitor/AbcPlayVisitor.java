@@ -105,12 +105,14 @@ class AbcPlayVisitor implements AbcVisitor<Void>
     @Override
     public Void on(FieldKey field)
     {
+        // ignore, doesn't matter
         return null;
     }
 
     @Override
     public Void on(FieldVoice field)
     {
+        // ignore, doesn't matter
         return null;
     }
 
@@ -124,12 +126,14 @@ class AbcPlayVisitor implements AbcVisitor<Void>
     @Override
     public Void on(FieldDefaultLength field)
     {
+        // ignore, doesn't matter
         return null;
     }
 
     @Override
     public Void on(FieldMeter field)
     {
+        // ignore, doesn't matter
         return null;
     }
 
@@ -184,6 +188,9 @@ class AbcPlayVisitor implements AbcVisitor<Void>
     @Override
     public Void on(MultiNote mnote)
     {
+        PlayChordVisitor playChord = new PlayChordVisitor(mnote);
+        currentTick += playChord.getElapsedTicks();
+
         return null;
     }
 
@@ -197,16 +204,8 @@ class AbcPlayVisitor implements AbcVisitor<Void>
     @Override
     public Void on(Rest rest)
     {
-        NoteLength nl = rest.getNoteLength();
-
-        RationalNumber rationalNoteLength = new RationalNumber(nl.getUpper(), nl.getLower());
-
-        RationalNumber realNoteLength = rationalNoteLength.multiply(abcInfo.getDefaultNoteLength());
-
-        // calculate how many ticks should the rest be played
-        int ticks = realNoteLength.divide(abcInfo.getUnitNoteLength()).getNumerator();
-
-        currentTick += ticks;
+        // calculate and add the amount of ticks should the rest be played
+        currentTick += getTicksToPlay(rest.getNoteLength());
 
         return null;
     }
@@ -214,13 +213,8 @@ class AbcPlayVisitor implements AbcVisitor<Void>
     @Override
     public Void on(Pitch pitch)
     {
-        NoteLength noteLength = pitch.getNoteLength();
-        RationalNumber relativeNoteLength = new RationalNumber(noteLength.getUpper(), noteLength.getLower());
-        RationalNumber defaultNoteLength = abcInfo.getDefaultNoteLength();
-        RationalNumber absoluteNoteLength = relativeNoteLength.multiply(defaultNoteLength);
-
         // calculate how many ticks should the note be played
-        int ticks = absoluteNoteLength.divide(abcInfo.getUnitNoteLength()).getNumerator();
+        int ticks = getTicksToPlay(pitch.getNoteLength());
 
         // create a sound pitch
         char symbol = Character.toUpperCase(pitch.getBasenote().getSymbol());
@@ -229,6 +223,7 @@ class AbcPlayVisitor implements AbcVisitor<Void>
         // transpose appropriate amount of octaves
         soundPitch = soundPitch.octaveTranspose(calculateOctaves(pitch));
 
+        // transpose appropriate amount accidentals
         soundPitch = soundPitch.accidentalTranspose(calculateAccidental(pitch));
 
         sequencePlayer.addNote(soundPitch.toMidiNote(), currentTick, ticks);
@@ -238,6 +233,28 @@ class AbcPlayVisitor implements AbcVisitor<Void>
         return null;
     }
 
+    /**
+     * calculate and return how many ticks should the note be played
+     *
+     * @param nl
+     * @return number of ticks
+     */
+    private int getTicksToPlay(NoteLength nl)
+    {
+        RationalNumber rationalNoteLength = new RationalNumber(nl.getUpper(), nl.getLower());
+
+        RationalNumber realNoteLength = rationalNoteLength.multiply(abcInfo.getDefaultNoteLength());
+
+        int ticks = realNoteLength.divide(abcInfo.getUnitNoteLength()).getNumerator();
+
+        return ticks;
+    }
+
+    /**
+     * Calculate and return amount of accidental to adjust the note
+     * @param pitch
+     * @return
+     */
     private int calculateAccidental(Pitch pitch) {
 
         char noteSymbol = Character.toUpperCase(pitch.getBasenote().getSymbol());
@@ -369,5 +386,249 @@ class AbcPlayVisitor implements AbcVisitor<Void>
     public String toString()
     {
         return sequencePlayer.toString();
+    }
+
+
+    /**
+     * Visitor that play the notes of a chord/multinote at the same times
+     * Assume that the notes have equal note length
+     */
+    class PlayChordVisitor implements AbcVisitor<Void>
+    {
+        /**
+         * ticks that the notes has been played
+         */
+        private int elapsedTicks;
+
+        /**
+         * @param mnote
+         */
+        public PlayChordVisitor(MultiNote mnote)
+        {
+            this.elapsedTicks = 0;
+            mnote.accept(this);
+        }
+
+        @Override
+        public Void on(AbcTune tune)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(AbcHeader header)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(AbcMusic body)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(FieldNumber field)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(FieldTitle field)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(FieldKey field)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(FieldVoice field)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(FieldComposer field)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(FieldDefaultLength field)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(FieldMeter field)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(FieldTempo field)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(Comment c)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(ElementLine line)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(Element element)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(NthRepeat repeat)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(Barline bar)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(TupletElement element)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(MultiNote mnote)
+        {
+            mnote.getNotes().stream().forEach(note -> note.accept(this));
+            return null;
+        }
+
+        @Override
+        public Void on(NoteLength noteLength)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(Rest rest)
+        {
+            if (elapsedTicks == 0)
+                elapsedTicks = getTicksToPlay(rest.getNoteLength());
+
+            return null;
+        }
+
+        @Override
+        public Void on(Pitch pitch)
+        {
+            // calculate how many ticks should the note be played
+            int ticks = getTicksToPlay(pitch.getNoteLength());
+
+            // create a sound pitch
+            char symbol = Character.toUpperCase(pitch.getBasenote().getSymbol());
+            sound.Pitch soundPitch = new sound.Pitch(symbol);
+
+            // transpose appropriate amount of octaves
+            soundPitch = soundPitch.octaveTranspose(calculateOctaves(pitch));
+
+            // transpose appropriate amount accidentals
+            soundPitch = soundPitch.accidentalTranspose(calculateAccidental(pitch));
+
+            sequencePlayer.addNote(soundPitch.toMidiNote(), currentTick, ticks);
+
+            if (elapsedTicks == 0)
+                elapsedTicks = ticks;
+
+            return null;
+        }
+
+        @Override
+        public Void on(Basenote basenote)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(Accidental acc)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(Octave octave)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(KeyAccidental keyAccidental)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(Keynote keynote)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(NoteLengthStrict noteLengthStrict)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(ModeMinor modeMinor)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(MeterFraction meterFraction)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(MeterCPipe meterCPipe)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(MeterC meterC)
+        {
+            return null;
+        }
+
+        @Override
+        public Void on(Key key)
+        {
+            return null;
+        }
+
+        /**
+         * @return current tick of the track
+         */
+        public int getElapsedTicks()
+        {
+            return elapsedTicks;
+        }
     }
 }

@@ -59,7 +59,7 @@ public class AbcPlayVisitorTest
                         "M:6/8\n" +
                         "Q:240\n" +
                         "K:D\n" +
-                        "dff ce'e\n"
+                        "dfz ce'e\n"
         ).expectAbcTune();
 
         AbcPlayVisitor player = new AbcPlayVisitor(abcTune, new AbcInfoVisitor(abcTune));
@@ -70,8 +70,6 @@ public class AbcPlayVisitorTest
                 "Event: NOTE_OFF Pitch: 74  Tick: 1\n" +
                 "Event: NOTE_ON  Pitch: 78  Tick: 1\n" +
                 "Event: NOTE_OFF Pitch: 78  Tick: 2\n" +
-                "Event: NOTE_ON  Pitch: 78  Tick: 2\n" +
-                "Event: NOTE_OFF Pitch: 78  Tick: 3\n" +
 
                 "Event: NOTE_ON  Pitch: 73  Tick: 3\n" +
                 "Event: NOTE_OFF Pitch: 73  Tick: 4\n" +
@@ -143,6 +141,74 @@ public class AbcPlayVisitorTest
         AbcPlayVisitor player = new AbcPlayVisitor(abcTune, new AbcInfoVisitor(abcTune));
 
         player.play();
+    }
+
+    @Test
+    public void testPlayWithChords() throws Exception
+    {
+        abcTune = getParser("X:1\n" +
+                        "T:Paddy O'Rafferty\n" +
+                        "C:Trad.\n" +
+                        "M:6/8\n" +
+                        "Q:240\n" +
+                        "K:D\n" +
+                        "df[abc] ce'e\n"
+        ).expectAbcTune();
+
+        AbcPlayVisitor player = new AbcPlayVisitor(abcTune, new AbcInfoVisitor(abcTune));
+
+        player.play();
+
+        assertEquals("Event: NOTE_ON  Pitch: 74  Tick: 0\n" +
+                "Event: NOTE_OFF Pitch: 74  Tick: 1\n" +
+                "Event: NOTE_ON  Pitch: 78  Tick: 1\n" +
+                "Event: NOTE_OFF Pitch: 78  Tick: 2\n" +
+
+                "Event: NOTE_ON  Pitch: 81  Tick: 2\n" +
+                "Event: NOTE_ON  Pitch: 83  Tick: 2\n" +
+                "Event: NOTE_ON  Pitch: 73  Tick: 2\n" +
+                "Event: NOTE_OFF Pitch: 81  Tick: 3\n" +
+                "Event: NOTE_OFF Pitch: 83  Tick: 3\n" +
+                "Event: NOTE_OFF Pitch: 73  Tick: 3\n" +
+
+                "Event: NOTE_ON  Pitch: 73  Tick: 3\n" +
+                "Event: NOTE_OFF Pitch: 73  Tick: 4\n" +
+                "Event: NOTE_ON  Pitch: 88  Tick: 4\n" +
+                "Event: NOTE_OFF Pitch: 88  Tick: 5\n" +
+                "Event: NOTE_ON  Pitch: 76  Tick: 5\n" +
+                "Event: NOTE_OFF Pitch: 76  Tick: 6\n" +
+                "***** End of track *****   Tick: 6\n", player.toString());
+    }
+
+    @Test
+    public void testPlayWithTuplet() throws Exception
+    {
+        abcTune = getParser("X:1\n" +
+                        "T:Paddy O'Rafferty\n" +
+                        "C:Trad.\n" +
+                        "M:C\n" +
+                        "Q:120\n" +
+                        "K:C\n" +
+                        "CC(3ABC\n"
+        ).expectAbcTune();
+
+        AbcPlayVisitor player = new AbcPlayVisitor(abcTune, new AbcInfoVisitor(abcTune));
+
+        player.play();
+
+        assertEquals("Event: NOTE_ON  Pitch: 60  Tick: 0\n" +
+                "Event: NOTE_OFF Pitch: 60  Tick: 3\n" +
+                "Event: NOTE_ON  Pitch: 60  Tick: 3\n" +
+                "Event: NOTE_OFF Pitch: 60  Tick: 6\n" +
+
+                "Event: NOTE_ON  Pitch: 69  Tick: 6\n" +
+                "Event: NOTE_OFF Pitch: 69  Tick: 8\n" +
+                "Event: NOTE_ON  Pitch: 71  Tick: 8\n" +
+                "Event: NOTE_OFF Pitch: 71  Tick: 10\n" +
+                "Event: NOTE_ON  Pitch: 60  Tick: 10\n" +
+                "Event: NOTE_OFF Pitch: 60  Tick: 12\n" +
+
+                "***** End of track *****   Tick: 12\n", player.toString());
     }
 
     public Parser getParser(String str)

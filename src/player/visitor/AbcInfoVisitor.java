@@ -293,7 +293,7 @@ class AbcInfoVisitor implements AbcVisitor<Void>
 
         int tupletCount = tuplet.getTupletSpec().getCount();
 
-        Set<RationalNumber> tupletNoteLengths = (new AbcTupletNoteLengthVisitor(tuplet, defaultNoteLength)).getNoteLengths();
+        Set<RationalNumber> tupletNoteLengths = (new TupletNoteLengthVisitor(tuplet, defaultNoteLength)).getNoteLengths();
 
         RationalNumber aNoteLength = (RationalNumber) tupletNoteLengths.toArray()[0];
 

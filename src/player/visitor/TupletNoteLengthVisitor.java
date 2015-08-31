@@ -6,13 +6,13 @@ import player.ast.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class AbcTupletNoteLengthVisitor implements AbcVisitor<Void>
+class TupletNoteLengthVisitor implements AbcVisitor<Void>
 {
     private Set<RationalNumber> noteLengths;
 
     private RationalNumber defaultNoteLength;
 
-    public AbcTupletNoteLengthVisitor(TupletElement tuplet, RationalNumber defaultNoteLength)
+    public TupletNoteLengthVisitor(TupletElement tuplet, RationalNumber defaultNoteLength)
     {
         noteLengths = new HashSet<>();
 
