@@ -7,6 +7,8 @@ import sound.SequencePlayer;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 
 /**
@@ -23,6 +25,16 @@ class AbcPlayVisitor implements AbcVisitor<Void>
      * Store accidentals while playing
      */
     private final HashMap<Character, Integer> tempAccidental;
+
+    /**
+     * store elements for repeats
+     */
+    private final Queue<Element> elementRecorder;
+
+    /**
+     * is recording the element for later repeats
+     */
+    private boolean isRecording;
 
     /**
      * count the ticks of the player
@@ -56,7 +68,12 @@ class AbcPlayVisitor implements AbcVisitor<Void>
         // initialize sequence player with appropriate BPM and ticksPerQuaterNote
         sequencePlayer = new SequencePlayer(abcInfo.getBpm(), abcInfo.getTicksPerQuarterNote());
 
+        // store temporary accidentals
         tempAccidental = new HashMap<Character, Integer>();
+
+        // store elements for repeats
+        elementRecorder = new LinkedList<>();
+        isRecording = true;
 
         // traverse the ast
         ast.accept(this);
@@ -161,33 +178,75 @@ class AbcPlayVisitor implements AbcVisitor<Void>
     public Void on(ElementLine line)
     {
         line.getElements().stream().forEach(element -> element.accept(this));
+
         return null;
     }
 
     @Override
     public Void on(Element element)
     {
-        element.accept(this);
+        // ignore, Element is interface not get called
         return null;
     }
 
     @Override
     public Void on(NthRepeat repeat)
     {
+        switch (repeat.getTimes()) {
+            case 1:
+                isRecording = false;
+                break;
+            case 2:
+                break;
+        }
         return null;
     }
 
     @Override
     public Void on(Barline bar)
     {
+        switch (bar.getType()) {
+            case CLOSE_REPEAT_BAR:
+                // playback the recorded elements
+                isRecording = false;
+                elementRecorder.stream().forEach(element -> element.accept(this));
+                elementRecorder.clear();
+                isRecording = true;
+                break;
+            case OPEN_REPEAT_BAR:
+                // re-start recording here
+                isRecording = true;
+                elementRecorder.clear();
+                break;
+            case CLOSE_BAR:
+                // re-start recording here
+                isRecording = true;
+                elementRecorder.clear();
+                break;
+        }
+
+        // recording bars except for CLOSE / OPEN_REPEAT_BAR
+        if (isRecording
+                && bar.getType() != Barline.Type.CLOSE_REPEAT_BAR
+                && bar.getType() != Barline.Type.OPEN_REPEAT_BAR
+                && bar.getType() != Barline.Type.CLOSE_BAR) {
+
+            elementRecorder.add(bar);
+        }
+
+
         // clear all accidentals at barline
         tempAccidental.clear();
+
         return null;
     }
 
     @Override
     public Void on(TupletElement tuplet)
     {
+        if (isRecording)
+            elementRecorder.add(tuplet);
+
         int tupletCount = tuplet.getTupletSpec().getCount();
 
         switch (tupletCount) {
@@ -211,6 +270,9 @@ class AbcPlayVisitor implements AbcVisitor<Void>
     @Override
     public Void on(MultiNote mnote)
     {
+        if (isRecording)
+            elementRecorder.add(mnote);
+
         PlayChordVisitor playChord = new PlayChordVisitor(mnote);
         currentTick += playChord.getElapsedTicks();
 
@@ -227,6 +289,9 @@ class AbcPlayVisitor implements AbcVisitor<Void>
     @Override
     public Void on(Rest rest)
     {
+        if (isRecording)
+            elementRecorder.add(rest);
+
         // calculate and add the amount of ticks should the rest be played
         currentTick += getTicksToPlay(rest.getNoteLength());
 
@@ -236,6 +301,9 @@ class AbcPlayVisitor implements AbcVisitor<Void>
     @Override
     public Void on(Pitch pitch)
     {
+        if (isRecording)
+            elementRecorder.add(pitch);
+
         // calculate how many ticks should the note be played
         int ticks = getTicksToPlay(pitch.getNoteLength());
 
